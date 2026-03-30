@@ -1,0 +1,62 @@
+schema_version: "1.0"
+
+extension:
+  id: blueprint
+  name: "Blueprint"
+  version: "0.1.0"
+  description: "Vision-first project planning that decomposes ideas into right-sized Epic specs for SpecKit."
+  author: "jaeryun"
+  repository: "https://github.com/jaeryun/spec-kit-blueprint"
+  license: MIT
+
+requires:
+  speckit_version: ">=0.4.0"
+
+hooks:
+  before_specify:
+    command: "speckit.blueprint.roadmap-check"
+    optional: false
+    description: "Validate feature aligns with current roadmap before specifying."
+
+provides:
+  commands:
+    - name: speckit.blueprint.vision
+      file: commands/vision.md
+      description: "Define project vision through an adaptive interview."
+
+    - name: speckit.blueprint.roadmap
+      file: commands/roadmap.md
+      description: "Generate a staged delivery roadmap from the confirmed vision."
+
+    - name: speckit.blueprint.decompose
+      file: commands/decompose.md
+      description: "Decompose roadmap into Epic-sized specs with dependency ordering."
+
+    - name: speckit.blueprint.roadmap-check
+      file: commands/roadmap-check.md
+      description: "Pre-flight check: validate feature aligns with roadmap before specify."
+
+  hooks:
+    - event: before_blueprint_vision
+      description: "Triggered before the vision interview begins."
+
+    - event: after_blueprint_vision
+      description: "Triggered after vision.md is confirmed and saved."
+
+    - event: before_blueprint_roadmap
+      description: "Triggered before roadmap generation begins."
+
+    - event: after_blueprint_roadmap
+      description: "Triggered after roadmap.md is confirmed and saved."
+
+    - event: before_blueprint_decompose
+      description: "Triggered before Epic decomposition begins."
+
+    - event: after_blueprint_decompose
+      description: "Triggered after epics.md is generated and confirmed."
+
+tags:
+  - planning
+  - vision
+  - roadmap
+  - project-management
