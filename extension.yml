@@ -28,6 +28,11 @@ hooks:
     optional: false
     description: "Validate feature aligns with epics before specifying."
 
+  after_specify:
+    command: "speckit.blueprint._epic-sync"
+    optional: false
+    description: "Sync Epic and roadmap stage status after a spec is completed."
+
 provides:
   commands:
     - name: speckit.blueprint.vision
@@ -53,6 +58,10 @@ provides:
     - name: speckit.blueprint._decompose-check
       file: commands/_decompose-check.md
       description: "Pre-flight check: validate feature aligns with epics before specify."
+
+    - name: speckit.blueprint._epic-sync
+      file: commands/_epic-sync.md
+      description: "Post-specify sync: update Epic and roadmap stage status after completion."
 
   hooks:
     - event: before_blueprint_vision
