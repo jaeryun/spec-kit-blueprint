@@ -13,10 +13,20 @@ requires:
   speckit_version: ">=0.4.0"
 
 hooks:
-  before_specify:
-    command: "speckit.blueprint.roadmap-check"
+  before_blueprint_roadmap:
+    command: "speckit.blueprint._vision-check"
     optional: false
-    description: "Validate feature aligns with current roadmap before specifying."
+    description: "Validate vision alignment before roadmap generation."
+
+  before_blueprint_decompose:
+    command: "speckit.blueprint._roadmap-check"
+    optional: false
+    description: "Validate roadmap coherence and protect immutable epics before decomposition."
+
+  before_specify:
+    command: "speckit.blueprint._decompose-check"
+    optional: false
+    description: "Validate feature aligns with epics before specifying."
 
 provides:
   commands:
@@ -32,9 +42,17 @@ provides:
       file: commands/decompose.md
       description: "Decompose roadmap into Epic-sized specs with dependency ordering."
 
-    - name: speckit.blueprint.roadmap-check
-      file: commands/roadmap-check.md
-      description: "Pre-flight check: validate feature aligns with roadmap before specify."
+    - name: speckit.blueprint._vision-check
+      file: commands/_vision-check.md
+      description: "Pre-flight check: validate vision alignment before roadmap generation."
+
+    - name: speckit.blueprint._roadmap-check
+      file: commands/_roadmap-check.md
+      description: "Pre-flight check: validate roadmap coherence before decomposition."
+
+    - name: speckit.blueprint._decompose-check
+      file: commands/_decompose-check.md
+      description: "Pre-flight check: validate feature aligns with epics before specify."
 
   hooks:
     - event: before_blueprint_vision

@@ -13,10 +13,13 @@ flowchart TD
     subgraph bp ["Blueprint — Big Picture First"]
         B["/speckit.blueprint.vision\nAdaptive Interview"]
         B --> C["vision.md"]
-        C --> D["/speckit.blueprint.roadmap\nStaged Delivery Plan"]
+        C --> VC{"/speckit.blueprint._vision-check\nbefore_blueprint_roadmap"}
+        VC --> D["/speckit.blueprint.roadmap\nStaged Delivery Plan"]
         D --> R["roadmap.md"]
-        R --> X["/speckit.blueprint.decompose\nEpic sizing & dependencies"]
+        R --> RC{"/speckit.blueprint._roadmap-check\nbefore_blueprint_decompose"}
+        RC --> X["/speckit.blueprint.decompose\nEpic sizing & dependencies"]
         X --> E["epics.md\nE001 ➜ E002 ➜ E003 …"]
+        E --> DC{"/speckit.blueprint._decompose-check\nbefore_specify"}
     end
 
     E --> F & G & H
@@ -32,10 +35,13 @@ flowchart TD
     style A fill:#1e293b,stroke:#1e293b,color:#f8fafc
     style B fill:#1e40af,stroke:#1e40af,color:#f8fafc
     style C fill:#ffffff,stroke:#93c5fd,color:#1e3a5f
+    style VC fill:#92400e,stroke:#92400e,color:#fef3c7
     style D fill:#1e40af,stroke:#1e40af,color:#f8fafc
     style R fill:#ffffff,stroke:#93c5fd,color:#1e3a5f
+    style RC fill:#92400e,stroke:#92400e,color:#fef3c7
     style X fill:#1e40af,stroke:#1e40af,color:#f8fafc
     style E fill:#ffffff,stroke:#93c5fd,color:#1e3a5f
+    style DC fill:#92400e,stroke:#92400e,color:#fef3c7
     style F fill:#0f766e,stroke:#0f766e,color:#f0fdf4
     style G fill:#0f766e,stroke:#0f766e,color:#f0fdf4
     style H fill:#0f766e,stroke:#0f766e,color:#f0fdf4
@@ -66,6 +72,7 @@ flowchart TD
 | **Dependency mapping** | Hard vs. soft deps identified upfront — know what blocks what before you start |
 | **Parallel group analysis** | Epics that can be worked simultaneously are grouped, so team bandwidth isn't wasted |
 | **Idempotent by design** | Re-run `vision`, `roadmap`, or `decompose` any time. Completed and in-progress Epics are never overwritten |
+| **Alignment checks** | Three pre-flight hooks catch vision drift, roadmap divergence, and unmapped features before they reach the spec stage |
 | **Full extension compatibility** | Blueprint is pre-specify only — SpecKit's core workflow is untouched, so Fleet, Jira, and other extensions work alongside it without conflict |
 
 ## Installation
@@ -99,6 +106,16 @@ Commands run in sequence. Each requires the previous command's output to exist.
 | `/speckit.blueprint.vision` | Adaptive interview → vision.md | — |
 | `/speckit.blueprint.roadmap` | Generate staged roadmap → roadmap.md | vision.md |
 | `/speckit.blueprint.decompose` | Decompose roadmap → epics.md with dependencies | roadmap.md |
+
+### Pre-flight Checks
+
+Check commands run automatically as hooks — you do not invoke them directly. Each fires before its corresponding command and blocks progression when alignment issues are detected.
+
+| Check Command | Hook | Validates |
+|--------------|------|-----------|
+| `/speckit.blueprint._vision-check` | `before_blueprint_roadmap` | vision.md is consistent before roadmap is generated |
+| `/speckit.blueprint._roadmap-check` | `before_blueprint_decompose` | roadmap stages align with vision; immutable epics protected |
+| `/speckit.blueprint._decompose-check` | `before_specify` | feature maps to an existing Epic before spec is created |
 
 ### Usage Examples
 
@@ -144,11 +161,11 @@ Blueprint fits between `constitution` (project setup) and `specify` (spec writin
 /speckit.constitution              # one-time project setup
     ↓
 /speckit.blueprint.vision          # interview → vision.md
-    ↓
+    ↓ [vision-check] auto-runs
 /speckit.blueprint.roadmap         # vision → roadmap.md
-    ↓
+    ↓ [roadmap-check] auto-runs
 /speckit.blueprint.decompose       # roadmap → epics.md with dependencies
-    ↓
+    ↓ [decompose-check] auto-runs
 For each Epic (in dependency order):
     /speckit.specify [Epic goal]
         ↓
@@ -163,11 +180,11 @@ Fleet handles the specify → implement cycle with human gates. Blueprint provid
 /speckit.constitution              # one-time project setup
     ↓
 /speckit.blueprint.vision          # interview → vision.md
-    ↓
+    ↓ [vision-check] auto-runs
 /speckit.blueprint.roadmap         # vision → roadmap.md
-    ↓
+    ↓ [roadmap-check] auto-runs
 /speckit.blueprint.decompose       # roadmap → epics.md with dependencies
-    ↓
+    ↓ [decompose-check] auto-runs
 For each Epic (in dependency order):
     /speckit.fleet [Epic goal]     # Fleet orchestrates specify → plan → tasks → implement
 ```

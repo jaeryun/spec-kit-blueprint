@@ -1,10 +1,10 @@
 ---
-description: "Validate that the feature being specified aligns with the current roadmap and epics."
+description: "Validate that the feature being specified aligns with the current epics and decomposed roadmap."
 ---
 
-# Blueprint Roadmap Check
+# Blueprint Decompose Check
 
-Pre-flight validation before `/speckit.specify`. Detects roadmap divergence before a spec branch is created.
+Pre-flight validation before `/speckit.specify`. Detects epic divergence before a spec branch is created.
 
 ## Context
 
@@ -15,10 +15,10 @@ This command is invoked as a `before_specify` hook. The feature description is a
 ### Step 1: Check prerequisites
 
 If `docs/blueprint/roadmap.md` does not exist:
-→ Output: "ℹ️ Blueprint roadmap not found — skipping roadmap alignment check." and stop (allow specify to proceed).
+→ Output: "ℹ️ Blueprint roadmap not found — skipping decompose alignment check." and stop (allow specify to proceed).
 
 If `docs/blueprint/epics.md` does not exist:
-→ Output: "ℹ️ Blueprint epics not found — skipping roadmap alignment check." and stop (allow specify to proceed).
+→ Output: "ℹ️ Blueprint epics not found — skipping decompose alignment check." and stop (allow specify to proceed).
 
 ---
 
@@ -44,7 +44,7 @@ Using the feature description from the current conversation context, determine w
 
 Output:
 ```
-✅ Roadmap aligned: maps to **[ENNN]** — [Epic goal]
+✅ Decompose aligned: maps to **[ENNN]** — [Epic goal]
 Proceeding with specification.
 ```
 
@@ -73,19 +73,19 @@ Wait for user response.
 
 Output:
 ```
-⚠️ Roadmap Divergence Detected
+⚠️ Decompose Divergence Detected
 
-"[feature description]" does not map to any Epic in the current roadmap.
+"[feature description]" does not map to any Epic in the current decomposed roadmap.
 
 Options:
-  A) Update roadmap first — run `/speckit.blueprint.decompose` to add this as a new Epic, then re-run specify.
+  A) Update decompose first — run `/speckit.blueprint.decompose` to add this as a new Epic, then re-run specify.
   B) Proceed anyway — this is a minor addition not worth a separate Epic.
   C) Cancel.
 ```
 
 Wait for user response.
 - **A** → stop. Output: "Run `/speckit.blueprint.decompose` to update the Epic plan first."
-- **B** → allow specify to proceed. Output: "⚠️ Proceeding without roadmap entry. Consider updating `docs/blueprint/epics.md` manually after this spec is complete."
+- **B** → allow specify to proceed. Output: "⚠️ Proceeding without decompose entry. Consider updating `docs/blueprint/epics.md` manually after this spec is complete."
 - **C** → stop.
 
 ---
@@ -101,8 +101,10 @@ Spanning multiple Epics in a single spec risks scope creep and unclear ownership
 Options:
   A) Proceed — I'll scope this spec tightly to one Epic.
   B) Cancel — I'll split this feature into separate specify runs.
+  C) Cancel.
 ```
 
 Wait for user response.
 - **A** → allow specify to proceed.
 - **B** → stop. Output: "Run `/speckit.specify` once per Epic to keep scopes clean."
+- **C** → stop.
