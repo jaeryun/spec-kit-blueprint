@@ -16,6 +16,14 @@ This is Step 3 of the Blueprint workflow. It reads the confirmed vision and road
 
 The output is `docs/blueprint/epics.md` — the authoritative list of what to build and in what order.
 
+## Scope Boundary
+
+`epics.md` answers **what to build in each unit** — not how to build it.
+
+**Belongs here:** Epic user-facing goals, 1–3 user stories per Epic, hard/soft dependencies, size estimates, parallel groupings.
+
+**Does NOT belong here:** spec-level detail, implementation approaches, code snippets, UI wireframes, more than 3 user stories per Epic, task-level breakdowns, test cases. If any of these appear in your draft, they belong in a spec (`/speckit.specify`) — remove them from epics.
+
 ## User Input
 
 $ARGUMENTS
@@ -179,7 +187,33 @@ Incorporate feedback and save to `docs/blueprint/epics.md`.
 
 ---
 
-### Step 6: Completion
+### Step 6: Scope Check
+
+Before confirming completion, review the saved `docs/blueprint/epics.md` against the Scope Boundary defined above.
+
+Flag any content that does not belong at the Epic level:
+
+- More than 3 user stories in a single Epic → split the Epic or trim stories
+- Implementation detail within a story (how to build it) → belongs in spec
+- Code snippets, data models, or UI wireframes → belongs in spec
+- Task-level breakdowns or sub-tasks → belongs in spec
+- Test cases or acceptance test scripts → belongs in spec
+
+For each violation found, output:
+```
+⚠️ Scope issue in epics.md: "[excerpt]"
+This level of detail belongs in [spec / specify]. Remove it from epics.md or defer it to the relevant /speckit.specify run.
+```
+
+Ask the user: "Found [N] scope issue(s) above. Fix before proceeding? (yes / no / skip)"
+- **yes** → apply fixes and re-confirm the file
+- **no / skip** → proceed as-is, note issues remain
+
+If no violations found → output: "✅ Scope check passed."
+
+---
+
+### Step 8: Completion
 
 Tell the user:
 "Breakdown complete. [N] Epics defined across [N] stages.

@@ -15,6 +15,14 @@ Using the confirmed `vision.md`, create a staged roadmap that:
 
 The output feeds into `/speckit.blueprint.decompose`.
 
+## Scope Boundary
+
+`roadmap.md` answers **when and in what order** — not who does what or how.
+
+**Belongs here:** stage names and goals, deliverables per stage, dependencies between stages, acceptance criteria per stage.
+
+**Does NOT belong here:** Epic or story breakdowns, task lists, specific implementation approaches, code or architecture decisions, sprint-by-sprint assignments, team member allocation. If any of these appear in your draft, they belong in decompose or a spec — remove them from the roadmap.
+
 ## User Input
 
 $ARGUMENTS
@@ -91,7 +99,32 @@ Save to `docs/blueprint/roadmap.md`.
 
 ---
 
-### Step 3: Completion
+### Step 3: Scope Check
+
+Before confirming completion, review the saved `docs/blueprint/roadmap.md` against the Scope Boundary defined above.
+
+Flag any content that does not belong at the roadmap level:
+
+- Epic or user story breakdowns within a stage → belongs in decompose
+- Task lists or sub-tasks → belongs in decompose or spec
+- Specific implementation approaches or technology choices → belongs in spec
+- Sprint-by-sprint or person-by-person assignments → belongs in project management tooling
+
+For each violation found, output:
+```
+⚠️ Scope issue in roadmap.md: "[excerpt]"
+This level of detail belongs in [decompose / spec / project management]. Remove it from roadmap.md or move it to the appropriate stage.
+```
+
+Ask the user: "Found [N] scope issue(s) above. Fix before proceeding? (yes / no / skip)"
+- **yes** → apply fixes and re-confirm the file
+- **no / skip** → proceed as-is, note issues remain
+
+If no violations found → output: "✅ Scope check passed."
+
+---
+
+### Step 5: Completion
 
 Confirm the file is saved:
 - `docs/blueprint/roadmap.md` ✓
