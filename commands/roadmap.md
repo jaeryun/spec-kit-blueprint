@@ -85,6 +85,25 @@ Check if `docs/blueprint/roadmap.md` exists.
 
 Output: `[Phase 1 of 3] Stage Boundary Definition`
 
+**Vision alignment check:** Before proceeding, assess whether the current roadmap change intent (what the user wants to update or generate) conflicts with `docs/blueprint/vision.md` across these four dimensions:
+
+- **Core Features** — does the proposed change drop or significantly reduce a Core Feature?
+- **Out of Scope** — does the proposed change introduce something vision explicitly marks as Out of Scope?
+- **Target Users** — does the proposed change shift focus to a different user segment?
+- **Non-Functional Requirements** — does the proposed change contradict a stated NFR?
+
+If a conflict is found, present it specifically and ask the user to confirm before continuing:
+```
+⚠️ Vision Conflict: [dimension]
+"[specific conflict description]"
+
+Proceed anyway? (yes / no)
+```
+- **yes** → continue.
+- **no** → stop. Output: "Update `docs/blueprint/vision.md` first to reflect the intended change."
+
+If no conflicts found, continue silently.
+
 Read `docs/blueprint/vision.md`. Pay special attention to:
 - Sprint cadence and team size (Execution Context section)
 - Core features and out-of-scope items
@@ -238,7 +257,36 @@ If no violations are found, output: "Scope check passed."
 
 ---
 
-### Step 7: Completion
+### Step 7: Vision Sync
+
+Read `docs/blueprint/vision.md`. Compare the finalized `roadmap.md` against the four vision dimensions:
+
+- **Out of Scope violations** — do any stage goals or Spec Outline stories introduce something vision marks as Out of Scope?
+- **Core Feature drift** — are any Core Features absent or contradicted by the roadmap structure?
+- **Target User drift** — do any stories serve a user segment not defined in vision?
+- **Non-Functional Requirements** — do any stories conflict with a stated NFR?
+
+If drift is detected, produce specific proposed changes to `vision.md`:
+
+```
+⚠️ Vision Sync: Scope changes detected
+
+[For each issue:]
+Section: [Core Features / Out of Scope / Target Users / NFR]
+Action:  [Add / Remove / Modify]
+Item:    "[item text]"
+Reason:  "[one-line explanation based on roadmap evidence]"
+```
+
+Ask: "Found [N] vision sync issue(s) above. Apply these updates to vision.md now? (yes / no)"
+- **yes** → apply all proposed changes to `docs/blueprint/vision.md`, save, and output: "✅ vision.md updated to reflect roadmap scope changes."
+- **no** → output: "ℹ️ vision.md not updated. Re-run `/speckit.blueprint.vision` when ready to re-align."
+
+If no drift found → output: "✅ Vision consistent with roadmap."
+
+---
+
+### Step 8: Completion
 
 Confirm the file is saved:
 - `docs/blueprint/roadmap.md` ✓

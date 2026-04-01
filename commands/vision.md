@@ -168,7 +168,38 @@ If no violations found → output: "✅ Scope check passed."
 
 ---
 
-### Step 5: Completion
+### Step 5: Roadmap Alignment Check
+
+Check if `docs/blueprint/roadmap.md` exists. If it does not exist, skip this step.
+
+Read `docs/blueprint/roadmap.md`. Compare each of the following against the updated `vision.md`:
+
+- **Stage goals** — do any stage goals contradict or no longer reflect the updated Core Features or Problem Statement?
+- **Spec Outline stories** — do any stories reference features that are now Out of Scope, or miss features newly added to Core Features?
+- **Out of Scope alignment** — does the roadmap include anything that vision now explicitly marks as Out of Scope?
+- **Target Users** — do any Spec Outline stories serve a user segment no longer in the vision?
+
+For each misalignment found, produce a specific proposed change:
+
+```
+⚠️ Roadmap alignment issue found:
+
+[For each issue:]
+Location: Stage [N] / Spec Outline [NNN]
+Current:  "[current text]"
+Proposed: "[updated text]"
+Reason:   "[one-line explanation based on vision change]"
+```
+
+If issues are found, ask: "Found [N] roadmap alignment issue(s) above. Apply these updates now? (yes / no)"
+- **yes** → apply all proposed changes to `docs/blueprint/roadmap.md`, save, and output: "✅ roadmap.md updated to reflect vision changes."
+- **no** → output: "ℹ️ roadmap.md not updated. Run `/speckit.blueprint.roadmap` when ready to re-align."
+
+If no issues found → output: "✅ Roadmap is consistent with updated vision."
+
+---
+
+### Step 6: Completion
 
 Confirm the file is saved:
 - `docs/blueprint/vision.md` ✓
