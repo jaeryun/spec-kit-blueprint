@@ -65,7 +65,7 @@ Did this spec cover it?
 Wait for user response.
 - **yes** → mark the Spec Outline as `[✅]` Complete
 - **partial** → mark the Spec Outline as `[🚧]` In Progress
-- **wrong** → ask: "Which Spec Outline did this spec cover? (provide number or goal)" — re-match against the user's answer and proceed from Step 3 with the corrected Spec Outline
+- **wrong** → ask: "Which Spec Outline did this spec cover? (provide number or goal)" — re-match against the user's answer and proceed from Step 3 with the corrected Spec Outline. If re-match also fails, output the manual update message from Step 2 and stop.
 
 The status markers used in `roadmap.md` are:
 - `[📋]` Planned
