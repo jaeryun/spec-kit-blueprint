@@ -87,6 +87,8 @@ Wait for user response.
 - **yes** → apply targeted updates to `vision.md`:
   - Move items from Out of Scope to Core Features (or add new Core Features) where the roadmap has introduced them as real deliverables.
   - Remove or qualify Core Features that have been dropped or explicitly deferred in the roadmap.
+  - Update Target Users section where roadmap evidence shows a different user segment is being served.
+  - Revise or add NFR entries where roadmap stories introduce dependencies that contradict stated requirements.
   - Preserve all other content in `vision.md` unchanged.
   - Save the updated `docs/blueprint/vision.md`.
   - Output:

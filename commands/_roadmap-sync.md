@@ -96,7 +96,7 @@ Check all Spec Outlines within that Stage:
 Mark the completed Stage in `roadmap.md` as done. Add or update the status line at the end of the stage's section:
 
 ```
-**Status: ✅ Complete**
+**Status:** ✅ Complete
 ```
 
 Save the updated `docs/blueprint/roadmap.md`.

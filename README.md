@@ -86,7 +86,7 @@ Requires Spec Kit >= 0.4.0.
 ### From GitHub Release
 
 ```bash
-specify extension add blueprint --from https://github.com/jaeryun/spec-kit-blueprint/archive/refs/tags/v1.0.0.zip
+specify extension add blueprint --from https://github.com/jaeryun/spec-kit-blueprint/archive/refs/tags/v0.2.0.zip
 ```
 
 ### From Local Path (For develop)
