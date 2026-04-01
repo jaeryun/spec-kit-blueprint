@@ -6,37 +6,71 @@ description: "Validate that the feature being specified aligns with a Spec Outli
 
 > Auto-invoked hook — fires automatically before `/speckit.specify`. Do not invoke directly.
 
-Pre-flight validation before `/speckit.specify`. Detects Spec Outline divergence before a spec branch is created.
+Pre-flight validation before `/speckit.specify`. Checks the argument, resolves it to a Spec Outline, and validates roadmap alignment and dependency order.
 
 ## Context
 
-This command is invoked as a `before_specify` hook. The feature description is available from the current conversation context — it is the argument the user passed to `/speckit.specify`.
+This command is invoked as a `before_specify` hook. The argument the user passed to `/speckit.specify` is available from the current conversation context.
 
 ## Instructions
 
-### Step 1: Check prerequisites
+### Step 1: Check argument
+
+Inspect the argument passed to `/speckit.specify`.
+
+**If no argument was provided:**
+→ Output:
+```
+⚠️ No argument passed to /speckit.specify.
+
+Roadmap alignment and spec file tracking require knowing what you are specifying.
+Accepted forms:
+  - Spec Outline number or goal: /speckit.specify "Spec Outline 001" or /speckit.specify "user authentication"
+  - Spec file name: /speckit.specify auth.md
+
+Spec Outline 및 spec 파일 없이 진행하겠습니까? (yes / no)
+```
+
+Wait for user response.
+- **yes** → allow specify to proceed, skip Steps 2–4.
+- **no** → stop. Output: "Re-run with a Spec Outline or spec file argument."
+
+---
+
+**If an argument was provided**, determine its type:
+
+- **Spec file reference** — argument ends with `.md` or looks like a file path (e.g., `auth.md`, `docs/spec/auth.md`)
+  → Read the file. Extract the spec title and any feature description from its content to use as the match target in Step 3.
+
+- **Spec Outline reference** — argument contains "Spec Outline" followed by a number, or is a plain number (e.g., `001`, `1`)
+  → Use the number to directly look up the matching Spec Outline in Step 3.
+
+- **Feature description** — free-form text describing what to build
+  → Use as-is for semantic matching in Step 3.
+
+---
+
+### Step 2: Check prerequisites
 
 If `docs/blueprint/roadmap.md` does not exist:
 → Output: "ℹ️ Blueprint roadmap not found — skipping roadmap alignment check." and stop (allow specify to proceed).
 
----
+Read `docs/blueprint/roadmap.md`. Find all Spec Outline entries (under `**Spec Outline:**` sections, identified by Spec Outline 001, 002...).
 
-### Step 2: Read Spec Outlines from roadmap
-
-Read `docs/blueprint/roadmap.md`.
-
-Find all Spec Outline entries. Spec Outlines appear under `**Spec Outline:**` sections within each Stage, identified by their number (Spec Outline 001, Spec Outline 002...). Each Spec Outline has a user-facing goal and a list of stories.
-
-If no Spec Outlines are found in `roadmap.md`:
+If no Spec Outlines are found:
 → Output: "ℹ️ No Spec Outlines found in `docs/blueprint/roadmap.md` — skipping roadmap alignment check." and stop (allow specify to proceed).
 
 ---
 
-### Step 3: Match feature to Spec Outline
+### Step 3: Match to Spec Outline
 
-Using the feature description from the current conversation context, determine which Spec Outline(s) in `roadmap.md` this feature falls under.
+Using the resolved match target from Step 1:
 
-**Match criteria:** The feature clearly falls within a Spec Outline's user-facing goal and its listed stories. Partial or ambiguous overlap counts as a match — prefer false positives over false negatives.
+- **Spec Outline reference**: look up by number directly. If not found, treat as no match (Case C).
+- **Spec file reference**: match the extracted spec title/description against Spec Outline goals and stories.
+- **Feature description**: match semantically against Spec Outline goals and stories.
+
+**Match criteria:** Prefer false positives over false negatives — partial or ambiguous overlap counts as a match.
 
 ---
 
@@ -83,7 +117,7 @@ Stop. Allow specify to proceed.
 
 #### Case B — Clear match, Spec Outline is [🚧] In Progress or [✅] Complete
 
-Run the same dependency check as Case A: verify all deps of this Spec Outline are `[✅]` Complete. If any dep is incomplete, output the Dependency Not Ready warning (same as Case A) and wait for user response before proceeding.
+Run the same dependency check as Case A. If any dep is incomplete, output the Dependency Not Ready warning and wait for user response before proceeding.
 
 If dependency check passes (or deps are `—`), output:
 ```
@@ -106,7 +140,7 @@ Output:
 ```
 ⚠️ Roadmap Divergence Detected
 
-"[feature description]" does not map to any Spec Outline in the current roadmap.
+"[argument]" does not map to any Spec Outline in the current roadmap.
 
 Options:
   A) Update roadmap first — run `/speckit.blueprint.roadmap` to add this as a new Spec Outline, then re-run specify.
@@ -121,11 +155,11 @@ Wait for user response.
 
 ---
 
-#### Case D — Ambiguous match (feature spans multiple Spec Outlines)
+#### Case D — Ambiguous match (argument spans multiple Spec Outlines)
 
 Output:
 ```
-⚠️ This feature overlaps multiple Spec Outlines: [Spec Outline NNN, Spec Outline NNM, ...]
+⚠️ This argument overlaps multiple Spec Outlines: [Spec Outline NNN, Spec Outline NNM, ...]
 
 Spanning multiple Spec Outlines in a single spec risks scope creep and unclear ownership.
 

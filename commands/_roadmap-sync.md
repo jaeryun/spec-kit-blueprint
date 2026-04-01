@@ -72,11 +72,18 @@ The status markers used in `roadmap.md` are:
 - `[🚧]` In Progress
 - `[✅]` Complete
 
+**Spec file mapping:** Identify the spec file produced by this specify run from the current conversation context (typically the file path of the generated `spec.md`). Update the `Spec:` field of the matched Spec Outline:
+```
+  - Spec: [spec file path]
+```
+If the spec file path cannot be determined, leave `Spec:` unchanged.
+
 Save the updated `docs/blueprint/roadmap.md`.
 
 Output:
 ```
 ✅ roadmap.md updated: [Spec Outline NNN] — [Spec Outline goal] → [✅ Complete / 🚧 In Progress]
+   Spec: [spec file path]
 ```
 
 ---

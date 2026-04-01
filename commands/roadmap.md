@@ -163,6 +163,7 @@ _Last updated: [date]_
   - Stories: [story 1], [story 2]
   - Size: ~N sprints
   - Deps: —
+  - Spec: —
 
 **Status:** 📋 Planned
 
@@ -180,6 +181,7 @@ _Last updated: [date]_
   - Stories: [story 1], [story 2]
   - Size: ~N sprints
   - Deps: Spec Outline 001
+  - Spec: —
 
 **Status:** 📋 Planned
 
