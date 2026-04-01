@@ -1,141 +1,112 @@
 ---
-description: "Validate roadmap-to-epics coherence and protect immutable epics before decomposition."
+description: "Validate that the feature being specified aligns with a Spec Outline in the roadmap."
 ---
 
 # Blueprint Roadmap Check
 
-Pre-flight validation before `/speckit.blueprint.decompose`. Detects roadmap drift and protects in-progress or complete epics from accidental re-decomposition.
+> Auto-invoked hook — fires automatically before `/speckit.specify`. Do not invoke directly.
+
+Pre-flight validation before `/speckit.specify`. Detects Spec Outline divergence before a spec branch is created.
 
 ## Context
 
-This command is invoked as a `before_blueprint_decompose` hook. The target stage (if any) is available from the current conversation context — it is the argument the user passed to `/speckit.blueprint.decompose`.
+This command is invoked as a `before_specify` hook. The feature description is available from the current conversation context — it is the argument the user passed to `/speckit.specify`.
 
 ## Instructions
 
 ### Step 1: Check prerequisites
 
 If `docs/blueprint/roadmap.md` does not exist:
-→ Output: "ℹ️ Blueprint roadmap not found — skipping roadmap check." and stop (allow decompose to proceed).
-
-If `docs/blueprint/vision.md` does not exist:
-→ Output: "ℹ️ Blueprint vision not found — skipping vision alignment check." Continue to Step 2 (skip Check A).
+→ Output: "ℹ️ Blueprint roadmap not found — skipping roadmap alignment check." and stop (allow specify to proceed).
 
 ---
 
-### Step 2: Determine target stages
+### Step 2: Read Spec Outlines from roadmap
 
 Read `docs/blueprint/roadmap.md`.
 
-If a specific stage was provided in the current conversation context (e.g., "Stage 2"):
-- Verify it exists in the roadmap.
-- If it does **not** exist → Output: "❌ Stage '[name]' not found in `docs/blueprint/roadmap.md`. Check the stage name and try again." and stop.
-- If it exists → set target to that stage only.
+Find all Spec Outline entries. Spec Outlines appear under `**Spec Outline:**` sections within each Stage, identified by their number (Spec Outline 001, Spec Outline 002...). Each Spec Outline has a user-facing goal and a list of stories.
 
-If no stage argument was provided → set target to all stages in the roadmap.
+If no Spec Outlines are found in `roadmap.md`:
+→ Output: "ℹ️ No Spec Outlines found in `docs/blueprint/roadmap.md` — skipping roadmap alignment check." and stop (allow specify to proceed).
 
 ---
 
-### Step 3: Check immutable epics
+### Step 3: Match feature to Spec Outline
 
-If `docs/blueprint/epics.md` exists, read it.
+Using the feature description from the current conversation context, determine which Spec Outline(s) in `roadmap.md` this feature falls under.
 
-For each target stage, check if any existing Epics are marked 🚧 In Progress or ✅ Complete.
+**Match criteria:** The feature clearly falls within a Spec Outline's user-facing goal and its listed stories. Partial or ambiguous overlap counts as a match — prefer false positives over false negatives.
 
-#### Case A — No immutable epics in target stages
+---
 
-Continue to Step 4.
+### Step 4: Handle match result
 
-#### Case B — Immutable epics found in target stages
+#### Case A — Clear match, Spec Outline is [📋] Planned
 
 Output:
 ```
-⚠️ Immutable Epics Detected
+✅ Roadmap aligned: maps to Spec Outline [NNN] — [Spec Outline goal]
+Proceeding with specification.
+```
 
-The following Epics in the target stage(s) are already in progress or complete and cannot be re-decomposed:
+Stop. Allow specify to proceed.
 
-[List each: E[NNN] — [goal] — [🚧 In Progress / ✅ Complete]]
+---
 
-Re-running decompose on these stages will only process 📋 Planned epics and add new ones.
-Immutable epics will not be modified.
+#### Case B — Clear match, Spec Outline is [🚧] In Progress or [✅] Complete
+
+Output:
+```
+⚠️ Spec Outline [NNN] is already [in progress / complete].
+
+Confirm this is an extension or fix within that Spec Outline's scope, not a duplicate or scope creep.
 
 Proceed? (yes / no)
 ```
 
 Wait for user response.
-- **yes** → continue to Step 4.
-- **no** → stop.
+- **yes** → allow specify to proceed.
+- **no** → stop. Suggest: "Consider running `/speckit.blueprint.roadmap` to add a new Spec Outline first."
 
 ---
 
-### Step 4: Vision alignment check (skip if vision.md not found)
-
-Read `docs/blueprint/vision.md` — extract:
-- **Core Features** — must-have features the product must deliver
-- **Out of Scope** — items explicitly excluded
-
-For each target stage in the roadmap, assess:
-
-**Check A — Core Feature coverage**
-Do the target stages collectively cover the Core Features listed in vision? Flag any Core Feature with no corresponding stage or deliverable.
-
-**Check B — Out of Scope creep**
-Do any target stage deliverables overlap with items explicitly listed as Out of Scope in vision?
-
-#### Case A — All checks pass
+#### Case C — No matching Spec Outline found
 
 Output:
 ```
-✅ Roadmap aligned: target stages are consistent with the project vision.
-Proceeding with decomposition.
-```
+⚠️ Roadmap Divergence Detected
 
-Stop. Allow decompose to proceed.
-
----
-
-#### Case B — Core Feature gap detected
-
-Output:
-```
-⚠️ Vision Gap: Uncovered Core Feature
-
-The following Core Feature from the vision has no corresponding stage or deliverable in the roadmap:
-"[feature]"
-
-This may result in Epics that don't deliver the full product vision.
+"[feature description]" does not map to any Spec Outline in the current roadmap.
 
 Options:
-  A) Update roadmap first — run `/speckit.blueprint.roadmap` to add coverage, then re-run decompose.
-  B) Proceed anyway — this feature will be handled outside the current roadmap scope.
+  A) Update roadmap first — run `/speckit.blueprint.roadmap` to add this as a new Spec Outline, then re-run specify.
+  B) Proceed anyway — this is a minor addition not worth a separate Spec Outline.
   C) Cancel.
 ```
 
 Wait for user response.
-- **A** → stop. Output: "Run `/speckit.blueprint.roadmap` to update the roadmap first."
-- **B** → allow decompose to proceed. Output: "⚠️ Proceeding. Note that the Epic breakdown will not fully cover all vision Core Features."
+- **A** → stop. Output: "Run `/speckit.blueprint.roadmap` to update the Spec Outline plan first."
+- **B** → allow specify to proceed. Output: "⚠️ Proceeding without a Spec Outline entry. Consider updating `docs/blueprint/roadmap.md` manually after this spec is complete."
 - **C** → stop.
 
 ---
 
-#### Case C — Out of Scope creep in roadmap
+#### Case D — Ambiguous match (feature spans multiple Spec Outlines)
 
 Output:
 ```
-⚠️ Vision Conflict: Out of Scope Item in Roadmap
+⚠️ This feature overlaps multiple Spec Outlines: [Spec Outline NNN, Spec Outline NNM, ...]
 
-Stage "[stage name]" includes "[deliverable]", which is explicitly out of scope in the current vision.
-
-Decomposing this stage will generate Epics for out-of-scope work.
+Spanning multiple Spec Outlines in a single spec risks scope creep and unclear ownership.
 
 Options:
-  A) Update vision first — run `/speckit.blueprint.vision` to revise Out of Scope, then re-run decompose.
-  B) Skip this stage — decompose other stages only.
-  C) Proceed anyway — the scope expansion is intentional.
-  D) Cancel.
+  A) Proceed — I'll scope this spec tightly to one Spec Outline.
+  B) Cancel — I'll split this feature into separate specify runs.
+  C) Cancel.
 ```
 
 Wait for user response.
-- **A** → stop. Output: "Run `/speckit.blueprint.vision` to update the vision first."
-- **B** → remove the conflicting stage from the target list and continue with remaining stages. If no stages remain after removal, output: "No stages remain after skipping conflicting ones — cancelling decompose." and stop.
-- **C** → allow decompose to proceed. Output: "⚠️ Proceeding with scope expansion. Remember to update `docs/blueprint/vision.md` to stay in sync."
-- **D** → stop.
+- **A** → allow specify to proceed.
+- **B** → stop. Output: "Run `/speckit.specify` once per Spec Outline to keep scopes clean."
+- **C** → stop.

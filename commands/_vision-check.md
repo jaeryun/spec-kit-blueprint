@@ -4,6 +4,8 @@ description: "Validate that roadmap changes align with the confirmed project vis
 
 # Blueprint Vision Check
 
+> Auto-invoked hook — fires automatically before `/speckit.blueprint.roadmap`. Do not invoke directly.
+
 Pre-flight validation before `/speckit.blueprint.roadmap`. Detects vision divergence before the roadmap is modified.
 
 ## Context
@@ -30,6 +32,13 @@ Read `docs/blueprint/vision.md` — extract and hold in context:
 ---
 
 ### Step 3: Analyze roadmap change intent
+
+**First-run check:** If no roadmap change intent is present in the current conversation context (the user ran `/speckit.blueprint.roadmap` with no arguments and no prior roadmap exists), output:
+```
+✅ First roadmap run — skipping vision alignment check.
+Proceeding with roadmap generation.
+```
+Stop. Allow roadmap to proceed.
 
 Using the roadmap change intent from the current conversation context, assess the proposed change against each of the four vision dimensions.
 

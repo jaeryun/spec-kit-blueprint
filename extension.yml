@@ -3,8 +3,8 @@ schema_version: "1.0"
 extension:
   id: blueprint
   name: "Blueprint"
-  version: "0.1.0"
-  description: "Vision-first project planning that decomposes ideas into right-sized Epic specs for SpecKit."
+  version: "0.2.0"
+  description: "Vision-first project planning that decomposes ideas into right-sized Spec Outlines for SpecKit."
   author: "jaeryun"
   repository: "https://github.com/jaeryun/spec-kit-blueprint"
   license: MIT
@@ -18,20 +18,20 @@ hooks:
     optional: false
     description: "Validate vision alignment before roadmap generation."
 
-  before_blueprint_decompose:
-    command: "speckit.blueprint._roadmap-check"
-    optional: false
-    description: "Validate roadmap coherence and protect immutable epics before decomposition."
+  after_blueprint_roadmap:
+    command: "speckit.blueprint._vision-sync"
+    optional: true
+    description: "Sync vision.md if roadmap planning revealed scope changes."
 
   before_specify:
-    command: "speckit.blueprint._decompose-check"
+    command: "speckit.blueprint._roadmap-check"
     optional: false
-    description: "Validate feature aligns with epics before specifying."
+    description: "Validate feature aligns with Spec Outlines in roadmap.md before specifying."
 
   after_specify:
-    command: "speckit.blueprint._epic-sync"
+    command: "speckit.blueprint._roadmap-sync"
     optional: false
-    description: "Sync Epic and roadmap stage status after a spec is completed."
+    description: "Sync Spec Outline and roadmap stage status after a spec is completed."
 
 provides:
   commands:
@@ -41,27 +41,23 @@ provides:
 
     - name: speckit.blueprint.roadmap
       file: commands/roadmap.md
-      description: "Generate a staged delivery roadmap from the confirmed vision."
-
-    - name: speckit.blueprint.decompose
-      file: commands/decompose.md
-      description: "Decompose roadmap into Epic-sized specs with dependency ordering."
+      description: "Generate a staged delivery roadmap with Spec Outlines and dependency mapping (3 phases: stage definition → Spec Outline sizing → dependency mapping)."
 
     - name: speckit.blueprint._vision-check
       file: commands/_vision-check.md
       description: "Pre-flight check: validate vision alignment before roadmap generation."
 
+    - name: speckit.blueprint._vision-sync
+      file: commands/_vision-sync.md
+      description: "Post-roadmap sync: update vision.md if roadmap planning revealed scope changes."
+
     - name: speckit.blueprint._roadmap-check
       file: commands/_roadmap-check.md
-      description: "Pre-flight check: validate roadmap coherence before decomposition."
+      description: "Pre-flight check: validate feature aligns with a Spec Outline in roadmap.md before specify."
 
-    - name: speckit.blueprint._decompose-check
-      file: commands/_decompose-check.md
-      description: "Pre-flight check: validate feature aligns with epics before specify."
-
-    - name: speckit.blueprint._epic-sync
-      file: commands/_epic-sync.md
-      description: "Post-specify sync: update Epic and roadmap stage status after completion."
+    - name: speckit.blueprint._roadmap-sync
+      file: commands/_roadmap-sync.md
+      description: "Post-specify sync: update Spec Outline and roadmap stage status in roadmap.md after completion."
 
   hooks:
     - event: before_blueprint_vision
@@ -77,10 +73,10 @@ provides:
       description: "Triggered after roadmap.md is confirmed and saved."
 
     - event: before_blueprint_decompose
-      description: "Triggered before Epic decomposition begins."
+      description: "Deprecated. Previously triggered before Spec Outline decomposition. The decompose command has been merged into roadmap."
 
     - event: after_blueprint_decompose
-      description: "Triggered after epics.md is generated and confirmed."
+      description: "Deprecated. Previously triggered after spec-outlines.md was generated. Spec Outlines now live inside roadmap.md."
 
 tags:
   - planning

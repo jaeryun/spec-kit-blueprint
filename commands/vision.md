@@ -21,7 +21,7 @@ The output feeds into `/speckit.blueprint.roadmap`.
 
 **Belongs here:** problem statement, target users, core features, non-functional requirements, out-of-scope items, success criteria, team/timeline context.
 
-**Does NOT belong here:** delivery stages or phases, Epic breakdowns, sprint assignments, specific technology choices, implementation approaches, API or data model design. If any of these appear in your draft, move them to roadmap or remove them.
+**Does NOT belong here:** delivery stages or phases, Spec Outline breakdowns, sprint assignments, specific technology choices, implementation approaches, API or data model design. If any of these appear in your draft, move them to roadmap or remove them.
 
 ## User Input
 
@@ -150,14 +150,14 @@ Before confirming completion, review the saved `docs/blueprint/vision.md` agains
 Flag any content that does not belong at the vision level:
 
 - Delivery stages, phases, or timelines broken into milestones → belongs in roadmap
-- Epic or feature breakdowns → belongs in decompose
+- Spec Outline or feature breakdowns → belongs in roadmap
 - Specific technology or architecture decisions → belongs in roadmap or spec
 - Sprint assignments or task lists → belongs in roadmap or spec
 
 For each violation found, output:
 ```
 ⚠️ Scope issue in vision.md: "[excerpt]"
-This level of detail belongs in [roadmap / decompose / spec]. Remove it from vision.md or move it to the appropriate stage.
+This level of detail belongs in [roadmap / spec]. Remove it from vision.md or move it to the appropriate stage.
 ```
 
 Ask the user: "Found [N] scope issue(s) above. Fix before proceeding? (yes / no / skip)"
@@ -168,7 +168,7 @@ If no violations found → output: "✅ Scope check passed."
 
 ---
 
-### Step 6: Completion
+### Step 5: Completion
 
 Confirm the file is saved:
 - `docs/blueprint/vision.md` ✓
