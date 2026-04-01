@@ -80,7 +80,7 @@ Conduct a conversational interview in **3 rounds**. Do not present all questions
 
 1. "What problem are you solving? Describe it in one or two sentences."
 2. "Who are the primary users? Be specific — not just 'developers' but what kind, what context."
-3. "What are the 3 most important things the product must do? (Core features, not nice-to-haves)"
+3. "What are the 3~5 most important things the product must do? (Core features, not nice-to-haves)"
 
 After Round 1, briefly reflect back what you heard and ask: "Is that a fair summary so far?"
 
@@ -102,37 +102,9 @@ If the user says "I don't know" or "not sure" for any answer — record it as `T
 
 ### Step 3: Generate vision.md Draft
 
-Using the interview answers, create a draft `docs/blueprint/vision.md` following this structure:
+Load `templates/vision-template.md` to understand the required sections.
 
-```markdown
-# Vision: [Project Name]
-
-## Problem Statement
-[What problem this solves and why it matters]
-
-## Target Users
-[Specific user personas and their context]
-
-## Core Features
-[The 3-5 must-have features, described from the user's perspective]
-
-## Technical Context
-[Stack constraints, hosting, existing systems to integrate with]
-
-## Non-Functional Requirements
-[Performance, security, accessibility, scalability targets]
-
-## Out of Scope
-[Explicitly what this project will NOT do — be specific]
-
-## Success Criteria
-[How we know this project succeeded — measurable outcomes]
-
-## Execution Context
-- Team size: [N]
-- Sprint cadence: [N weeks]
-- Target first release: [timeline or TBD]
-```
+Fill each section with the interview answers, following the **For AI Generation** guidelines below.
 
 Show the draft to the user and ask:
 "Here's the vision draft. Does this capture what you're building? What's missing or incorrect?"
@@ -140,6 +112,45 @@ Show the draft to the user and ask:
 Incorporate feedback. Repeat until the user confirms: "Yes, this is correct."
 
 Save to `docs/blueprint/vision.md`.
+
+---
+
+## For AI Generation
+
+When filling `templates/vision-template.md`:
+
+### Section Rules
+
+**Problem Statement** — State the problem only. No solution hints, no technology, no delivery phases.
+
+**Target Users** — Be specific. "Small e-commerce teams of 2–5 people running Shopify stores" beats "business users". Include their context.
+
+**Core Features** — User-facing capabilities only. If the user listed more than 5, ask which 3–5 are non-negotiable.
+
+**Technical Context** — Record only what the user stated. Do not infer a tech stack.
+
+**Non-Functional Requirements** — If not mentioned, write "No specific NFRs identified." Do not invent targets.
+
+**Out of Scope** — Be specific. "No mobile app" is useful; "out of scope for v1" is not.
+
+**Success Criteria** — Prefer measurable outcomes. If the user gave none, propose 2–3 based on Core Features and confirm before saving.
+
+**Execution Context** — Use `TBD` for any unknown value. Never estimate team size, sprint cadence, or release target.
+
+### When to Mark TBD
+
+Use `TBD` when the user said "I don't know" or the question was skipped. Never infer a value for team size, sprint cadence, or release target.
+
+### Scope Signals — Remove Before Saving
+
+If any of the following appear in the draft, move or remove them before saving:
+
+| Found in draft | Where it belongs instead |
+| --- | --- |
+| Delivery phases, stages, or milestones | `roadmap.md` |
+| Spec Outline breakdowns or feature priority lists | `roadmap.md` |
+| Specific technology or architecture choices | `roadmap.md` or `spec.md` |
+| Sprint assignments, task lists, implementation steps | `roadmap.md` or `spec.md` |
 
 ---
 
@@ -155,12 +166,14 @@ Flag any content that does not belong at the vision level:
 - Sprint assignments or task lists → belongs in roadmap or spec
 
 For each violation found, output:
-```
+
+```text
 ⚠️ Scope issue in vision.md: "[excerpt]"
 This level of detail belongs in [roadmap / spec]. Remove it from vision.md or move it to the appropriate stage.
 ```
 
 Ask the user: "Found [N] scope issue(s) above. Fix before proceeding? (yes / no / skip)"
+
 - **yes** → apply fixes and re-confirm the file
 - **no / skip** → proceed as-is, note issues remain
 
@@ -175,13 +188,13 @@ Check if `docs/blueprint/roadmap.md` exists. If it does not exist, skip this ste
 Read `docs/blueprint/roadmap.md`. Compare each of the following against the updated `vision.md`:
 
 - **Stage goals** — do any stage goals contradict or no longer reflect the updated Core Features or Problem Statement?
-- **Spec Outline stories** — do any stories reference features that are now Out of Scope, or miss features newly added to Core Features?
+- **Spec Outline objectives** — do any objectives reference features that are now Out of Scope, or miss features newly added to Core Features?
 - **Out of Scope alignment** — does the roadmap include anything that vision now explicitly marks as Out of Scope?
-- **Target Users** — do any Spec Outline stories serve a user segment no longer in the vision?
+- **Target Users** — do any Spec Outline objectives serve a user segment no longer in the vision?
 
 For each misalignment found, produce a specific proposed change:
 
-```
+```text
 ⚠️ Roadmap alignment issue found:
 
 [For each issue:]
@@ -192,6 +205,7 @@ Reason:   "[one-line explanation based on vision change]"
 ```
 
 If issues are found, ask: "Found [N] roadmap alignment issue(s) above. Apply these updates now? (yes / no)"
+
 - **yes** → apply all proposed changes to `docs/blueprint/roadmap.md`, save, and output: "✅ roadmap.md updated to reflect vision changes."
 - **no** → output: "ℹ️ roadmap.md not updated. Run `/speckit.blueprint.roadmap` when ready to re-align."
 
@@ -202,6 +216,7 @@ If no issues found → output: "✅ Roadmap is consistent with updated vision."
 ### Step 6: Completion
 
 Confirm the file is saved:
+
 - `docs/blueprint/vision.md` ✓
 
 Tell the user:
@@ -210,5 +225,5 @@ Tell the user:
 ## Output Files
 
 | File | Purpose |
-|------|---------|
+| --- | --- |
 | `docs/blueprint/vision.md` | Project vision — foundation for all downstream work |

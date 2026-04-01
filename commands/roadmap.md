@@ -19,15 +19,15 @@ This command replaces both the old `roadmap` and `decompose` commands. The outpu
 
 `roadmap.md` answers **what stages exist, in what order, and what each Spec Outline covers** — nothing more.
 
-**Belongs here:** stage names and goals, acceptance criteria per stage, one Spec Outline per stage (user-facing goal, 1–3 user stories, size estimate), dependencies between Spec Outlines, execution order.
+**Belongs here:** stage names and goals, acceptance criteria per stage, one Spec Outline per stage (user-facing goal, 1–3 objectives, size estimate), dependencies between Spec Outlines, execution order.
 
-**Does NOT belong here:** implementation details, code snippets, task-level breakdowns, test cases, more than 3 stories per Spec Outline, sprint-by-sprint assignments, team member allocation. If any of these appear in a draft, they belong in a spec — remove them.
+**Does NOT belong here:** implementation details, code snippets, task-level breakdowns, test cases, more than 3 objectives per Spec Outline, sprint-by-sprint assignments, team member allocation. If any of these appear in a draft, they belong in a spec — remove them.
 
 ## Stage : Spec Outline Ratio
 
 Each stage has **exactly one** Spec Outline. If a stage is too large to fit into a single Epic (2–4+ sprints), split it into two stages rather than adding a second Spec Outline.
 
-Spec Outline stories map directly to the P1/P2/P3 priority sections that `/speckit.specify` will generate inside `spec.md`. Keep stories user-facing and outcome-oriented.
+Spec Outline objectives map directly to the P1/P2/P3 priority sections that `/speckit.specify` will generate inside `spec.md`. Keep objectives user-facing and outcome-oriented.
 
 ## User Input
 
@@ -132,12 +132,12 @@ Output: `[Phase 2 of 3] Spec Outline Sizing`
 For each confirmed stage, define its Spec Outline:
 - **Spec Outline ID**: sequential, zero-padded (Spec Outline 001, Spec Outline 002, …)
 - **User-facing goal**: one sentence from the user's perspective
-- **Stories**: 1–3 user stories that will become P1/P2/P3 sections in `spec.md` — phrase as outcomes, not tasks
+- **Objectives**: 1–3 objectives that will become P1/P2/P3 sections in `spec.md` — phrase as outcomes, not tasks
 - **Size**: estimated sprint count (~N sprints)
 
-One Spec Outline per stage, no exceptions. If stories exceed 3 or the size estimate exceeds what fits one Epic, split the stage instead.
+One Spec Outline per stage, no exceptions. If objectives exceed 3 or the size estimate exceeds what fits one Epic, split the stage instead.
 
-Present the Spec Outlines to the user and ask: "Do the Spec Outlines correctly capture what each stage delivers? Are the story counts and sizes realistic?"
+Present the Spec Outlines to the user and ask: "Do the Spec Outlines correctly capture what each stage delivers? Are the objective counts and sizes realistic?"
 
 Incorporate feedback. Repeat until the user confirms.
 
@@ -161,70 +161,63 @@ Incorporate feedback, then proceed to write the output file.
 
 ### Step 5: Write Output File
 
-Assemble and save `docs/blueprint/roadmap.md` using the format below. Include a `_Last updated:_` line with today's date.
+Load `templates/roadmap-template.md` to understand the required sections.
 
-```markdown
-# Roadmap: [Project Name]
+Fill each Stage and Spec Outline with the confirmed output from Phases 1–3, following the **For AI Generation** guidelines below.
 
-_Last updated: [date]_
+Include a `_Last updated:_` line with today's date.
 
----
-
-## Stage 1: [Name]
-
-**Goal:** [What this stage delivers]
-**Dependencies:** [Prior stages or None]
-**Acceptance Criteria:**
-- [ ] [Verifiable criterion]
-
-**Spec Outline:**
-- [📋] **Spec Outline 001** [User-facing goal]
-  - Stories: [story 1], [story 2]
-  - Size: ~N sprints
-  - Deps: —
-  - Spec: —
-
-**Status:** 📋 Planned
+Save to `docs/blueprint/roadmap.md`.
 
 ---
 
-## Stage 2: [Name]
+## For AI Generation
 
-**Goal:** ...
-**Dependencies:** Stage 1
-**Acceptance Criteria:**
-- [ ] ...
+When filling `templates/roadmap-template.md`:
 
-**Spec Outline:**
-- [📋] **Spec Outline 002** [User-facing goal]
-  - Stories: [story 1], [story 2]
-  - Size: ~N sprints
-  - Deps: Spec Outline 001
-  - Spec: —
+### Stage Rules
 
-**Status:** 📋 Planned
+- Each stage delivers a demonstrable, locally-runnable increment — not an internal milestone
+- One Spec Outline per stage, no exceptions. If a stage needs two Spec Outlines, split the stage instead
+- Stage size must produce a Spec Outline of 2–4+ sprints. If smaller, merge with an adjacent stage
 
----
+### Spec Outline Field Rules
 
-## Execution Order
+**Goal** — User-facing, one sentence. Bad: "Implement authentication". Good: "Users can register and log in with email/password."
 
-### Sequence (must be done in order)
-Spec Outline 001 → Spec Outline 002 → Spec Outline 004 → ...
+**Objectives** — 1–3 only. Each becomes a P1/P2/P3 section in `spec.md`. Phrase as outcomes ("Users can X"), not tasks ("Implement X").
 
-### Parallel Groups
-| Group | Spec Outlines                       | Can start after         |
-|-------|-------------------------------------|-------------------------|
-| A     | Spec Outline 003, Spec Outline 005  | Spec Outline 001 complete |
+**Size** — Round to nearest sprint. Use `~1`, `~2`, `~3`. Do not write ranges.
 
----
+**Deps** — List Spec Outline IDs (e.g., `Spec Outline 001`). Write `—` if no dependencies.
 
-## Summary
-- Total Spec Outlines: [N]
-- Estimated total: [N sprints]
-- Critical path: Spec Outline 001 → Spec Outline 002 → ...
-```
+**Spec** — Write `—` until the spec file exists. Updated automatically by `_roadmap-sync` after `/speckit.specify`.
 
-The `[📋]` marker on each Spec Outline indicates it is ready to specify. When a Spec is in progress, change `[📋]` to `[🚧]`; when complete, change it to `[✅]`.
+### Status Markers
+
+| Marker | Meaning | When to set |
+| --- | --- | --- |
+| `[📋]` | Planned | Default — not yet specified |
+| `[🚧]` | In Progress | After `/speckit.specify` starts |
+| `[✅]` | Complete | After `_roadmap-sync` confirms completion |
+
+Never change markers manually unless the user explicitly asks to reset a status.
+
+### Execution Order Rules
+
+**Sequence** — Critical path only. Spec Outlines that can run in parallel do not belong here.
+
+**Parallel Groups** — Include only if two or more Spec Outlines can genuinely run concurrently. Remove the table entirely if everything is sequential. "Can start after" must name a specific Spec Outline ID, not a stage name.
+
+### Scope Signals — Remove Before Saving
+
+| Found in draft | Where it belongs instead |
+| --- | --- |
+| Code snippets or technical implementation details | `spec.md` |
+| More than 3 objectives in a Spec Outline | Split the stage |
+| Task-level breakdowns or test cases | `spec.md` |
+| Sprint-by-sprint assignments or team member allocation | Project management tool |
+| Multiple Spec Outlines in one stage | Split the stage |
 
 ---
 
@@ -237,8 +230,8 @@ Flag each violation before confirming completion:
 | Violation | Guidance |
 |-----------|----------|
 | Multiple Spec Outlines per Stage | Merge into one Spec Outline or split the Stage |
-| More than 3 stories in a Spec Outline | Trim to 3 or split the Stage |
-| Implementation detail in a story | Move to spec |
+| More than 3 objectives in a Spec Outline | Trim to 3 or split the Stage |
+| Implementation detail in an objective | Move to spec |
 | Spec Outline sized under ~1 sprint | Consider merging with an adjacent stage |
 | Stage Deliverables section present (old format) | Remove — the Spec Outline covers this |
 
@@ -261,10 +254,10 @@ If no violations are found, output: "Scope check passed."
 
 Read `docs/blueprint/vision.md`. Compare the finalized `roadmap.md` against the four vision dimensions:
 
-- **Out of Scope violations** — do any stage goals or Spec Outline stories introduce something vision marks as Out of Scope?
+- **Out of Scope violations** — do any stage goals or Spec Outline objectives introduce something vision marks as Out of Scope?
 - **Core Feature drift** — are any Core Features absent or contradicted by the roadmap structure?
-- **Target User drift** — do any stories serve a user segment not defined in vision?
-- **Non-Functional Requirements** — do any stories conflict with a stated NFR?
+- **Target User drift** — do any objectives serve a user segment not defined in vision?
+- **Non-Functional Requirements** — do any objectives conflict with a stated NFR?
 
 If drift is detected, produce specific proposed changes to `vision.md`:
 
