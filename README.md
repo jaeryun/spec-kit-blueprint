@@ -15,22 +15,16 @@ flowchart TD
     subgraph bp ["Blueprint — Big Picture First"]
         B["/speckit.blueprint.vision\nAdaptive Interview"]
         B --> C["vision.md"]
-        C --> VR{{"_vision-roadmap-check\nafter_blueprint_vision"}}
-        VR --> VC{{"_vision-check\nbefore_blueprint_roadmap"}}
-        VC --> D["/speckit.blueprint.roadmap\n3-phase: stages → Spec Outlines → deps"]
+        C --> D["/speckit.blueprint.roadmap\n3-phase: stages → Spec Outlines → deps"]
         D --> R["roadmap.md\nSpec Outline 001 ➜ Spec Outline 002 ➜ Spec Outline 003 …"]
-        R --> VS{{"_vision-sync\nafter_blueprint_roadmap"}}
     end
 
     R --> F & G & H
 
     subgraph impl ["Per-Spec-Outline — Repeat for each Spec Outline"]
-        RC{{"_roadmap-check\nbefore_specify"}}
-        RC --> F["/speckit.specify Spec Outline 001"] --> spec1["spec.md"]
-        RC --> G["/speckit.specify Spec Outline 002"] --> spec2["spec.md"]
-        RC --> H["/speckit.specify Spec Outline 003"] --> spec3["spec.md"]
-        spec1 & spec2 & spec3 --> RS{{"_roadmap-sync\nafter_specify"}}
-        RS --> RM["roadmap.md\nSpec Outline status updated"]
+        F["/speckit.specify Spec Outline 001"] --> spec1["spec.md"]
+        G["/speckit.specify Spec Outline 002"] --> spec2["spec.md"]
+        H["/speckit.specify Spec Outline 003"] --> spec3["spec.md"]
     end
 
     style bp fill:#e8edf5,stroke:#1e40af,stroke-width:1.5px
@@ -38,23 +32,15 @@ flowchart TD
     style A fill:#1e293b,stroke:#1e293b,color:#f8fafc
     style B fill:#1e40af,stroke:#1e40af,color:#f8fafc
     style C fill:#ffffff,stroke:#93c5fd,color:#1e3a5f
-    style VC fill:#92400e,stroke:#92400e,color:#fef3c7
     style D fill:#1e40af,stroke:#1e40af,color:#f8fafc
     style R fill:#ffffff,stroke:#93c5fd,color:#1e3a5f
-    style VR fill:#92400e,stroke:#92400e,color:#fef3c7
-    style VS fill:#92400e,stroke:#92400e,color:#fef3c7
-    style RC fill:#92400e,stroke:#92400e,color:#fef3c7
     style F fill:#0f766e,stroke:#0f766e,color:#f0fdf4
     style G fill:#0f766e,stroke:#0f766e,color:#f0fdf4
     style H fill:#0f766e,stroke:#0f766e,color:#f0fdf4
     style spec1 fill:#ffffff,stroke:#6ee7b7,color:#134e4a
     style spec2 fill:#ffffff,stroke:#6ee7b7,color:#134e4a
     style spec3 fill:#ffffff,stroke:#6ee7b7,color:#134e4a
-    style RS fill:#92400e,stroke:#92400e,color:#fef3c7
-    style RM fill:#ffffff,stroke:#6ee7b7,color:#134e4a
 ```
-
-> Hooks (diamond nodes, brown) fire automatically — you never invoke them directly.
 
 ## Goals
 
