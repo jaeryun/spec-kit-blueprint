@@ -21,15 +21,7 @@ If `docs/blueprint/roadmap.md` does not exist:
 
 ---
 
-### Step 2: Check for vision changes
-
-Compare the update date of `docs/blueprint/vision.md` against the `_Last updated:` line in `docs/blueprint/roadmap.md`.
-
-If vision.md was updated after the roadmap's last update date, the roadmap may be out of sync.
-
----
-
-### Step 3: Notify
+### Step 2: Notify
 
 Output:
 ```

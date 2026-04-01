@@ -83,7 +83,9 @@ Stop. Allow specify to proceed.
 
 #### Case B — Clear match, Spec Outline is [🚧] In Progress or [✅] Complete
 
-Output:
+Run the same dependency check as Case A: verify all deps of this Spec Outline are `[✅]` Complete. If any dep is incomplete, output the Dependency Not Ready warning (same as Case A) and wait for user response before proceeding.
+
+If dependency check passes (or deps are `—`), output:
 ```
 ⚠️ Spec Outline [NNN] is already [in progress / complete].
 
@@ -130,10 +132,8 @@ Spanning multiple Spec Outlines in a single spec risks scope creep and unclear o
 Options:
   A) Proceed — I'll scope this spec tightly to one Spec Outline.
   B) Cancel — I'll split this feature into separate specify runs.
-  C) Cancel.
 ```
 
 Wait for user response.
 - **A** → allow specify to proceed.
 - **B** → stop. Output: "Run `/speckit.specify` once per Spec Outline to keep scopes clean."
-- **C** → stop.

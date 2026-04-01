@@ -60,10 +60,22 @@ Check if `docs/blueprint/roadmap.md` exists.
 2. Ask: "Your existing roadmap is summarized above. What would you like to do?
    - (1) Update specific stages
    - (2) Regenerate from scratch
-   - (3) Cancel"
+   - (3) Reset a Spec Outline status
+   - (4) Cancel"
 3. If the user chooses (1): identify which stages to update from `$ARGUMENTS` or from their reply. Stages whose Spec Outline is marked ✅ Complete or 🚧 In Progress are **immutable** — do not re-analyze or overwrite them. Proceed to Step 2 for only the targeted stages.
 4. If the user chooses (2): proceed to Step 2 for all stages.
-5. If the user chooses (3): stop.
+5. If the user chooses (3): ask "Which Spec Outline would you like to reset? (provide number or goal)" — find the matching Spec Outline, then ask:
+   ```
+   Reset Spec Outline [NNN] — [goal]?
+
+   Current status: [✅ Complete / 🚧 In Progress]
+   Reset to: 📋 Planned
+
+   This will allow it to be re-specified. Confirm? (yes / no)
+   ```
+   - **yes** → change the Spec Outline marker back to `[📋]`, remove or reset any `**Status:**` line on the Stage if it was set to Complete, save `docs/blueprint/roadmap.md`, and output: "✅ Spec Outline [NNN] reset to 📋 Planned."
+   - **no** → return to the options menu.
+6. If the user chooses (4): stop.
 
 **If it does not exist:** proceed to Step 2.
 

@@ -15,7 +15,8 @@ flowchart TD
     subgraph bp ["Blueprint — Big Picture First"]
         B["/speckit.blueprint.vision\nAdaptive Interview"]
         B --> C["vision.md"]
-        C --> VC{{"_vision-check\nbefore_blueprint_roadmap"}}
+        C --> VR{{"_vision-roadmap-check\nafter_blueprint_vision"}}
+        VR --> VC{{"_vision-check\nbefore_blueprint_roadmap"}}
         VC --> D["/speckit.blueprint.roadmap\n3-phase: stages → Spec Outlines → deps"]
         D --> R["roadmap.md\nSpec Outline 001 ➜ Spec Outline 002 ➜ Spec Outline 003 …"]
         R --> VS{{"_vision-sync\nafter_blueprint_roadmap"}}
@@ -40,6 +41,7 @@ flowchart TD
     style VC fill:#92400e,stroke:#92400e,color:#fef3c7
     style D fill:#1e40af,stroke:#1e40af,color:#f8fafc
     style R fill:#ffffff,stroke:#93c5fd,color:#1e3a5f
+    style VR fill:#92400e,stroke:#92400e,color:#fef3c7
     style VS fill:#92400e,stroke:#92400e,color:#fef3c7
     style RC fill:#92400e,stroke:#92400e,color:#fef3c7
     style F fill:#0f766e,stroke:#0f766e,color:#f0fdf4
@@ -156,11 +158,12 @@ Blueprint fits between `constitution` (project setup) and `specify` (spec writin
 /speckit.constitution              # one-time project setup
     ↓
 /speckit.blueprint.vision          # interview → vision.md
-    ↓ [_vision-check] auto-runs before roadmap
+    ↓ [_vision-roadmap-check] auto-runs after vision saved
 /speckit.blueprint.roadmap         # vision → roadmap.md (stages + Spec Outlines + deps)
+    ↓ [_vision-check] auto-runs before roadmap
     ↓ [_vision-sync] auto-runs after roadmap saved
 For each Spec Outline (in dependency order):
-    ↓ [_roadmap-check] auto-runs before specify
+    ↓ [_roadmap-check] auto-runs before specify (includes dependency order check)
     /speckit.specify [Spec Outline goal]
         ↓ [_roadmap-sync] auto-runs after spec completed
     /speckit.plan → /speckit.tasks → /speckit.implement
@@ -174,11 +177,12 @@ Fleet handles the specify → implement cycle with human gates. Blueprint provid
 /speckit.constitution              # one-time project setup
     ↓
 /speckit.blueprint.vision          # interview → vision.md
-    ↓ [_vision-check] auto-runs before roadmap
+    ↓ [_vision-roadmap-check] auto-runs after vision saved
 /speckit.blueprint.roadmap         # vision → roadmap.md (stages + Spec Outlines + deps)
+    ↓ [_vision-check] auto-runs before roadmap
     ↓ [_vision-sync] auto-runs after roadmap saved
 For each Spec Outline (in dependency order):
-    ↓ [_roadmap-check] auto-runs before specify
+    ↓ [_roadmap-check] auto-runs before specify (includes dependency order check)
     /speckit.fleet [Spec Outline goal]     # Fleet orchestrates specify → plan → tasks → implement
         ↓ [_roadmap-sync] auto-runs after spec completed
 ```
