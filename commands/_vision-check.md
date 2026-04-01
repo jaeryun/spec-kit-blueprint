@@ -14,6 +14,15 @@ This command is invoked as a `before_blueprint_roadmap` hook. The roadmap change
 
 ## Instructions
 
+### Step 0: Re-sync skip check
+
+Check the current conversation context for evidence that this roadmap run was triggered as a re-sync operation — specifically, that `_vision-roadmap-check` already ran in this conversation and the user chose to re-run roadmap in response to its notification.
+
+If re-sync context is detected:
+→ Output: "✅ Re-sync run detected — skipping vision alignment check." and stop (allow roadmap to proceed).
+
+---
+
 ### Step 1: Check prerequisites
 
 If `docs/blueprint/vision.md` does not exist:
