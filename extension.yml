@@ -3,7 +3,7 @@ schema_version: "1.0"
 extension:
   id: blueprint
   name: "Blueprint"
-  version: "0.2.0"
+  version: "0.3.0"
   description: "Vision-first project planning that decomposes ideas into right-sized Spec Outlines for SpecKit."
   author: "jaeryun"
   repository: "https://github.com/jaeryun/spec-kit-blueprint"
@@ -13,6 +13,11 @@ requires:
   speckit_version: ">=0.4.0"
 
 hooks:
+  after_blueprint_vision:
+    command: "speckit.blueprint._vision-roadmap-check"
+    optional: true
+    description: "Notify user if roadmap.md may need updating after vision changes."
+
   before_blueprint_roadmap:
     command: "speckit.blueprint._vision-check"
     optional: false
@@ -50,6 +55,10 @@ provides:
     - name: speckit.blueprint._vision-sync
       file: commands/_vision-sync.md
       description: "Post-roadmap sync: update vision.md if roadmap planning revealed scope changes."
+
+    - name: speckit.blueprint._vision-roadmap-check
+      file: commands/_vision-roadmap-check.md
+      description: "Post-vision check: notify if roadmap.md exists and may need updating after vision changes."
 
     - name: speckit.blueprint._roadmap-check
       file: commands/_roadmap-check.md

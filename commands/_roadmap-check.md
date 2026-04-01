@@ -44,7 +44,34 @@ Using the feature description from the current conversation context, determine w
 
 #### Case A — Clear match, Spec Outline is [📋] Planned
 
-Output:
+Check the `Deps:` field of the matched Spec Outline.
+
+**If deps is `—` (none):** proceed directly.
+
+**If deps lists one or more Spec Outlines:** check the status of each listed dependency in `roadmap.md`.
+
+- If all listed dependencies are `[✅]` Complete → proceed.
+- If any listed dependency is `[📋]` Planned or `[🚧]` In Progress → output:
+
+```
+⚠️ Dependency Not Ready
+
+Spec Outline [NNN] depends on [Spec Outline MMM — goal], which is not yet complete ([📋 Planned / 🚧 In Progress]).
+
+Proceeding out of order risks building on an incomplete foundation.
+
+Options:
+  A) Complete Spec Outline [MMM] first — run `/speckit.specify [MMM goal]` first.
+  B) Proceed anyway — I understand the dependency risk.
+  C) Cancel.
+```
+
+Wait for user response.
+- **A** → stop.
+- **B** → allow specify to proceed. Output: "⚠️ Proceeding out of dependency order. Ensure Spec Outline [MMM] is completed before integrating."
+- **C** → stop.
+
+If all dependency checks pass, output:
 ```
 ✅ Roadmap aligned: maps to Spec Outline [NNN] — [Spec Outline goal]
 Proceeding with specification.

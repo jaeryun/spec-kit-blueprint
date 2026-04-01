@@ -116,9 +116,10 @@ Hooks fire automatically at lifecycle events — you do not invoke them directly
 
 | Hook | Event | When it fires | Purpose |
 |------|-------|---------------|---------|
+| `_vision-roadmap-check` | `after_blueprint_vision` | After vision saved | Alerts if roadmap may be out of sync with updated vision |
 | `_vision-check` | `before_blueprint_roadmap` | Before roadmap runs | Validates vision.md alignment |
 | `_vision-sync` | `after_blueprint_roadmap` | After roadmap saved | Syncs vision.md if scope changed |
-| `_roadmap-check` | `before_specify` | Before specify runs | Validates feature maps to a Spec Outline |
+| `_roadmap-check` | `before_specify` | Before specify runs | Validates feature maps to a Spec Outline and dependencies are met |
 | `_roadmap-sync` | `after_specify` | After spec completed | Updates Spec Outline status in roadmap.md |
 
 ### Usage Examples
