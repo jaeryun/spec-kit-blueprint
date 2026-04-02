@@ -67,8 +67,8 @@ If no Spec Outlines are found:
 Using the resolved match target from Step 1:
 
 - **Spec Outline reference**: look up by number directly. If not found, treat as no match (Case C).
-- **Spec file reference**: match the extracted spec title/description against Spec Outline goals and stories.
-- **Feature description**: match semantically against Spec Outline goals and stories.
+- **Spec file reference**: match the extracted spec title/description against Spec Outline goals and objectives.
+- **Feature description**: match semantically against Spec Outline goals and objectives.
 
 **Match criteria:** Prefer false positives over false negatives — partial or ambiguous overlap counts as a match.
 

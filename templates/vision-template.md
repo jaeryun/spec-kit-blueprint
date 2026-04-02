@@ -1,5 +1,7 @@
 # Vision: [PROJECT NAME]
 
+_Last updated: [DATE]_
+
 ---
 
 ## Problem Statement

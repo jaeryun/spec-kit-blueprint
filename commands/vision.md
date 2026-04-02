@@ -82,7 +82,7 @@ Conduct a conversational interview in **3 rounds**. Do not present all questions
 
 1. "What problem are you solving? Describe it in one or two sentences."
 2. "Who are the primary users? Be specific — not just 'developers' but what kind, what context."
-3. "What are the 3~5 most important things the product must do? (Core features, not nice-to-haves)"
+3. "What are the 3–5 most important things the product must do? (Core features, not nice-to-haves)"
 
 After Round 1, briefly reflect back what you heard and ask: "Is that a fair summary so far?"
 
@@ -107,6 +107,8 @@ If the user says "I don't know" or "not sure" for any answer — record it as `T
 Load `templates/vision-template.md` to understand the required sections.
 
 Fill each section with the interview answers, following the **For AI Generation** guidelines below.
+
+Include a `_Last updated: [date]_` line with today's date.
 
 Show the draft to the user and ask:
 "Here's the vision draft. Does this capture what you're building? What's missing or incorrect?"

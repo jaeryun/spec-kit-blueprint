@@ -24,7 +24,7 @@ This command replaces both the old `roadmap` and `decompose` commands. The outpu
 
 **Does NOT belong here:** implementation details, code snippets, task-level breakdowns, test cases, more than 3 objectives per Spec Outline, sprint-by-sprint assignments, team member allocation. If any of these appear in a draft, they belong in a spec — remove them.
 
-## Stage : Spec Outline Ratio
+## Stage: Spec Outline Ratio
 
 Each stage has **exactly one** Spec Outline. If a stage is too large to fit into a single Epic (2–4+ sprints), split it into two stages rather than adding a second Spec Outline.
 
@@ -176,7 +176,7 @@ Load `templates/roadmap-template.md` to understand the required sections.
 
 Fill each Stage and Spec Outline with the confirmed output from Phases 1–3, following the **For AI Generation** guidelines below.
 
-Include a `_Last updated:_` line with today's date.
+Include a `_Last updated: [date]_` line with today's date.
 
 Save to `docs/blueprint/roadmap.md`.
 

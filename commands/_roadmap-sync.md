@@ -10,7 +10,7 @@ Post-completion sync after `/speckit.specify`. Updates Spec Outline status in `r
 
 ## Context
 
-This command is invoked as an `after_specify` hook. The completed feature description is available from the current conversation context — it is the argument the user passed to `/speckit.specify`.
+This command is invoked as an `after_specify` or `after_clarify` hook. The completed feature description is available from the current conversation context — it is the argument the user passed to `/speckit.specify` or `/speckit.clarify`.
 
 ## Instructions
 

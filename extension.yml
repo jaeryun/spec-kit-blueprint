@@ -23,6 +23,11 @@ hooks:
     optional: false
     description: "Sync Spec Outline and roadmap stage status after a spec is completed."
 
+  after_clarify:
+    command: "speckit.blueprint._roadmap-sync"
+    optional: false
+    description: "Sync Spec Outline and roadmap stage status after a spec is updated via clarify."
+
 provides:
   commands:
     - name: speckit.blueprint.vision

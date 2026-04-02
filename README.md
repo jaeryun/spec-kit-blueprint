@@ -4,7 +4,7 @@ A [Spec Kit](https://github.com/github/spec-kit) extension that establishes proj
 
 ## Overview
 
-A **Spec Outline** is a planning artifact in `roadmap.md` — it defines the goal and user stories for one `/speckit.specify` run, sized to a single Jira Epic (2–4+ sprints). Each Stage in the roadmap has exactly one Spec Outline.
+A **Spec Outline** is a planning artifact in `roadmap.md` — it defines the goal and objectives for one `/speckit.specify` run, sized to a single Jira Epic (2–4+ sprints). Each Stage in the roadmap has exactly one Spec Outline.
 
 Starting a new project directly with `/speckit.specify` creates specs that are too large — trying to cover everything at once. Blueprint solves this by adding a vision-first step before any spec is written: it interviews you to define project vision, then produces a staged roadmap that embeds Spec Outlines (each sized to a single `/speckit.specify` run) and maps their dependencies so you know what to build in what order.
 
@@ -47,7 +47,7 @@ flowchart TD
 - **Clarify requirements through conversation**: An adaptive interview surfaces goals, users, constraints, and scope — turning a rough idea into a concrete plan before any spec is written
 - **Prevent scope creep**: Break large visions into right-sized Spec Outlines — each one completable as a single `/speckit.specify` run
 - **Identify dependencies at planning time**: Surface what blocks what before mid-sprint surprises, not after
-- **Zero-extension conflict**: Blueprint operates exclusively in the pre-specify phase — it exits before SpecKit's core workflow begins, leaving `specify → plan → tasks → implement` and every other extension completely untouched
+- **Zero-extension conflict**: Blueprint hooks only into planning and spec lifecycle events — leaving `plan → tasks → implement` and every other extension completely untouched
 
 ## Non-Goals
 
@@ -64,8 +64,8 @@ flowchart TD
 | **Dependency mapping** | Hard vs. soft deps identified upfront — know what blocks what before you start |
 | **Parallel group analysis** | Spec Outlines that can be worked simultaneously are grouped, so team bandwidth isn't wasted |
 | **Idempotent by design** | Re-run `vision` or `roadmap` any time. Completed and in-progress Spec Outlines are never overwritten |
-| **Alignment hooks** | Four lifecycle hooks catch vision drift, unmapped features, and keep roadmap status current automatically |
-| **Full extension compatibility** | Blueprint is pre-specify only — SpecKit's core workflow is untouched, so Fleet, Jira, and other extensions work alongside it without conflict |
+| **Alignment hooks** | Lifecycle hooks catch vision drift, unmapped features, and keep roadmap status current automatically |
+| **Full extension compatibility** | Blueprint hooks only into planning and spec lifecycle events — SpecKit's core workflow is untouched, so Fleet, Jira, and other extensions work alongside it without conflict |
 
 ## Installation
 
@@ -74,7 +74,7 @@ Requires Spec Kit >= 0.4.0.
 ### From GitHub Release
 
 ```bash
-specify extension add blueprint --from https://github.com/jaeryun/spec-kit-blueprint/archive/refs/tags/v0.2.0.zip
+specify extension add blueprint --from https://github.com/jaeryun/spec-kit-blueprint/archive/refs/tags/v0.3.0.zip
 ```
 
 ### From Local Path (For develop)
@@ -102,13 +102,22 @@ Commands run in sequence. Each requires the previous command's output to exist.
 
 Hooks fire automatically at lifecycle events — you do not invoke them directly. Each hook blocks or updates based on the current state of your blueprint files.
 
+**Registered hooks** (Blueprint subscribes to these SpecKit events):
+
 | Hook | Trigger Condition | Action | Purpose |
 |------|------------------|--------|---------|
-| `after_blueprint_vision` | After vision.md saved | `_vision-roadmap-check` | Alerts if roadmap may be out of sync with updated vision |
-| `before_blueprint_roadmap` | Before roadmap runs | `_vision-check` | Validates vision.md alignment |
-| `after_blueprint_roadmap` | After roadmap saved | `_vision-sync` | Syncs vision.md if scope changed |
 | `before_specify` | Before specify runs | `_roadmap-check` | Validates feature maps to a Spec Outline and dependencies are met |
 | `after_specify` | After spec completed | `_roadmap-sync` | Updates Spec Outline status in roadmap.md |
+| `after_clarify` | After spec updated via clarify | `_roadmap-sync` | Updates Spec Outline status in roadmap.md |
+
+**Emitted hook events** (available for other extensions to subscribe to):
+
+| Event | Fired when |
+|-------|-----------|
+| `before_blueprint_vision` | Before the vision interview begins |
+| `after_blueprint_vision` | After vision.md is confirmed and saved |
+| `before_blueprint_roadmap` | Before roadmap generation begins |
+| `after_blueprint_roadmap` | After roadmap.md is confirmed and saved |
 
 ### Usage Examples
 
@@ -152,6 +161,8 @@ For each Spec Outline (in dependency order):
     ↓ [_roadmap-check] auto-runs before specify (includes dependency order check)
     /speckit.specify [Spec Outline goal]
         ↓ [_roadmap-sync] auto-runs after spec completed
+    /speckit.clarify [changes]          # optional — refine spec after feedback
+        ↓ [_roadmap-sync] auto-runs after clarify
     /speckit.plan → /speckit.tasks → /speckit.implement
 ```
 
@@ -170,7 +181,7 @@ Fleet handles the specify → implement cycle with human gates. Blueprint provid
 For each Spec Outline (in dependency order):
     ↓ [_roadmap-check] auto-runs before specify (includes dependency order check)
     /speckit.fleet [Spec Outline goal]     # Fleet orchestrates specify → plan → tasks → implement
-        ↓ [_roadmap-sync] auto-runs after spec completed
+        ↓ [_roadmap-sync] auto-runs after spec completed / after clarify
 ```
 
 > Fleet extension: [spec-kit-fleet](https://github.com/sharathsatish/spec-kit-fleet)
