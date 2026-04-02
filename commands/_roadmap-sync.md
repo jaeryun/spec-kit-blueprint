@@ -45,6 +45,10 @@ If no matching Spec Outline is found:
 ```text
 ℹ️ No matching Spec Outline found — skipping sync.
 
+Top candidates (closest semantic match):
+  - Spec Outline [NNN] — [goal] ([stage name])
+  - Spec Outline [NNM] — [goal] ([stage name])
+
 To update manually, open docs/blueprint/roadmap.md and change the Spec Outline's status marker:
   [📋] → [🚧] for In Progress
   [📋] or [🚧] → [✅] for Complete
@@ -80,7 +84,7 @@ The status markers used in `roadmap.md` are:
 - `[🚧]` In Progress
 - `[✅]` Complete
 
-**Spec file mapping:** Identify the spec file produced by this specify run from the current conversation context (typically the file path of the generated `spec.md`). Update the `Spec:` field of the matched Spec Outline:
+**Spec file mapping:** Identify the spec file produced by this specify run from the current conversation context (typically the file path of the generated `spec.md`). The path must be relative to the project root (e.g., `docs/spec/auth.md`). Update the `Spec:` field of the matched Spec Outline:
 
 ```text
   - Spec: [spec file path]
@@ -93,7 +97,11 @@ Append a row to the History table reflecting the actual transition:
 - partial (status changed): `[TIMESTAMP] | Spec Outline [NNN] | 📋 → 🚧`
 - partial (already 🚧, no change): skip the History row
 
+**Before saving:** Verify the roadmap.md content is valid — check that no duplicate Spec Outline IDs exist and all status markers use the correct format (`[📋]`, `[🚧]`, or `[✅]`). If invalid content is detected, output an error and do not save.
+
 Save the updated `docs/blueprint/roadmap.md`.
+
+**After saving:** Re-read `docs/blueprint/roadmap.md` and confirm the status marker for the updated Spec Outline reflects the intended change. If the file does not contain the expected marker, output a warning and instruct the user to update manually.
 
 Output:
 

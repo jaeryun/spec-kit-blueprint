@@ -61,7 +61,7 @@ flowchart TD
 | **Adaptive interview** | Conversational setup that extracts vision, constraints, and team context |
 | **Staged roadmap** | Vision is translated into a delivery plan with demonstrable milestones sized to your sprint cadence |
 | **Integrated Spec Outlines** | Spec Outlines live inside roadmap.md — one per Stage, each sized to a single `/speckit.specify` run with a clear goal and 1–3 scope items |
-| **Dependency mapping** | Hard vs. soft deps identified upfront — know what blocks what before you start |
+| **Dependency mapping** | Deps between Spec Outlines are mapped at planning time — know what blocks what before you start |
 | **Parallel group analysis** | Spec Outlines that can be worked simultaneously are grouped, so team bandwidth isn't wasted |
 | **Idempotent by design** | Re-run `vision` or `roadmap` any time. Completed and in-progress Spec Outlines are never overwritten |
 | **Alignment hooks** | Lifecycle hooks catch vision drift, unmapped features, and keep roadmap status current automatically |

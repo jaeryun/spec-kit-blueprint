@@ -49,7 +49,7 @@ _Last updated: [DATE]_
 <!-- See Stage 1 comments above for full field guidance. -->
 **Goal:** [What this stage delivers]
 
-**Dependencies:** Stage 1
+**Dependencies:** Spec Outline 001
 
 **Acceptance Criteria:**
 - [ ] [Verifiable criterion]

@@ -74,7 +74,7 @@ Using the resolved match target from Step 1:
 - **Spec file reference**: match the extracted spec title/description against Spec Outline goals and objectives.
 - **Feature description**: match semantically against Spec Outline goals and objectives.
 
-**Match criteria:** Prefer false positives over false negatives — partial or ambiguous overlap counts as a match.
+**Match criteria:** When confidence is low or the match is ambiguous, ask the user to confirm before proceeding — this hook writes to `roadmap.md` and a wrong match would corrupt status.
 
 ---
 
@@ -138,7 +138,7 @@ Stop. Allow specify to proceed.
 
 **If the Spec Outline is `[✅]` Complete:** Skip the dependency check — dependencies were already satisfied when this Spec Outline was originally specified. Proceed directly to the confirmation prompt below.
 
-No status transition occurs in Case B — no History row is written regardless of the user's choice.
+No status transition occurs in Case B.
 
 Output:
 
@@ -152,7 +152,7 @@ Proceed? (yes / no)
 
 Wait for user response.
 
-- **yes** → allow specify to proceed.
+- **yes** → append a row to the History table: `[TIMESTAMP] | Spec Outline [NNN] | Re-specified (was 🚧/✅)` — then save `docs/blueprint/roadmap.md`. Allow specify to proceed.
 - **no** → stop. Suggest: "Consider running `/speckit.blueprint.roadmap` to add a new Spec Outline first."
 
 ---
