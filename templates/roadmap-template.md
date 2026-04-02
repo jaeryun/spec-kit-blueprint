@@ -40,7 +40,7 @@ _Last updated: [DATE]_
   - Deps: —
   - Spec: —
 
-**Status:** 📋 Planned
+**Status:** 📋 Planned <!-- 🚧 In Progress after first Spec Outline starts; ✅ Complete after all Spec Outlines done -->
 
 ---
 
@@ -61,7 +61,7 @@ _Last updated: [DATE]_
   - Deps: Spec Outline 001
   - Spec: —
 
-**Status:** 📋 Planned
+**Status:** 📋 Planned <!-- 🚧 In Progress after first Spec Outline starts; ✅ Complete after all Spec Outlines done -->
 
 ---
 
