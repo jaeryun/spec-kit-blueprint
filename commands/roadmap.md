@@ -77,7 +77,7 @@ Check if `docs/blueprint/roadmap.md` exists.
    This will allow it to be re-specified. Confirm? (yes / no)
    ```
 
-   - **yes** → change the Spec Outline marker back to `[📋]`, remove or reset any `**Status:**` line on the Stage if it was set to Complete, save `docs/blueprint/roadmap.md`, and output: "✅ Spec Outline [NNN] reset to 📋 Planned."
+   - **yes** → change the Spec Outline marker back to `[📋]`, clear the `Spec:` field back to `—`, remove or reset any `**Status:**` line on the Stage if it was set to Complete, save `docs/blueprint/roadmap.md`, and output: "✅ Spec Outline [NNN] reset to 📋 Planned. Note: the previously linked spec file (if any) is no longer referenced — archive or delete it manually if no longer needed."
    - **no** → return to the options menu.
 6. If the user chooses (4): stop.
 

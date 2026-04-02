@@ -14,6 +14,8 @@ This command is invoked as an `after_specify` or `after_clarify` hook. The compl
 
 When invoked via `after_clarify`, the argument may be a change description rather than a Spec Outline goal. In that case, prefer matching against the Spec Outline already marked `[🚧] In Progress` before attempting semantic matching.
 
+**Recovery after interrupted session:** If the specify run was interrupted (session ended before `after_specify` fired), this hook will not have run. To recover manually: run `/speckit.blueprint.roadmap` option (3) is not needed — instead, open `docs/blueprint/roadmap.md` and update the Spec Outline status and `Spec:` field directly, using the manual update instructions in Step 2 below.
+
 ## Instructions
 
 ### Step 1: Check prerequisites

@@ -62,6 +62,11 @@ Read `docs/blueprint/roadmap.md`. Find all Spec Outline entries (under `**Spec O
 If no Spec Outlines are found:
 → Output: "ℹ️ No Spec Outlines found in `docs/blueprint/roadmap.md` — skipping roadmap alignment check." and stop (allow specify to proceed).
 
+If `docs/blueprint/vision.md` exists, compare its `_Last updated:` date against `roadmap.md`'s `_Last updated:` date. If vision is newer than roadmap, output:
+> ⚠️ vision.md was updated after roadmap.md — roadmap may be out of sync with the latest vision. Consider running `/speckit.blueprint.roadmap` to re-align before specifying.
+
+This is a warning only — allow specify to proceed regardless.
+
 ---
 
 ### Step 3: Match to Spec Outline
@@ -119,9 +124,11 @@ Stop. Allow specify to proceed.
 
 #### Case B — Clear match, Spec Outline is [🚧] In Progress or [✅] Complete
 
-Run the same dependency check as Case A. If any dep is incomplete, output the Dependency Not Ready warning and wait for user response. If the user chooses A or C (stop), stop entirely. If the user chooses B (proceed), continue to the Case B confirmation prompt below.
+**If the Spec Outline is `[🚧]` In Progress:** Run the same dependency check as Case A. If any dep is incomplete, output the Dependency Not Ready warning and wait for user response. If the user chooses A or C (stop), stop entirely. If the user chooses B (proceed), continue to the confirmation prompt below.
 
-If dependency check passes (or deps are `—`), output:
+**If the Spec Outline is `[✅]` Complete:** Skip the dependency check — dependencies were already satisfied when this Spec Outline was originally specified. Proceed directly to the confirmation prompt below.
+
+Output:
 ```text
 ⚠️ Spec Outline [NNN] is already [in progress / complete].
 

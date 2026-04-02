@@ -60,10 +60,10 @@ provides:
       description: "Triggered after roadmap.md is confirmed and saved."
 
     - event: before_blueprint_decompose
-      description: "Deprecated. Previously triggered before Spec Outline decomposition. The decompose command has been merged into roadmap."
+      description: "Deprecated since v0.3.0. Previously triggered before Spec Outline decomposition. The decompose command has been merged into roadmap. Will be removed in v1.0.0."
 
     - event: after_blueprint_decompose
-      description: "Deprecated. Previously triggered after spec-outlines.md was generated. Spec Outlines now live inside roadmap.md."
+      description: "Deprecated since v0.3.0. Previously triggered after spec-outlines.md was generated. Spec Outlines now live inside roadmap.md. Will be removed in v1.0.0."
 
 tags:
   - planning
