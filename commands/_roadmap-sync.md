@@ -14,7 +14,7 @@ This command is invoked as an `after_specify` or `after_clarify` hook. The compl
 
 When invoked via `after_clarify`, the argument is a change description for a specific spec file. Identify the spec file being clarified from the current conversation context, then match it against the `Spec:` field in `roadmap.md` to find the corresponding Spec Outline — do not rely on semantic matching or `[🚧]` status for this case.
 
-**Recovery after interrupted session:** If the specify run was interrupted (session ended before `after_specify` fired), this hook will not have run. To recover manually: run `/speckit.blueprint.roadmap` option (3) is not needed — instead, open `docs/blueprint/roadmap.md` and update the Spec Outline status and `Spec:` field directly, using the manual update instructions in Step 2 below.
+**Recovery after interrupted session:** If the specify run was interrupted (session ended before `after_specify` fired), this hook will not have run. To recover manually: do NOT use `/speckit.blueprint.roadmap` option (3) — instead, open `docs/blueprint/roadmap.md` directly and update the Spec Outline status and `Spec:` field manually, following the format in Step 2 below.
 
 ## Instructions
 
@@ -71,7 +71,7 @@ Did this spec cover it?
 Wait for user response.
 
 - **yes** → mark the Spec Outline as `[✅]` Complete
-- **partial** → mark the Spec Outline as `[🚧]` In Progress
+- **partial** → if the Spec Outline is already `[🚧]` (set by `_roadmap-check` at specify start), leave the marker unchanged; if it is `[📋]` for any reason, set it to `[🚧]`
 - **wrong** → ask: "Which Spec Outline did this spec cover? (provide number or goal)" — re-match against the user's answer and proceed from Step 3 with the corrected Spec Outline. If re-match also fails, output the manual update message from Step 2 and stop.
 
 The status markers used in `roadmap.md` are:
@@ -88,7 +88,10 @@ The status markers used in `roadmap.md` are:
 
 If the spec file path cannot be determined, leave `Spec:` unchanged.
 
-Append a row to the History table: `[TIMESTAMP] | Spec Outline [NNN] | [🚧 → ✅ / 📋 → 🚧]`
+Append a row to the History table reflecting the actual transition:
+- yes: `[TIMESTAMP] | Spec Outline [NNN] | 🚧 → ✅`
+- partial (status changed): `[TIMESTAMP] | Spec Outline [NNN] | 📋 → 🚧`
+- partial (already 🚧, no change): skip the History row
 
 Save the updated `docs/blueprint/roadmap.md`.
 

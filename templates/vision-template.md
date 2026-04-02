@@ -65,4 +65,4 @@ _Last updated: [DATE]_
 
 | Timestamp | Subject | Note |
 | --- | --- | --- |
-| [TIMESTAMP] | vision.md | Created |
+| [YYYY-MM-DD HH:MM] | vision.md | Created |

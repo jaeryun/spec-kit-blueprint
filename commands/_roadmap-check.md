@@ -124,7 +124,7 @@ Output:
 ```text
 ✅ Roadmap aligned: maps to Spec Outline [NNN] — [Spec Outline goal]
 Status updated: [📋] Planned → [🚧] In Progress
-Stage "[stage name]": 📋 Planned → 🚧 In Progress
+Stage "[stage name]": 📋 Planned → 🚧 In Progress  ← only if Stage status changed
 Proceeding with specification.
 ```
 
@@ -137,6 +137,8 @@ Stop. Allow specify to proceed.
 **If the Spec Outline is `[🚧]` In Progress:** Run the same dependency check as Case A. If any dep is incomplete, output the Dependency Not Ready warning and wait for user response. If the user chooses A or C (stop), stop entirely. If the user chooses B (proceed), continue to the confirmation prompt below.
 
 **If the Spec Outline is `[✅]` Complete:** Skip the dependency check — dependencies were already satisfied when this Spec Outline was originally specified. Proceed directly to the confirmation prompt below.
+
+No status transition occurs in Case B — no History row is written regardless of the user's choice.
 
 Output:
 

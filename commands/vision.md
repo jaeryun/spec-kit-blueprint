@@ -115,9 +115,9 @@ Show the draft to the user and ask:
 
 Incorporate feedback. Repeat until the user confirms: "Yes, this is correct."
 
-If `docs/blueprint/vision.md` does not yet exist, add a History section with a `Created` entry. If it already exists, append a new row to the existing History table with an `Updated` note.
-
 Save to `docs/blueprint/vision.md`.
+
+**History:** If the file did not yet exist, the History section is already in the template with a `Created` entry — update the `[YYYY-MM-DD HH:MM]` placeholder with the current timestamp. If the file already existed, append a new row: `[YYYY-MM-DD HH:MM] | vision.md | Updated`.
 
 ---
 

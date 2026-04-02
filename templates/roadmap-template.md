@@ -24,7 +24,7 @@ _Last updated: [DATE]_
 
      Status markers:
        [📋] Planned — default, not yet specified
-       [🚧] In Progress — after /speckit.specify starts
+       [🚧] In Progress — set by _roadmap-check when /speckit.specify starts; also set by _roadmap-sync for partial coverage
        [✅] Complete — after _roadmap-sync confirms completion
 
      Goal: one sentence, user-facing. Bad: "Implement auth". Good: "Users can sign up and log in."
@@ -100,4 +100,4 @@ Spec Outline 001 → Spec Outline 002 → ...
 
 | Timestamp | Subject | Note |
 | --- | --- | --- |
-| [TIMESTAMP] | roadmap.md | Created |
+| [YYYY-MM-DD HH:MM] | roadmap.md | Created |
