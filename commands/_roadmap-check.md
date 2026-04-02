@@ -112,9 +112,12 @@ Wait for user response.
 - **B** → allow specify to proceed. Output: "⚠️ Proceeding out of dependency order. Ensure Spec Outline [MMM] is completed before integrating."
 - **C** → stop.
 
-If all dependency checks pass, output:
+If all dependency checks pass, update `docs/blueprint/roadmap.md`: change the matched Spec Outline marker from `[📋]` to `[🚧]` and save.
+
+Output:
 ```text
 ✅ Roadmap aligned: maps to Spec Outline [NNN] — [Spec Outline goal]
+Status updated: [📋] Planned → [🚧] In Progress
 Proceeding with specification.
 ```
 
