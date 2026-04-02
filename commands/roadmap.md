@@ -1,40 +1,34 @@
 ---
-description: "Generate a staged delivery roadmap with Spec Outlines from the confirmed vision."
+description: "Generate a delivery roadmap of Spec Outlines from the confirmed vision."
 ---
 
 # Blueprint Roadmap
 
-Generate a staged delivery roadmap with one Spec Outline per stage from the confirmed vision.
+Generate a delivery roadmap of Spec Outlines from the confirmed vision.
 
 ## Purpose
 
 Using the confirmed `vision.md`, produce a single `roadmap.md` that:
 
-- Breaks the project into deliverable stages
-- Attaches exactly one Spec Outline to each stage (sized to a Jira Epic, 2–4+ sprints)
+- Analyzes the project vision and interviews the user to surface all work needed
+- Defines Spec Outlines (Jira Epics, 2–4+ sprints each) with goals, objectives, and size estimates
 - Maps dependencies between Spec Outlines and produces an execution order
 
-This command replaces both the old `roadmap` and `decompose` commands. The output file contains stage definitions and Spec Outlines in one document.
+This command replaces both the old `roadmap` and `decompose` commands.
 
 ## Scope Boundary
 
-`roadmap.md` answers **what stages exist, in what order, and what each Spec Outline covers** — nothing more.
+`roadmap.md` answers **what Spec Outlines exist, in what order, and what each covers** — nothing more.
 
-**Belongs here:** stage names and goals, acceptance criteria per stage, one Spec Outline per stage (user-facing goal, 1–3 objectives, size estimate), dependencies between Spec Outlines, execution order.
+**Belongs here:** Spec Outline goals, 1–3 objectives per Spec Outline (user-facing outcomes), size estimates, dependencies between Spec Outlines, execution order.
 
 **Does NOT belong here:** implementation details, code snippets, task-level breakdowns, test cases, more than 3 objectives per Spec Outline, sprint-by-sprint assignments, team member allocation. If any of these appear in a draft, they belong in a spec — remove them.
-
-## Stage: Spec Outline Ratio
-
-Each stage has **exactly one** Spec Outline. If a stage is too large to fit into a single Epic (2–4+ sprints), split it into two stages rather than adding a second Spec Outline.
-
-Spec Outline objectives map directly to the P1/P2/P3 priority sections that `/speckit.specify` will generate inside `spec.md`. Keep objectives user-facing and outcome-oriented.
 
 ## User Input
 
 $ARGUMENTS
 
-If `$ARGUMENTS` names a specific stage (e.g., "Stage 2"), re-run only that stage and leave all others unchanged. If `$ARGUMENTS` contains a general focus hint (e.g., "focus on the backend stages"), apply it during generation.
+If `$ARGUMENTS` names a specific Spec Outline (e.g., "Spec Outline 002"), re-run only that Spec Outline and leave all others unchanged. If `$ARGUMENTS` contains a general focus hint (e.g., "focus on the backend Spec Outlines"), apply it during generation.
 
 ## Hooks
 
@@ -58,14 +52,14 @@ Check if `docs/blueprint/roadmap.md` exists.
 
 **If it exists:**
 
-1. Read the file and output a brief summary: number of stages, Spec Outline IDs, and any stages marked Complete (✅) or In Progress (🚧).
+1. Read the file and output a brief summary: number of Spec Outlines, their IDs and statuses (📋 / 🚧 / ✅).
 2. Ask: "Your existing roadmap is summarized above. What would you like to do?
-   - (1) Update specific stages
+   - (1) Update specific Spec Outlines
    - (2) Regenerate from scratch
    - (3) Reset a Spec Outline status
    - (4) Cancel"
-3. If the user chooses (1): identify which stages to update from `$ARGUMENTS` or from their reply. Stages whose Spec Outline is marked ✅ Complete or 🚧 In Progress are **immutable** — do not re-analyze or overwrite them. For each skipped immutable stage, output: "Skipping Stage [N] — Spec Outline [NNN] is [🚧 In Progress / ✅ Complete]. Use option (3) to reset it first." Proceed to Step 2 for only the targeted stages.
-4. If the user chooses (2): proceed to Step 2 for all stages.
+3. If the user chooses (1): identify which Spec Outlines to update from `$ARGUMENTS` or from their reply. Spec Outlines marked ✅ Complete or 🚧 In Progress are **immutable** — do not re-analyze or overwrite them. For each skipped immutable Spec Outline, output: "Skipping Spec Outline [NNN] — status is [🚧 In Progress / ✅ Complete]. Use option (3) to reset it first." Proceed to Step 2 for only the targeted Spec Outlines.
+4. If the user chooses (2): proceed to Step 2 for all Spec Outlines.
 5. If the user chooses (3): ask "Which Spec Outline would you like to reset? (provide number or goal)" — find the matching Spec Outline, then ask:
 
    ```text
@@ -77,7 +71,7 @@ Check if `docs/blueprint/roadmap.md` exists.
    This will allow it to be re-specified. Confirm? (yes / no)
    ```
 
-   - **yes** → change the Spec Outline marker back to `[📋]`, clear the `Spec:` field back to `—`, remove or reset any `**Status:**` line on the Stage if it was set to Complete, append a `[TIMESTAMP] | Spec Outline [NNN] | ✅/🚧 → 📋 (reset)` row to the History table, save `docs/blueprint/roadmap.md`, and output: "✅ Spec Outline [NNN] reset to 📋 Planned. Note: the previously linked spec file (if any) is no longer referenced — archive or delete it manually if no longer needed."
+   - **yes** → change the Spec Outline marker back to `[📋]`, clear the `Spec:` field back to `—`, append a `[TIMESTAMP] | Spec Outline [NNN] | ✅/🚧 → 📋 (reset)` row to the History table, save `docs/blueprint/roadmap.md`, and output: "✅ Spec Outline [NNN] reset to 📋 Planned. Note: the previously linked spec file (if any) is no longer referenced — archive or delete it manually if no longer needed."
    - **no** → return to the options menu.
 6. If the user chooses (4): stop.
 
@@ -85,11 +79,11 @@ Check if `docs/blueprint/roadmap.md` exists.
 
 ---
 
-### Step 2: Phase 1 — Stage Boundary Definition
+### Step 2: Phase 1 — Spec Outline Definition
 
-Output: `[Phase 1 of 3] Stage Boundary Definition`
+Output: `[Phase 1 of 2] Spec Outline Definition`
 
-**Vision alignment check:** Before proceeding, assess whether the current roadmap change intent (what the user wants to update or generate) conflicts with `docs/blueprint/vision.md` across these four dimensions:
+**Vision alignment check:** Before proceeding, assess whether the current roadmap change intent conflicts with `docs/blueprint/vision.md` across these four dimensions:
 
 - **Core Features** — does the proposed change drop or significantly reduce a Core Feature?
 - **Out of Scope** — does the proposed change introduce something vision explicitly marks as Out of Scope?
@@ -115,47 +109,28 @@ Read `docs/blueprint/vision.md`. Pay special attention to:
 - Sprint cadence and team size (Execution Context section)
 - Core features and out-of-scope items
 
-Define stages. For each stage, determine:
+Define Spec Outlines. For each, determine:
 
-- **Name**: short, delivery-oriented label
-- **Goal**: one sentence describing what this stage delivers
-- **Acceptance Criteria**: 2–4 verifiable, binary criteria (checkbox format)
+- **Goal**: one sentence describing what this Epic delivers, from the user's perspective
+- **Objectives**: 1–3 outcomes that will become P1/P2/P3 sections in `spec.md` — phrase as outcomes ("Users can X"), not tasks ("Implement X")
+- **Size**: estimated sprint count (~N sprints, minimum ~2)
 
 Principles:
 
-- Each stage delivers a demonstrable, locally-runnable increment
-- Stage size should produce a Spec Outline of 2–4+ sprints
-- Earlier stages cover foundational/blocking work; later stages add depth and polish
-- If a stage feels too large for one Epic, split it into two stages now
+- Each Spec Outline delivers a cohesive, user-observable capability
+- Size should be 2–4+ sprints (one Jira Epic). If smaller, merge with an adjacent Spec Outline. If larger, split into two.
+- Earlier Spec Outlines cover foundational/blocking work; later ones add depth and polish
+- Objectives must not exceed 3 — if more are needed, split into two Spec Outlines
 
-Present the stage list to the user and ask: "Do the stage boundaries make sense? Are the sizes realistic for your team?"
-
-Incorporate feedback. Repeat until the user confirms the stage list.
-
----
-
-### Step 3: Phase 2 — Spec Outline Sizing
-
-Output: `[Phase 2 of 3] Spec Outline Sizing`
-
-For each confirmed stage, define its Spec Outline:
-
-- **Spec Outline ID**: sequential, zero-padded (Spec Outline 001, Spec Outline 002, …)
-- **User-facing goal**: one sentence from the user's perspective
-- **Objectives**: 1–3 objectives that will become P1/P2/P3 sections in `spec.md` — phrase as outcomes, not tasks
-- **Size**: estimated sprint count (~N sprints)
-
-One Spec Outline per stage, no exceptions. If objectives exceed 3 or the size estimate exceeds what fits one Epic, split the stage instead.
-
-Present the Spec Outlines to the user and ask: "Do the Spec Outlines correctly capture what each stage delivers? Are the objective counts and sizes realistic?"
+Present the Spec Outline list to the user and ask: "Do the Spec Outlines make sense? Are the scopes and sizes realistic for your team?"
 
 Incorporate feedback. Repeat until the user confirms.
 
 ---
 
-### Step 4: Phase 3 — Dependency Mapping
+### Step 3: Phase 2 — Dependency Mapping
 
-Output: `[Phase 3 of 3] Dependency Mapping`
+Output: `[Phase 2 of 2] Dependency Mapping`
 
 For each Spec Outline, identify which prior Spec Outlines it depends on (write `—` if none).
 
@@ -170,21 +145,21 @@ Incorporate feedback, then proceed to write the output file.
 
 ---
 
-### Step 5: Write Output File
+### Step 4: Write Output File
 
 Load `templates/roadmap-template.md` to understand the required sections.
 
-Fill each Stage and Spec Outline with the confirmed output from Phases 1–3, following the **For AI Generation** guidelines at the end of this file.
+Fill each Spec Outline with the confirmed output from Phases 1–2, following the **For AI Generation** guidelines at the end of this file.
 
 Include a `_Last updated: [date]_` line with today's date.
 
-If `docs/blueprint/roadmap.md` does not yet exist, the History section in the template will carry a `Created` entry. If it already exists (regenerate or stage update), preserve all existing History rows and append a new row: `roadmap.md | Updated` (for full regeneration) or `Stage [N] | Updated` (for targeted stage update).
+If `docs/blueprint/roadmap.md` does not yet exist, the History section in the template will carry a `Created` entry. If it already exists (regenerate or update), preserve all existing History rows and append a new row: `[TIMESTAMP] | roadmap.md | Updated` (for full regeneration) or `[TIMESTAMP] | Spec Outline [NNN] | Updated` (for targeted update).
 
 Save to `docs/blueprint/roadmap.md`.
 
 ---
 
-### Step 6: Scope Check
+### Step 5: Scope Check
 
 After saving, review `docs/blueprint/roadmap.md` against the Scope Boundary defined above.
 
@@ -192,11 +167,9 @@ Flag each violation before confirming completion:
 
 | Violation | Guidance |
 | --- | --- |
-| Multiple Spec Outlines per Stage | Merge into one Spec Outline or split the Stage |
-| More than 3 objectives in a Spec Outline | Trim to 3 or split the Stage |
+| More than 3 objectives in a Spec Outline | Trim to 3 or split into two Spec Outlines |
 | Implementation detail in an objective | Move to spec |
-| Spec Outline sized under ~2 sprints | Consider merging with an adjacent stage |
-| Stage Deliverables section present (old format) | Remove — the Spec Outline covers this |
+| Spec Outline sized under ~2 sprints | Consider merging with an adjacent Spec Outline |
 
 For each violation found, output:
 
@@ -214,12 +187,12 @@ If no violations are found, output: "Scope check passed."
 
 ---
 
-### Step 7: Vision Sync
+### Step 6: Vision Sync
 
 Read `docs/blueprint/vision.md`. Compare the finalized `roadmap.md` against the four vision dimensions:
 
-- **Out of Scope violations** — do any stage goals or Spec Outline objectives introduce something vision marks as Out of Scope?
-- **Core Feature drift** — are any Core Features absent or contradicted by the roadmap structure?
+- **Out of Scope violations** — do any Spec Outline goals or objectives introduce something vision marks as Out of Scope?
+- **Core Feature drift** — are any Core Features absent or contradicted by the roadmap?
 - **Target User drift** — do any objectives serve a user segment not defined in vision?
 - **Non-Functional Requirements** — do any objectives conflict with a stated NFR?
 
@@ -244,7 +217,7 @@ If no drift found → output: "✅ Vision consistent with roadmap."
 
 ---
 
-### Step 8: Completion
+### Step 7: Completion
 
 Confirm the file is saved:
 
@@ -253,7 +226,7 @@ Confirm the file is saved:
 Output:
 
 ```text
-Roadmap complete. [N] stages, [N] Spec Outlines defined.
+Roadmap complete. [N] Spec Outlines defined.
 
 Next: /speckit.specify [Spec Outline 001 goal]
 After each Spec is complete, run the next Spec Outline in dependency order.
@@ -263,7 +236,7 @@ After each Spec is complete, run the next Spec Outline in dependency order.
 
 | File | Purpose |
 | --- | --- |
-| `docs/blueprint/roadmap.md` | Staged delivery plan with Spec Outlines and dependencies |
+| `docs/blueprint/roadmap.md` | Delivery plan with Spec Outlines and dependencies |
 
 ---
 
@@ -271,19 +244,13 @@ After each Spec is complete, run the next Spec Outline in dependency order.
 
 When filling `templates/roadmap-template.md`:
 
-### Stage Rules
-
-- Each stage delivers a demonstrable, locally-runnable increment — not an internal milestone
-- One Spec Outline per stage, no exceptions. If a stage needs two Spec Outlines, split the stage instead
-- Stage size must produce a Spec Outline of 2–4+ sprints. If smaller, merge with an adjacent stage
-
 ### Spec Outline Field Rules
 
 **Goal** — User-facing, one sentence. Bad: "Implement authentication". Good: "Users can register and log in with email/password."
 
 **Objectives** — 1–3 only. Each becomes a P1/P2/P3 section in `spec.md`. Phrase as outcomes ("Users can X"), not tasks ("Implement X").
 
-**Size** — Round to nearest sprint. Use `~2`, `~3`, `~4`. Minimum ~2; if smaller, merge with an adjacent stage. Do not write ranges.
+**Size** — Round to nearest sprint. Use `~2`, `~3`, `~4`. Minimum ~2; if smaller, merge with an adjacent Spec Outline. Do not write ranges.
 
 **Deps** — List Spec Outline IDs (e.g., `Spec Outline 001`). Write `—` if no dependencies.
 
@@ -303,14 +270,13 @@ Never change markers manually unless the user explicitly asks to reset a status.
 
 **Sequence** — Critical path only. Spec Outlines that can run in parallel do not belong here.
 
-**Parallel Groups** — Include only if two or more Spec Outlines can genuinely run concurrently. Remove the table entirely if everything is sequential. "Can start after" must name a specific Spec Outline ID, not a stage name.
+**Parallel Groups** — Include only if two or more Spec Outlines can genuinely run concurrently. Remove the table entirely if everything is sequential. "Can start after" must name a specific Spec Outline ID.
 
 ### Scope Signals — Remove Before Saving
 
 | Found in draft | Where it belongs instead |
 | --- | --- |
 | Code snippets or technical implementation details | `spec.md` |
-| More than 3 objectives in a Spec Outline | Split the stage |
+| More than 3 objectives in a Spec Outline | Split into two Spec Outlines |
 | Task-level breakdowns or test cases | `spec.md` |
 | Sprint-by-sprint assignments or team member allocation | Project management tool |
-| Multiple Spec Outlines in one stage | Split the stage |

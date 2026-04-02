@@ -113,10 +113,7 @@ Wait for user response.
 If all dependency checks pass, update `docs/blueprint/roadmap.md`:
 
 - Change the matched Spec Outline marker from `[📋]` to `[🚧]`
-- If the Stage's `**Status:**` is `📋 Planned`, update it to `🚧 In Progress`
-- Append rows to the History table:
-  - `[TIMESTAMP] | Spec Outline [NNN] | 📋 → 🚧`
-  - `[TIMESTAMP] | Stage [N] | 📋 → 🚧` (only if Stage was Planned)
+- Append a row to the History table: `[TIMESTAMP] | Spec Outline [NNN] | 📋 → 🚧`
 - Save the file
 
 Output:
@@ -124,7 +121,6 @@ Output:
 ```text
 ✅ Roadmap aligned: maps to Spec Outline [NNN] — [Spec Outline goal]
 Status updated: [📋] Planned → [🚧] In Progress
-Stage "[stage name]": 📋 Planned → 🚧 In Progress  ← only if Stage status changed
 Proceeding with specification.
 ```
 

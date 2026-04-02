@@ -4,7 +4,7 @@ A [Spec Kit](https://github.com/github/spec-kit) extension that establishes proj
 
 ## Overview
 
-A **Spec Outline** is a planning artifact in `roadmap.md` — it defines the goal and objectives for one `/speckit.specify` run, sized to a single Jira Epic (2–4+ sprints). Each Stage in the roadmap has exactly one Spec Outline.
+A **Spec Outline** is a planning artifact in `roadmap.md` — it defines the goal and objectives for one `/speckit.specify` run, sized to a single Jira Epic (2–4+ sprints).
 
 Starting a new project directly with `/speckit.specify` creates specs that are too large — trying to cover everything at once. Blueprint solves this by adding a vision-first step before any spec is written: it interviews you to define project vision, then produces a staged roadmap that embeds Spec Outlines (each sized to a single `/speckit.specify` run) and maps their dependencies so you know what to build in what order.
 
@@ -59,7 +59,7 @@ flowchart TD
 | | |
 |---|---|
 | **Adaptive interview** | Conversational setup that extracts vision, constraints, and team context |
-| **Staged roadmap** | Vision is translated into a delivery plan with demonstrable milestones sized to your sprint cadence |
+| **Delivery roadmap** | Vision is translated into a delivery plan with Spec Outlines sized to Jira Epics and ordered by dependency |
 | **Integrated Spec Outlines** | Spec Outlines live inside roadmap.md — one per Stage, each sized to a single `/speckit.specify` run with a clear goal and 1–3 scope items |
 | **Dependency mapping** | Deps between Spec Outlines are mapped at planning time — know what blocks what before you start |
 | **Parallel group analysis** | Spec Outlines that can be worked simultaneously are grouped, so team bandwidth isn't wasted |

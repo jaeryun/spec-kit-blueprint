@@ -112,43 +112,11 @@ Output:
 
 ---
 
-### Step 4: Check roadmap stage completion
-
-Find the Stage that the updated Spec Outline belongs to.
-
-Check all Spec Outlines within that Stage:
-
-- If **all Spec Outlines** in the Stage are `[✅]` Complete → the Stage is complete. Proceed to Step 5.
-- If **any Spec Outline** in the Stage is `[📋]` Planned or `[🚧]` In Progress → output: "ℹ️ Stage [stage name] still has incomplete Spec Outlines — stage status not updated." and proceed to Step 6.
-
----
-
-### Step 5: Update roadmap stage status
-
-Mark the completed Stage in `roadmap.md` as done. Update the status line at the end of the stage's section:
-
-```text
-**Status:** ✅ Complete
-```
-
-Append a row to the History table: `[TIMESTAMP] | Stage [N] | 🚧 → ✅`
-
-Save the updated `docs/blueprint/roadmap.md`.
-
-Output:
-
-```text
-✅ roadmap.md updated: Stage "[stage name]" → ✅ Complete (all Spec Outlines done)
-```
-
----
-
-### Step 6: Summary
+### Step 4: Summary
 
 Output a brief sync summary:
 
 ```text
 Blueprint sync complete:
 - Spec Outline: [Spec Outline NNN] → [✅ Complete / 🚧 In Progress]
-- Stage "[stage name]": [✅ Complete (all Spec Outlines done) / incomplete Spec Outlines remain]
 ```
