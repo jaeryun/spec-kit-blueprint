@@ -9,6 +9,7 @@ Generate a staged delivery roadmap with one Spec Outline per stage from the conf
 ## Purpose
 
 Using the confirmed `vision.md`, produce a single `roadmap.md` that:
+
 - Breaks the project into deliverable stages
 - Attaches exactly one Spec Outline to each stage (sized to a Jira Epic, 2–4+ sprints)
 - Maps dependencies between Spec Outlines and produces an execution order
@@ -56,6 +57,7 @@ If missing, stop and output: "Run `/speckit.blueprint.vision` first."
 Check if `docs/blueprint/roadmap.md` exists.
 
 **If it exists:**
+
 1. Read the file and output a brief summary: number of stages, Spec Outline IDs, and any stages marked Complete (✅) or In Progress (🚧).
 2. Ask: "Your existing roadmap is summarized above. What would you like to do?
    - (1) Update specific stages
@@ -65,7 +67,8 @@ Check if `docs/blueprint/roadmap.md` exists.
 3. If the user chooses (1): identify which stages to update from `$ARGUMENTS` or from their reply. Stages whose Spec Outline is marked ✅ Complete or 🚧 In Progress are **immutable** — do not re-analyze or overwrite them. Proceed to Step 2 for only the targeted stages.
 4. If the user chooses (2): proceed to Step 2 for all stages.
 5. If the user chooses (3): ask "Which Spec Outline would you like to reset? (provide number or goal)" — find the matching Spec Outline, then ask:
-   ```
+
+   ```text
    Reset Spec Outline [NNN] — [goal]?
 
    Current status: [✅ Complete / 🚧 In Progress]
@@ -73,6 +76,7 @@ Check if `docs/blueprint/roadmap.md` exists.
 
    This will allow it to be re-specified. Confirm? (yes / no)
    ```
+
    - **yes** → change the Spec Outline marker back to `[📋]`, remove or reset any `**Status:**` line on the Stage if it was set to Complete, save `docs/blueprint/roadmap.md`, and output: "✅ Spec Outline [NNN] reset to 📋 Planned."
    - **no** → return to the options menu.
 6. If the user chooses (4): stop.
@@ -93,27 +97,32 @@ Output: `[Phase 1 of 3] Stage Boundary Definition`
 - **Non-Functional Requirements** — does the proposed change contradict a stated NFR?
 
 If a conflict is found, present it specifically and ask the user to confirm before continuing:
-```
+
+```text
 ⚠️ Vision Conflict: [dimension]
 "[specific conflict description]"
 
 Proceed anyway? (yes / no)
 ```
+
 - **yes** → continue.
 - **no** → stop. Output: "Update `docs/blueprint/vision.md` first to reflect the intended change."
 
 If no conflicts found, continue silently.
 
 Read `docs/blueprint/vision.md`. Pay special attention to:
+
 - Sprint cadence and team size (Execution Context section)
 - Core features and out-of-scope items
 
 Define stages. For each stage, determine:
+
 - **Name**: short, delivery-oriented label
 - **Goal**: one sentence describing what this stage delivers
 - **Acceptance Criteria**: 2–4 verifiable, binary criteria (checkbox format)
 
 Principles:
+
 - Each stage delivers a demonstrable, locally-runnable increment
 - Stage size should produce a Spec Outline of 2–4+ sprints
 - Earlier stages cover foundational/blocking work; later stages add depth and polish
@@ -130,6 +139,7 @@ Incorporate feedback. Repeat until the user confirms the stage list.
 Output: `[Phase 2 of 3] Spec Outline Sizing`
 
 For each confirmed stage, define its Spec Outline:
+
 - **Spec Outline ID**: sequential, zero-padded (Spec Outline 001, Spec Outline 002, …)
 - **User-facing goal**: one sentence from the user's perspective
 - **Objectives**: 1–3 objectives that will become P1/P2/P3 sections in `spec.md` — phrase as outcomes, not tasks
@@ -149,9 +159,10 @@ Output: `[Phase 3 of 3] Dependency Mapping`
 
 For each Spec Outline, identify which prior Spec Outlines it depends on (write `—` if none).
 
-From the dependency graph, derive:
-- **Sequence**: the linear chain of Spec Outlines that must be completed in strict order (the critical path)
-- **Parallel Groups**: sets of Spec Outlines that can run concurrently, labeled Group A, B, C, …, and the condition under which each group can start
+From the dependency graph, produce two outputs:
+
+- **Sequence** — the linear chain of Spec Outlines that must be completed in strict order (the critical path)
+- **Parallel Groups** — sets of Spec Outlines that can run concurrently, labeled Group A, B, C, …, and the condition under which each group can start
 
 Present the execution order to the user and ask: "Does this dependency and parallelism plan look correct?"
 
@@ -301,4 +312,3 @@ Never change markers manually unless the user explicitly asks to reset a status.
 | Task-level breakdowns or test cases | `spec.md` |
 | Sprint-by-sprint assignments or team member allocation | Project management tool |
 | Multiple Spec Outlines in one stage | Split the stage |
-
