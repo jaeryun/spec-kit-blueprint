@@ -22,6 +22,7 @@ Inspect the argument passed to `/speckit.specify`.
 
 **If no argument was provided:**
 → Output:
+
 ```text
 ⚠️ No argument passed to /speckit.specify.
 
@@ -34,6 +35,7 @@ Proceed without a Spec Outline or spec file? (yes / no)
 ```
 
 Wait for user response.
+
 - **yes** → allow specify to proceed, skip Steps 2–4.
 - **no** → stop. Output: "Re-run with a Spec Outline or spec file argument."
 
@@ -61,7 +63,6 @@ Read `docs/blueprint/roadmap.md`. Find all Spec Outline entries (under `**Spec O
 
 If no Spec Outlines are found:
 → Output: "ℹ️ No Spec Outlines found in `docs/blueprint/roadmap.md` — skipping roadmap alignment check." and stop (allow specify to proceed).
-
 
 ---
 
@@ -104,11 +105,13 @@ Options:
 ```
 
 Wait for user response.
+
 - **A** → stop.
 - **B** → allow specify to proceed. Output: "⚠️ Proceeding out of dependency order. Ensure Spec Outline [MMM] is completed before integrating."
 - **C** → stop.
 
 If all dependency checks pass, update `docs/blueprint/roadmap.md`:
+
 - Change the matched Spec Outline marker from `[📋]` to `[🚧]`
 - If the Stage's `**Status:**` is `📋 Planned`, update it to `🚧 In Progress`
 - Append rows to the History table:
@@ -117,6 +120,7 @@ If all dependency checks pass, update `docs/blueprint/roadmap.md`:
 - Save the file
 
 Output:
+
 ```text
 ✅ Roadmap aligned: maps to Spec Outline [NNN] — [Spec Outline goal]
 Status updated: [📋] Planned → [🚧] In Progress
@@ -135,6 +139,7 @@ Stop. Allow specify to proceed.
 **If the Spec Outline is `[✅]` Complete:** Skip the dependency check — dependencies were already satisfied when this Spec Outline was originally specified. Proceed directly to the confirmation prompt below.
 
 Output:
+
 ```text
 ⚠️ Spec Outline [NNN] is already [in progress / complete].
 
@@ -144,6 +149,7 @@ Proceed? (yes / no)
 ```
 
 Wait for user response.
+
 - **yes** → allow specify to proceed.
 - **no** → stop. Suggest: "Consider running `/speckit.blueprint.roadmap` to add a new Spec Outline first."
 
@@ -152,6 +158,7 @@ Wait for user response.
 #### Case C — No matching Spec Outline found
 
 Output:
+
 ```text
 ⚠️ Roadmap Divergence Detected
 
@@ -164,6 +171,7 @@ Options:
 ```
 
 Wait for user response.
+
 - **A** → stop. Output: "Run `/speckit.blueprint.roadmap` to update the Spec Outline plan first."
 - **B** → allow specify to proceed. Output: "⚠️ Proceeding without a Spec Outline entry. Consider updating `docs/blueprint/roadmap.md` manually after this spec is complete."
 - **C** → stop.
@@ -173,6 +181,7 @@ Wait for user response.
 #### Case D — Ambiguous match (argument spans multiple Spec Outlines)
 
 Output:
+
 ```text
 ⚠️ This argument overlaps multiple Spec Outlines: [Spec Outline NNN, Spec Outline NNM, ...]
 
@@ -184,5 +193,6 @@ Options:
 ```
 
 Wait for user response.
+
 - **A** → allow specify to proceed.
 - **B** → stop. Output: "Run `/speckit.specify` once per Spec Outline to keep scopes clean."

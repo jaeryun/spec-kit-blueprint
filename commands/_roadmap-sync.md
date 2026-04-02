@@ -34,6 +34,7 @@ Find all Spec Outline entries. Spec Outlines are identified by their Spec Outlin
 Using the completed feature description from the current conversation context, find the Spec Outline that was just specified.
 
 **Match criteria:** The match must be STRICT — this is a write operation that modifies roadmap.md status:
+
 - The feature description must clearly and specifically match the Spec Outline's user-facing goal
 - Partial or ambiguous overlap is NOT enough — when in doubt, ask the user to confirm
 - If match confidence is low, output the top candidate and ask: "Is this the Spec Outline you just specified? (yes / no)" — if no, treat as no match
@@ -57,6 +58,7 @@ If all Spec Outlines in a Stage are ✅ Complete, also add to the end of that St
 ### Step 3: Confirm coverage and update Spec Outline status
 
 Ask the user:
+
 ```text
 This spec appears to match **Spec Outline NNN — [goal]**.
 
@@ -67,19 +69,23 @@ Did this spec cover it?
 ```
 
 Wait for user response.
+
 - **yes** → mark the Spec Outline as `[✅]` Complete
 - **partial** → mark the Spec Outline as `[🚧]` In Progress
 - **wrong** → ask: "Which Spec Outline did this spec cover? (provide number or goal)" — re-match against the user's answer and proceed from Step 3 with the corrected Spec Outline. If re-match also fails, output the manual update message from Step 2 and stop.
 
 The status markers used in `roadmap.md` are:
+
 - `[📋]` Planned
 - `[🚧]` In Progress
 - `[✅]` Complete
 
 **Spec file mapping:** Identify the spec file produced by this specify run from the current conversation context (typically the file path of the generated `spec.md`). Update the `Spec:` field of the matched Spec Outline:
+
 ```text
   - Spec: [spec file path]
 ```
+
 If the spec file path cannot be determined, leave `Spec:` unchanged.
 
 Append a row to the History table: `[TIMESTAMP] | Spec Outline [NNN] | [🚧 → ✅ / 📋 → 🚧]`
@@ -87,6 +93,7 @@ Append a row to the History table: `[TIMESTAMP] | Spec Outline [NNN] | [🚧 →
 Save the updated `docs/blueprint/roadmap.md`.
 
 Output:
+
 ```text
 ✅ roadmap.md updated: [Spec Outline NNN] — [Spec Outline goal] → [✅ Complete / 🚧 In Progress]
    Spec: [spec file path]
@@ -99,6 +106,7 @@ Output:
 Find the Stage that the updated Spec Outline belongs to.
 
 Check all Spec Outlines within that Stage:
+
 - If **all Spec Outlines** in the Stage are `[✅]` Complete → the Stage is complete. Proceed to Step 5.
 - If **any Spec Outline** in the Stage is `[📋]` Planned or `[🚧]` In Progress → output: "ℹ️ Stage [stage name] still has incomplete Spec Outlines — stage status not updated." and proceed to Step 6.
 
@@ -117,6 +125,7 @@ Append a row to the History table: `[TIMESTAMP] | Stage [N] | 🚧 → ✅`
 Save the updated `docs/blueprint/roadmap.md`.
 
 Output:
+
 ```text
 ✅ roadmap.md updated: Stage "[stage name]" → ✅ Complete (all Spec Outlines done)
 ```
