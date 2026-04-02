@@ -15,20 +15,20 @@ _Last updated: [DATE]_
        [✅] Complete — after _roadmap-sync confirms completion
 
      Goal: one sentence, user-facing. Bad: "Implement auth". Good: "Users can sign up and log in."
-     Objectives: 1–3 only. Phrase as outcomes ("Users can X"), not tasks ("Implement X").
-       Each objective becomes a P1/P2/P3 section in spec.md.
+     Phases: 1–3 only. Phrase as outcomes ("Users can X"), not tasks ("Implement X").
+       Each phase becomes a P1/P2/P3 section in spec.md.
      Size: sprint estimate, e.g. ~2. Do not write ranges.
      Deps: Spec Outline IDs this depends on, or — if none.
      Spec: spec file path once specified, or — until then. -->
 
 - [📋] **Spec Outline 001** — [User-facing goal]
-  - Objectives: [objective 1], [objective 2]
+  - Phases: [phase 1], [phase 2]
   - Size: ~N sprints
   - Deps: —
   - Spec: —
 
 - [📋] **Spec Outline 002** — [User-facing goal]
-  - Objectives: [objective 1], [objective 2]
+  - Phases: [phase 1], [phase 2]
   - Size: ~N sprints
   - Deps: Spec Outline 001
   - Spec: —

@@ -71,8 +71,8 @@ If no Spec Outlines are found:
 Using the resolved match target from Step 1:
 
 - **Spec Outline reference**: look up by number directly. If not found, treat as no match (Case C).
-- **Spec file reference**: match the extracted spec title/description against Spec Outline goals and objectives.
-- **Feature description**: match semantically against Spec Outline goals and objectives.
+- **Spec file reference**: match the extracted spec title/description against Spec Outline goals and phases.
+- **Feature description**: match semantically against Spec Outline goals and phases.
 
 **Match criteria:** When confidence is low or the match is ambiguous, ask the user to confirm before proceeding — this hook writes to `roadmap.md` and a wrong match would corrupt status.
 

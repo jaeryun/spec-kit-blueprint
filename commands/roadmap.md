@@ -11,18 +11,35 @@ Generate a delivery roadmap of Spec Outlines from the confirmed vision.
 Using the confirmed `vision.md`, produce a single `roadmap.md` that:
 
 - Analyzes the project vision and interviews the user to surface all work needed
-- Defines Spec Outlines (Jira Epics, 2–4+ sprints each) with goals, objectives, and size estimates
+- Defines Spec Outlines (Jira Epics, 2–4+ sprints each) with goals, phases, and size estimates
 - Maps dependencies between Spec Outlines and produces an execution order
 
-This command replaces both the old `roadmap` and `decompose` commands.
+## What is a Spec Outline
+
+A **Spec Outline** is the planning blueprint for one Jira Epic. Understanding this mapping is essential for correct sizing:
+
+```
+Spec Outline (roadmap.md)
+    └─► /speckit.specify → feature branch + spec.md
+            ├─ Phase 1 → P1 User Story (must-have)
+            ├─ Phase 2 → P2 User Story (should-have)
+            └─ Phase 3 → P3 User Story (nice-to-have)
+                    └─► /speckit.plan → /speckit.tasks → /speckit.implement
+```
+
+Key implications for generation:
+- Each Spec Outline = one `/speckit.specify` run = one feature branch
+- Each phase becomes a prioritized user story in `spec.md` with acceptance scenarios and functional requirements
+- The **Size** estimate covers the full branch lifecycle: specify → clarify → plan → tasks → implement — not just spec writing time
+- Phases must be user-facing outcomes, not technical tasks — the AI will derive the technical implementation from them during planning
 
 ## Scope Boundary
 
 `roadmap.md` answers **what Spec Outlines exist, in what order, and what each covers** — nothing more.
 
-**Belongs here:** Spec Outline goals, 1–3 objectives per Spec Outline (user-facing outcomes), size estimates, dependencies between Spec Outlines, execution order.
+**Belongs here:** Spec Outline goals, 1–3 phases per Spec Outline (user-facing outcomes), size estimates, dependencies between Spec Outlines, execution order.
 
-**Does NOT belong here:** implementation details, code snippets, task-level breakdowns, test cases, more than 3 objectives per Spec Outline, sprint-by-sprint assignments, team member allocation. If any of these appear in a draft, they belong in a spec — remove them.
+**Does NOT belong here:** implementation details, code snippets, task-level breakdowns, test cases, more than 3 phases per Spec Outline, sprint-by-sprint assignments, team member allocation. If any of these appear in a draft, they belong in a spec — remove them.
 
 ## User Input
 
@@ -112,15 +129,15 @@ Read `docs/blueprint/vision.md`. Pay special attention to:
 Define Spec Outlines. For each, determine:
 
 - **Goal**: one sentence describing what this Epic delivers, from the user's perspective
-- **Objectives**: 1–3 outcomes that will become P1/P2/P3 sections in `spec.md` — phrase as outcomes ("Users can X"), not tasks ("Implement X")
-- **Size**: estimated sprint count (~N sprints, minimum ~2)
+- **Phases**: 1–3 outcomes that will become P1/P2/P3 sections in `spec.md` — phrase as outcomes ("Users can X"), not tasks ("Implement X")
+- **Size**: estimated sprint count — use the Sizing Guide in the For AI Generation section below
 
 Principles:
 
 - Each Spec Outline delivers a cohesive, user-observable capability
 - Size should be 2–4+ sprints (one Jira Epic). If smaller, merge with an adjacent Spec Outline. If larger, split into two.
 - Earlier Spec Outlines cover foundational/blocking work; later ones add depth and polish
-- Objectives must not exceed 3 — if more are needed, split into two Spec Outlines
+- Phases must not exceed 3 — if more are needed, split into two Spec Outlines
 
 Present the Spec Outline list to the user and ask: "Do the Spec Outlines make sense? Are the scopes and sizes realistic for your team?"
 
@@ -167,8 +184,8 @@ Flag each violation before confirming completion:
 
 | Violation | Guidance |
 | --- | --- |
-| More than 3 objectives in a Spec Outline | Trim to 3 or split into two Spec Outlines |
-| Implementation detail in an objective | Move to spec |
+| More than 3 phases in a Spec Outline | Trim to 3 or split into two Spec Outlines |
+| Implementation detail in a phase | Move to spec |
 | Spec Outline sized under ~2 sprints | Consider merging with an adjacent Spec Outline |
 
 For each violation found, output:
@@ -191,10 +208,10 @@ If no violations are found, output: "Scope check passed."
 
 Read `docs/blueprint/vision.md`. Compare the finalized `roadmap.md` against the four vision dimensions:
 
-- **Out of Scope violations** — do any Spec Outline goals or objectives introduce something vision marks as Out of Scope?
+- **Out of Scope violations** — do any Spec Outline goals or phases introduce something vision marks as Out of Scope?
 - **Core Feature drift** — are any Core Features absent or contradicted by the roadmap?
-- **Target User drift** — do any objectives serve a user segment not defined in vision?
-- **Non-Functional Requirements** — do any objectives conflict with a stated NFR?
+- **Target User drift** — do any phases serve a user segment not defined in vision?
+- **Non-Functional Requirements** — do any phases conflict with a stated NFR?
 
 If drift is detected, produce specific proposed changes to `vision.md`:
 
@@ -248,13 +265,53 @@ When filling `templates/roadmap-template.md`:
 
 **Goal** — User-facing, one sentence. Bad: "Implement authentication". Good: "Users can register and log in with email/password."
 
-**Objectives** — 1–3 only. Each becomes a P1/P2/P3 section in `spec.md`. Phrase as outcomes ("Users can X"), not tasks ("Implement X").
+**Phases** — 1–3 only. Each becomes a P1/P2/P3 section in `spec.md`. Phrase as outcomes ("Users can X"), not tasks ("Implement X").
 
-**Size** — Round to nearest sprint. Use `~2`, `~3`, `~4`. Minimum ~2; if smaller, merge with an adjacent Spec Outline. Do not write ranges.
+**Size** — Use the Sizing Guide below. Round to the nearest sprint: `~2`, `~3`, `~4`. Do not write ranges.
 
 **Deps** — List Spec Outline IDs (e.g., `Spec Outline 001`). Write `—` if no dependencies.
 
 **Spec** — Write `—` until the spec file exists. Updated automatically by `_roadmap-sync` after `/speckit.specify`.
+
+### Sizing Guide
+
+Size represents the estimated total duration of one Spec Outline from `/speckit.specify` through `/speckit.implement` — the full Epic lifecycle, not just spec writing time.
+
+**Step 1 — Baseline from phase count**
+
+| Phases | Baseline |
+| --- | --- |
+| 1 phase | ~2 sprints |
+| 2 phases | ~3 sprints |
+| 3 phases | ~4 sprints |
+
+**Step 2 — Adjust for context factors**
+
+Read the `Execution Context` section of `vision.md` before adjusting:
+
+| Factor | Adjustment |
+| --- | --- |
+| Solo developer | ×1.5 the baseline |
+| First Spec Outline in the project | +1 sprint (environment setup, conventions, CI/CD) |
+| Foundational / infrastructure work (auth, DB schema, core APIs) | +1 sprint (high uncertainty, blocks everything else) |
+| External API or third-party integration | +0.5–1 sprint per external dependency |
+| Unfamiliar domain or tech stack for the team | +1 sprint |
+| UI/frontend-heavy work | base (UI polish tends to expand — watch P3) |
+| Well-understood CRUD / business logic | base |
+
+**Step 3 — Split or merge**
+
+Split into two Spec Outlines if:
+
+- Adjusted estimate exceeds 4 sprints
+- Phases span unrelated domains (e.g., payment processing + user profiles)
+- One phase clearly blocks the others and is large enough to stand alone (~2 sprints)
+
+Keep foundational work as its own Spec Outline even if small — auth, DB schema, and core infrastructure block all downstream Spec Outlines and must not be merged with feature work.
+
+Merge with an adjacent Spec Outline if:
+
+- Adjusted estimate is under 2 sprints AND the work does not block any other Spec Outline
 
 ### Status Markers
 
@@ -277,6 +334,6 @@ Never change markers manually unless the user explicitly asks to reset a status.
 | Found in draft | Where it belongs instead |
 | --- | --- |
 | Code snippets or technical implementation details | `spec.md` |
-| More than 3 objectives in a Spec Outline | Split into two Spec Outlines |
+| More than 3 phases in a Spec Outline | Split into two Spec Outlines |
 | Task-level breakdowns or test cases | `spec.md` |
 | Sprint-by-sprint assignments or team member allocation | Project management tool |
