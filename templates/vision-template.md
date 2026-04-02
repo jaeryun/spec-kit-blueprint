@@ -58,3 +58,11 @@ _Last updated: [DATE]_
 - Team size: [N or TBD]
 - Sprint cadence: [N weeks or TBD]
 - Target first release: [timeline or TBD]
+
+---
+
+## History
+
+| Timestamp | Subject | Note |
+| --- | --- | --- |
+| [TIMESTAMP] | vision.md | Created |

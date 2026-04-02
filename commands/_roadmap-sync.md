@@ -82,6 +82,8 @@ The status markers used in `roadmap.md` are:
 ```
 If the spec file path cannot be determined, leave `Spec:` unchanged.
 
+Append a row to the History table: `[TIMESTAMP] | Spec Outline [NNN] | [🚧 → ✅ / 📋 → 🚧]`
+
 Save the updated `docs/blueprint/roadmap.md`.
 
 Output:
@@ -109,6 +111,8 @@ Mark the completed Stage in `roadmap.md` as done. Update the status line at the 
 ```text
 **Status:** ✅ Complete
 ```
+
+Append a row to the History table: `[TIMESTAMP] | Stage [N] | 🚧 → ✅`
 
 Save the updated `docs/blueprint/roadmap.md`.
 

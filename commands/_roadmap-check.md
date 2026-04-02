@@ -62,10 +62,6 @@ Read `docs/blueprint/roadmap.md`. Find all Spec Outline entries (under `**Spec O
 If no Spec Outlines are found:
 → Output: "ℹ️ No Spec Outlines found in `docs/blueprint/roadmap.md` — skipping roadmap alignment check." and stop (allow specify to proceed).
 
-If `docs/blueprint/vision.md` exists, compare its `_Last updated:` date against `roadmap.md`'s `_Last updated:` date. If vision is newer than roadmap, output:
-> ⚠️ vision.md was updated after roadmap.md — roadmap may be out of sync with the latest vision. Consider running `/speckit.blueprint.roadmap` to re-align before specifying.
-
-This is a warning only — allow specify to proceed regardless.
 
 ---
 
@@ -115,6 +111,9 @@ Wait for user response.
 If all dependency checks pass, update `docs/blueprint/roadmap.md`:
 - Change the matched Spec Outline marker from `[📋]` to `[🚧]`
 - If the Stage's `**Status:**` is `📋 Planned`, update it to `🚧 In Progress`
+- Append rows to the History table:
+  - `[TIMESTAMP] | Spec Outline [NNN] | 📋 → 🚧`
+  - `[TIMESTAMP] | Stage [N] | 📋 → 🚧` (only if Stage was Planned)
 - Save the file
 
 Output:

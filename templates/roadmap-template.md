@@ -93,3 +93,11 @@ Spec Outline 001 → Spec Outline 002 → ...
 - Total Spec Outlines: [N]
 - Estimated total: [N sprints]
 - Critical path: Spec Outline 001 → Spec Outline 002 → ...
+
+---
+
+## History
+
+| Timestamp | Subject | Note |
+| --- | --- | --- |
+| [TIMESTAMP] | roadmap.md | Created |

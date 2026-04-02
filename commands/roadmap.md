@@ -77,7 +77,7 @@ Check if `docs/blueprint/roadmap.md` exists.
    This will allow it to be re-specified. Confirm? (yes / no)
    ```
 
-   - **yes** → change the Spec Outline marker back to `[📋]`, clear the `Spec:` field back to `—`, remove or reset any `**Status:**` line on the Stage if it was set to Complete, save `docs/blueprint/roadmap.md`, and output: "✅ Spec Outline [NNN] reset to 📋 Planned. Note: the previously linked spec file (if any) is no longer referenced — archive or delete it manually if no longer needed."
+   - **yes** → change the Spec Outline marker back to `[📋]`, clear the `Spec:` field back to `—`, remove or reset any `**Status:**` line on the Stage if it was set to Complete, append a `Spec Outline [NNN] ✅/🚧 → 📋 (reset)` row to the History table, save `docs/blueprint/roadmap.md`, and output: "✅ Spec Outline [NNN] reset to 📋 Planned. Note: the previously linked spec file (if any) is no longer referenced — archive or delete it manually if no longer needed."
    - **no** → return to the options menu.
 6. If the user chooses (4): stop.
 
@@ -178,6 +178,8 @@ Fill each Stage and Spec Outline with the confirmed output from Phases 1–3, fo
 
 Include a `_Last updated: [date]_` line with today's date.
 
+If `docs/blueprint/roadmap.md` does not yet exist, the History section in the template will carry a `Created` entry. If it already exists (regenerate or stage update), preserve all existing History rows and append a new row: `roadmap.md | Updated` (for full regeneration) or `Stage [N] | Updated` (for targeted stage update).
+
 Save to `docs/blueprint/roadmap.md`.
 
 ---
@@ -235,7 +237,7 @@ Reason:  "[one-line explanation based on roadmap evidence]"
 
 Ask: "Found [N] vision sync issue(s) above. Apply these updates to vision.md now? (yes / no)"
 
-- **yes** → apply all proposed changes to `docs/blueprint/vision.md`, save, and output: "✅ vision.md updated to reflect roadmap scope changes."
+- **yes** → apply all proposed changes to `docs/blueprint/vision.md`, append a `Synced with roadmap.md` row to vision.md's History, save, and output: "✅ vision.md updated to reflect roadmap scope changes."
 - **no** → output: "ℹ️ vision.md not updated. Re-run `/speckit.blueprint.vision` when ready to re-align."
 
 If no drift found → output: "✅ Vision consistent with roadmap."

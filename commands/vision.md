@@ -115,6 +115,8 @@ Show the draft to the user and ask:
 
 Incorporate feedback. Repeat until the user confirms: "Yes, this is correct."
 
+If `docs/blueprint/vision.md` does not yet exist, add a History section with a `Created` entry. If it already exists, append a new row to the existing History table with an `Updated` note.
+
 Save to `docs/blueprint/vision.md`.
 
 ---
@@ -171,7 +173,7 @@ Reason:   "[one-line explanation based on vision change]"
 
 If issues are found, ask: "Found [N] roadmap alignment issue(s) above. Apply these updates now? (yes / no)"
 
-- **yes** → apply all proposed changes to `docs/blueprint/roadmap.md`, save, and output: "✅ roadmap.md updated to reflect vision changes."
+- **yes** → apply all proposed changes to `docs/blueprint/roadmap.md`, append a `Synced with vision.md` row to roadmap.md's History, save, and output: "✅ roadmap.md updated to reflect vision changes."
 - **no** → output: "ℹ️ roadmap.md not updated. Run `/speckit.blueprint.roadmap` when ready to re-align."
 
 If no issues found → output: "✅ Roadmap is consistent with updated vision."
