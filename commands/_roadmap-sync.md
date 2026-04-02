@@ -12,7 +12,7 @@ Post-completion sync after `/speckit.specify`. Updates Spec Outline status in `r
 
 This command is invoked as an `after_specify` or `after_clarify` hook. The completed feature description is available from the current conversation context — it is the argument the user passed to `/speckit.specify` or `/speckit.clarify`.
 
-When invoked via `after_clarify`, the argument may be a change description rather than a Spec Outline goal. In that case, prefer matching against the Spec Outline already marked `[🚧] In Progress` before attempting semantic matching.
+When invoked via `after_clarify`, the argument is a change description for a specific spec file. Identify the spec file being clarified from the current conversation context, then match it against the `Spec:` field in `roadmap.md` to find the corresponding Spec Outline — do not rely on semantic matching or `[🚧]` status for this case.
 
 **Recovery after interrupted session:** If the specify run was interrupted (session ended before `after_specify` fired), this hook will not have run. To recover manually: run `/speckit.blueprint.roadmap` option (3) is not needed — instead, open `docs/blueprint/roadmap.md` and update the Spec Outline status and `Spec:` field directly, using the manual update instructions in Step 2 below.
 
