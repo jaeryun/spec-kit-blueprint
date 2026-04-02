@@ -154,7 +154,7 @@ Check if `docs/blueprint/roadmap.md` exists. If it does not exist, skip this ste
 
 Read `docs/blueprint/roadmap.md`. Compare each of the following against the updated `vision.md`:
 
-- **Stage goals** — do any stage goals contradict or no longer reflect the updated Core Features or Problem Statement?
+- **Spec Outline goals** — do any Spec Outline goals contradict or no longer reflect the updated Core Features or Problem Statement?
 - **Spec Outline objectives** — do any objectives reference features that are now Out of Scope, or miss features newly added to Core Features?
 - **Out of Scope alignment** — does the roadmap include anything that vision now explicitly marks as Out of Scope?
 - **Target Users** — do any Spec Outline objectives serve a user segment no longer in the vision?
@@ -165,7 +165,7 @@ For each misalignment found, produce a specific proposed change:
 ⚠️ Roadmap alignment issue found:
 
 [For each issue:]
-Location: Stage [N] / Spec Outline [NNN]
+Location: Spec Outline [NNN]
 Current:  "[current text]"
 Proposed: "[updated text]"
 Reason:   "[one-line explanation based on vision change]"
@@ -187,7 +187,7 @@ Confirm the file is saved:
 - `docs/blueprint/vision.md` ✓
 
 Tell the user:
-"Vision defined. Next step: run `/speckit.blueprint.roadmap` to create a staged delivery plan."
+"Vision defined. Next step: run `/speckit.blueprint.roadmap` to create a delivery roadmap."
 
 ## Output Files
 

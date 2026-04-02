@@ -6,7 +6,7 @@ A [Spec Kit](https://github.com/github/spec-kit) extension that establishes proj
 
 A **Spec Outline** is a planning artifact in `roadmap.md` — it defines the goal and objectives for one `/speckit.specify` run, sized to a single Jira Epic (2–4+ sprints).
 
-Starting a new project directly with `/speckit.specify` creates specs that are too large — trying to cover everything at once. Blueprint solves this by adding a vision-first step before any spec is written: it interviews you to define project vision, then produces a staged roadmap that embeds Spec Outlines (each sized to a single `/speckit.specify` run) and maps their dependencies so you know what to build in what order.
+Starting a new project directly with `/speckit.specify` creates specs that are too large — trying to cover everything at once. Blueprint solves this by adding a vision-first step before any spec is written: it interviews you to define project vision, then produces a delivery roadmap of Spec Outlines (each sized to a single `/speckit.specify` run) and maps their dependencies so you know what to build in what order.
 
 ```mermaid
 flowchart TD
@@ -15,7 +15,7 @@ flowchart TD
     subgraph bp ["Blueprint — Big Picture First"]
         B["/speckit.blueprint.vision : Brainstorming Interview"]
         B --> C["vision.md"]
-        C --> D["/speckit.blueprint.roadmap : Vision to Staged Roadmap "]
+        C --> D["/speckit.blueprint.roadmap : Vision to Roadmap"]
         D --> R["roadmap.md\nSpec Outline 001 ➜ Spec Outline 002 ➜ Spec Outline 003 …"]
     end
 
@@ -60,7 +60,7 @@ flowchart TD
 |---|---|
 | **Adaptive interview** | Conversational setup that extracts vision, constraints, and team context |
 | **Delivery roadmap** | Vision is translated into a delivery plan with Spec Outlines sized to Jira Epics and ordered by dependency |
-| **Integrated Spec Outlines** | Spec Outlines live inside roadmap.md — one per Stage, each sized to a single `/speckit.specify` run with a clear goal and 1–3 scope items |
+| **Integrated Spec Outlines** | Spec Outlines live inside roadmap.md — each sized to a single `/speckit.specify` run with a clear goal and 1–3 scope items |
 | **Dependency mapping** | Deps between Spec Outlines are mapped at planning time — know what blocks what before you start |
 | **Parallel group analysis** | Spec Outlines that can be worked simultaneously are grouped, so team bandwidth isn't wasted |
 | **Idempotent by design** | Re-run `vision` or `roadmap` any time. Completed and in-progress Spec Outlines are never overwritten |
@@ -96,7 +96,7 @@ Commands run in sequence. Each requires the previous command's output to exist.
 | Command | Purpose | Requires |
 |---------|---------|---------|
 | `/speckit.blueprint.vision` | Adaptive interview → vision.md | — |
-| `/speckit.blueprint.roadmap` | 3-phase: stages → Spec Outlines → dependencies → roadmap.md | vision.md |
+| `/speckit.blueprint.roadmap` | 2-phase: Spec Outlines → dependencies → roadmap.md | vision.md |
 
 ### Hooks
 
@@ -136,11 +136,11 @@ All commands accept an optional argument to skip ahead or narrow the scope.
 **`/speckit.blueprint.roadmap`**
 
 ```text
-# Run all 3 phases: stage definition, Spec Outline sizing, dependency mapping
+# Run both phases: Spec Outline definition and dependency mapping
 /speckit.blueprint.roadmap
 
 # Re-plan from a specific concern
-/speckit.blueprint.roadmap focus on the backend stages
+/speckit.blueprint.roadmap focus on the backend Spec Outlines
 ```
 
 ## Workflow
@@ -153,7 +153,7 @@ Blueprint fits between `constitution` (project setup) and `specify` (spec writin
 /speckit.constitution              # one-time project setup
     ↓
 /speckit.blueprint.vision          # interview → vision.md
-/speckit.blueprint.roadmap         # vision → roadmap.md (stages + Spec Outlines + deps)
+/speckit.blueprint.roadmap         # vision → roadmap.md (Spec Outlines + deps)
 For each Spec Outline (in dependency order):
     ↓ [_roadmap-check] auto-runs before specify (includes dependency order check)
     /speckit.specify [Spec Outline goal]
@@ -171,7 +171,7 @@ Fleet handles the specify → implement cycle with human gates. Blueprint provid
 /speckit.constitution              # one-time project setup
     ↓
 /speckit.blueprint.vision          # interview → vision.md
-/speckit.blueprint.roadmap         # vision → roadmap.md (stages + Spec Outlines + deps)
+/speckit.blueprint.roadmap         # vision → roadmap.md (Spec Outlines + deps)
 For each Spec Outline (in dependency order):
     ↓ [_roadmap-check] auto-runs before specify (includes dependency order check)
     /speckit.fleet [Spec Outline goal]     # Fleet orchestrates specify → plan → tasks → implement
@@ -185,7 +185,7 @@ For each Spec Outline (in dependency order):
 ```text
 docs/blueprint/
 ├── vision.md    # Project vision
-└── roadmap.md   # Staged delivery plan with Spec Outlines and dependencies
+└── roadmap.md   # Delivery plan with Spec Outlines and dependencies
 ```
 
 ## Upgrading

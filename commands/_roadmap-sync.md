@@ -1,12 +1,12 @@
 ---
-description: "Sync Spec Outline and roadmap stage status after a spec is completed."
+description: "Sync Spec Outline status in roadmap.md after a spec is completed."
 ---
 
 # Blueprint Roadmap Sync
 
 > Auto-invoked hook — fires automatically after `/speckit.specify`. Do not invoke directly.
 
-Post-completion sync after `/speckit.specify`. Updates Spec Outline status in `roadmap.md` and promotes roadmap stage status when all Spec Outlines in a stage are complete.
+Post-completion sync after `/speckit.specify`. Updates Spec Outline status in `roadmap.md`.
 
 ## Context
 
@@ -29,7 +29,7 @@ If `docs/blueprint/roadmap.md` does not exist:
 
 Read `docs/blueprint/roadmap.md`.
 
-Find all Spec Outline entries. Spec Outlines are identified by their Spec Outline identifier (Spec Outline 001, Spec Outline 002...) and appear under `**Spec Outline:**` sections within each Stage.
+Find all Spec Outline entries. Spec Outlines are identified by their Spec Outline identifier (Spec Outline 001, Spec Outline 002...).
 
 Using the completed feature description from the current conversation context, find the Spec Outline that was just specified.
 
@@ -46,15 +46,12 @@ If no matching Spec Outline is found:
 ℹ️ No matching Spec Outline found — skipping sync.
 
 Top candidates (closest semantic match):
-  - Spec Outline [NNN] — [goal] ([stage name])
-  - Spec Outline [NNM] — [goal] ([stage name])
+  - Spec Outline [NNN] — [goal]
+  - Spec Outline [NNM] — [goal]
 
 To update manually, open docs/blueprint/roadmap.md and change the Spec Outline's status marker:
   [📋] → [🚧] for In Progress
   [📋] or [🚧] → [✅] for Complete
-
-If all Spec Outlines in a Stage are ✅ Complete, also add to the end of that Stage:
-  **Status:** ✅ Complete
 ```
 
 ---
@@ -93,6 +90,7 @@ The status markers used in `roadmap.md` are:
 If the spec file path cannot be determined, leave `Spec:` unchanged.
 
 Append a row to the History table reflecting the actual transition:
+
 - yes: `[TIMESTAMP] | Spec Outline [NNN] | 🚧 → ✅`
 - partial (status changed): `[TIMESTAMP] | Spec Outline [NNN] | 📋 → 🚧`
 - partial (already 🚧, no change): skip the History row
