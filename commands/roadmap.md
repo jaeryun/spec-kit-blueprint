@@ -171,6 +171,89 @@ Save to `docs/blueprint/roadmap.md`.
 
 ---
 
+### Step 6: Scope Check
+
+After saving, review `docs/blueprint/roadmap.md` against the Scope Boundary defined above.
+
+Flag each violation before confirming completion:
+
+| Violation | Guidance |
+| --- | --- |
+| Multiple Spec Outlines per Stage | Merge into one Spec Outline or split the Stage |
+| More than 3 objectives in a Spec Outline | Trim to 3 or split the Stage |
+| Implementation detail in an objective | Move to spec |
+| Spec Outline sized under ~1 sprint | Consider merging with an adjacent stage |
+| Stage Deliverables section present (old format) | Remove — the Spec Outline covers this |
+
+For each violation found, output:
+
+```text
+[!] Scope issue in roadmap.md: "[excerpt]"
+This level of detail belongs in [spec / project management]. Remove it from roadmap.md.
+```
+
+Ask the user: "Found [N] scope issue(s) above. Fix before proceeding? (yes / no / skip)"
+
+- **yes** — apply fixes, re-save, and re-confirm the file
+- **no / skip** — proceed as-is and note issues remain
+
+If no violations are found, output: "Scope check passed."
+
+---
+
+### Step 7: Vision Sync
+
+Read `docs/blueprint/vision.md`. Compare the finalized `roadmap.md` against the four vision dimensions:
+
+- **Out of Scope violations** — do any stage goals or Spec Outline objectives introduce something vision marks as Out of Scope?
+- **Core Feature drift** — are any Core Features absent or contradicted by the roadmap structure?
+- **Target User drift** — do any objectives serve a user segment not defined in vision?
+- **Non-Functional Requirements** — do any objectives conflict with a stated NFR?
+
+If drift is detected, produce specific proposed changes to `vision.md`:
+
+```text
+⚠️ Vision Sync: Scope changes detected
+
+[For each issue:]
+Section: [Core Features / Out of Scope / Target Users / NFR]
+Action:  [Add / Remove / Modify]
+Item:    "[item text]"
+Reason:  "[one-line explanation based on roadmap evidence]"
+```
+
+Ask: "Found [N] vision sync issue(s) above. Apply these updates to vision.md now? (yes / no)"
+
+- **yes** → apply all proposed changes to `docs/blueprint/vision.md`, save, and output: "✅ vision.md updated to reflect roadmap scope changes."
+- **no** → output: "ℹ️ vision.md not updated. Re-run `/speckit.blueprint.vision` when ready to re-align."
+
+If no drift found → output: "✅ Vision consistent with roadmap."
+
+---
+
+### Step 8: Completion
+
+Confirm the file is saved:
+
+- `docs/blueprint/roadmap.md` ✓
+
+Output:
+
+```text
+Roadmap complete. [N] stages, [N] Spec Outlines defined.
+
+Next: /speckit.specify [Spec Outline 001 goal]
+After each Spec is complete, run the next Spec Outline in dependency order.
+```
+
+## Output Files
+
+| File | Purpose |
+| --- | --- |
+| `docs/blueprint/roadmap.md` | Staged delivery plan with Spec Outlines and dependencies |
+
+---
+
 ## For AI Generation
 
 When filling `templates/roadmap-template.md`:
@@ -218,84 +301,4 @@ Never change markers manually unless the user explicitly asks to reset a status.
 | Task-level breakdowns or test cases | `spec.md` |
 | Sprint-by-sprint assignments or team member allocation | Project management tool |
 | Multiple Spec Outlines in one stage | Split the stage |
-
----
-
-### Step 6: Scope Check
-
-After saving, review `docs/blueprint/roadmap.md` against the Scope Boundary defined above.
-
-Flag each violation before confirming completion:
-
-| Violation | Guidance |
-|-----------|----------|
-| Multiple Spec Outlines per Stage | Merge into one Spec Outline or split the Stage |
-| More than 3 objectives in a Spec Outline | Trim to 3 or split the Stage |
-| Implementation detail in an objective | Move to spec |
-| Spec Outline sized under ~1 sprint | Consider merging with an adjacent stage |
-| Stage Deliverables section present (old format) | Remove — the Spec Outline covers this |
-
-For each violation found, output:
-
-```
-[!] Scope issue in roadmap.md: "[excerpt]"
-This level of detail belongs in [spec / project management]. Remove it from roadmap.md.
-```
-
-Ask the user: "Found [N] scope issue(s) above. Fix before proceeding? (yes / no / skip)"
-- **yes** — apply fixes, re-save, and re-confirm the file
-- **no / skip** — proceed as-is and note issues remain
-
-If no violations are found, output: "Scope check passed."
-
----
-
-### Step 7: Vision Sync
-
-Read `docs/blueprint/vision.md`. Compare the finalized `roadmap.md` against the four vision dimensions:
-
-- **Out of Scope violations** — do any stage goals or Spec Outline objectives introduce something vision marks as Out of Scope?
-- **Core Feature drift** — are any Core Features absent or contradicted by the roadmap structure?
-- **Target User drift** — do any objectives serve a user segment not defined in vision?
-- **Non-Functional Requirements** — do any objectives conflict with a stated NFR?
-
-If drift is detected, produce specific proposed changes to `vision.md`:
-
-```
-⚠️ Vision Sync: Scope changes detected
-
-[For each issue:]
-Section: [Core Features / Out of Scope / Target Users / NFR]
-Action:  [Add / Remove / Modify]
-Item:    "[item text]"
-Reason:  "[one-line explanation based on roadmap evidence]"
-```
-
-Ask: "Found [N] vision sync issue(s) above. Apply these updates to vision.md now? (yes / no)"
-- **yes** → apply all proposed changes to `docs/blueprint/vision.md`, save, and output: "✅ vision.md updated to reflect roadmap scope changes."
-- **no** → output: "ℹ️ vision.md not updated. Re-run `/speckit.blueprint.vision` when ready to re-align."
-
-If no drift found → output: "✅ Vision consistent with roadmap."
-
----
-
-### Step 8: Completion
-
-Confirm the file is saved:
-- `docs/blueprint/roadmap.md` ✓
-
-Output:
-
-```
-Roadmap complete. [N] stages, [N] Spec Outlines defined.
-
-Next: /speckit.specify [Spec Outline 001 goal]
-After each Spec is complete, run the next Spec Outline in dependency order.
-```
-
-## Output Files
-
-| File | Purpose |
-|------|---------|
-| `docs/blueprint/roadmap.md` | Staged delivery plan with Spec Outlines and dependencies |
 

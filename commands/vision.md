@@ -9,6 +9,7 @@ Define the project vision through an adaptive interview.
 ## Purpose
 
 Establish the foundation before writing any spec:
+
 - **What** you're building and **why**
 - **Who** it's for
 - **What's in scope** and explicitly what's not
@@ -59,6 +60,7 @@ Check if `.specify/memory/constitution.md` exists.
 Check if `docs/blueprint/vision.md` exists.
 
 **If it exists:**
+
 1. Read and summarize the existing vision (project name, problem, core features, current stage)
 2. Ask: "Your existing vision is summarized above. What would you like to do?
    - (1) Update specific sections
@@ -86,17 +88,17 @@ After Round 1, briefly reflect back what you heard and ask: "Is that a fair summ
 
 #### Round 2 — Scope & Constraints (adapt based on Round 1)
 
-4. "What is explicitly OUT of scope for the initial version? What are you intentionally deferring?"
-5. "Are there any hard technical constraints? (existing stack, hosting environment, must-use libraries, etc.)"
-6. "What are the non-functional requirements? Think about: performance targets, security requirements, accessibility, offline support, etc."
+1. "What is explicitly OUT of scope for the initial version? What are you intentionally deferring?"
+2. "Are there any hard technical constraints? (existing stack, hosting environment, must-use libraries, etc.)"
+3. "What are the non-functional requirements? Think about: performance targets, security requirements, accessibility, offline support, etc."
 
 If the user says "I don't know" or "not sure" for any answer — record it as `TBD` and move on. Do not block progress.
 
 #### Round 3 — Execution Context (adapt based on rounds 1-2)
 
-7. "Is this a new project or an existing codebase?"
-8. "What's the team size and rough sprint cadence? (e.g., 3 devs, 2-week sprints)"
-9. "What's the target timeline for a first working version?"
+1. "Is this a new project or an existing codebase?"
+2. "What's the team size and rough sprint cadence? (e.g., 3 devs, 2-week sprints)"
+3. "What's the target timeline for a first working version?"
 
 ---
 
@@ -112,45 +114,6 @@ Show the draft to the user and ask:
 Incorporate feedback. Repeat until the user confirms: "Yes, this is correct."
 
 Save to `docs/blueprint/vision.md`.
-
----
-
-## For AI Generation
-
-When filling `templates/vision-template.md`:
-
-### Section Rules
-
-**Problem Statement** — State the problem only. No solution hints, no technology, no delivery phases.
-
-**Target Users** — Be specific. "Small e-commerce teams of 2–5 people running Shopify stores" beats "business users". Include their context.
-
-**Core Features** — User-facing capabilities only. If the user listed more than 5, ask which 3–5 are non-negotiable.
-
-**Technical Context** — Record only what the user stated. Do not infer a tech stack.
-
-**Non-Functional Requirements** — If not mentioned, write "No specific NFRs identified." Do not invent targets.
-
-**Out of Scope** — Be specific. "No mobile app" is useful; "out of scope for v1" is not.
-
-**Success Criteria** — Prefer measurable outcomes. If the user gave none, propose 2–3 based on Core Features and confirm before saving.
-
-**Execution Context** — Use `TBD` for any unknown value. Never estimate team size, sprint cadence, or release target.
-
-### When to Mark TBD
-
-Use `TBD` when the user said "I don't know" or the question was skipped. Never infer a value for team size, sprint cadence, or release target.
-
-### Scope Signals — Remove Before Saving
-
-If any of the following appear in the draft, move or remove them before saving:
-
-| Found in draft | Where it belongs instead |
-| --- | --- |
-| Delivery phases, stages, or milestones | `roadmap.md` |
-| Spec Outline breakdowns or feature priority lists | `roadmap.md` |
-| Specific technology or architecture choices | `roadmap.md` or `spec.md` |
-| Sprint assignments, task lists, implementation steps | `roadmap.md` or `spec.md` |
 
 ---
 
@@ -227,3 +190,42 @@ Tell the user:
 | File | Purpose |
 | --- | --- |
 | `docs/blueprint/vision.md` | Project vision — foundation for all downstream work |
+
+---
+
+## For AI Generation
+
+When filling `templates/vision-template.md`:
+
+### Section Rules
+
+**Problem Statement** — State the problem only. No solution hints, no technology, no delivery phases.
+
+**Target Users** — Be specific. "Small e-commerce teams of 2–5 people running Shopify stores" beats "business users". Include their context.
+
+**Core Features** — User-facing capabilities only. If the user listed more than 5, ask which 3–5 are non-negotiable.
+
+**Technical Context** — Record only what the user stated. Do not infer a tech stack.
+
+**Non-Functional Requirements** — If not mentioned, write "No specific NFRs identified." Do not invent targets.
+
+**Out of Scope** — Be specific. "No mobile app" is useful; "out of scope for v1" is not.
+
+**Success Criteria** — Prefer measurable outcomes. If the user gave none, propose 2–3 based on Core Features and confirm before saving.
+
+**Execution Context** — Use `TBD` for any unknown value. Never estimate team size, sprint cadence, or release target.
+
+### When to Mark TBD
+
+Use `TBD` when the user said "I don't know" or the question was skipped. Never infer a value for team size, sprint cadence, or release target.
+
+### Scope Signals — Remove Before Saving
+
+If any of the following appear in the draft, move or remove them before saving:
+
+| Found in draft | Where it belongs instead |
+| --- | --- |
+| Delivery phases, stages, or milestones | `roadmap.md` |
+| Spec Outline breakdowns or feature priority lists | `roadmap.md` |
+| Specific technology or architecture choices | `roadmap.md` or `spec.md` |
+| Sprint assignments, task lists, implementation steps | `roadmap.md` or `spec.md` |
