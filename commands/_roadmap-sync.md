@@ -12,6 +12,8 @@ Post-completion sync after `/speckit.specify`. Updates Spec Outline status in `r
 
 This command is invoked as an `after_specify` or `after_clarify` hook. The completed feature description is available from the current conversation context — it is the argument the user passed to `/speckit.specify` or `/speckit.clarify`.
 
+When invoked via `after_clarify`, the argument may be a change description rather than a Spec Outline goal. In that case, prefer matching against the Spec Outline already marked `[🚧] In Progress` before attempting semantic matching.
+
 ## Instructions
 
 ### Step 1: Check prerequisites
@@ -37,7 +39,7 @@ Using the completed feature description from the current conversation context, f
 If no matching Spec Outline is found:
 → Output the message below and stop.
 
-```
+```text
 ℹ️ No matching Spec Outline found — skipping sync.
 
 To update manually, open docs/blueprint/roadmap.md and change the Spec Outline's status marker:
@@ -53,7 +55,7 @@ If all Spec Outlines in a Stage are ✅ Complete, also add to the end of that St
 ### Step 3: Confirm coverage and update Spec Outline status
 
 Ask the user:
-```
+```text
 This spec appears to match **Spec Outline NNN — [goal]**.
 
 Did this spec cover it?
@@ -73,7 +75,7 @@ The status markers used in `roadmap.md` are:
 - `[✅]` Complete
 
 **Spec file mapping:** Identify the spec file produced by this specify run from the current conversation context (typically the file path of the generated `spec.md`). Update the `Spec:` field of the matched Spec Outline:
-```
+```text
   - Spec: [spec file path]
 ```
 If the spec file path cannot be determined, leave `Spec:` unchanged.
@@ -81,7 +83,7 @@ If the spec file path cannot be determined, leave `Spec:` unchanged.
 Save the updated `docs/blueprint/roadmap.md`.
 
 Output:
-```
+```text
 ✅ roadmap.md updated: [Spec Outline NNN] — [Spec Outline goal] → [✅ Complete / 🚧 In Progress]
    Spec: [spec file path]
 ```
@@ -100,16 +102,16 @@ Check all Spec Outlines within that Stage:
 
 ### Step 5: Update roadmap stage status
 
-Mark the completed Stage in `roadmap.md` as done. Add or update the status line at the end of the stage's section:
+Mark the completed Stage in `roadmap.md` as done. Update the status line at the end of the stage's section:
 
-```
+```text
 **Status:** ✅ Complete
 ```
 
 Save the updated `docs/blueprint/roadmap.md`.
 
 Output:
-```
+```text
 ✅ roadmap.md updated: Stage "[stage name]" → ✅ Complete (all Spec Outlines done)
 ```
 
@@ -119,7 +121,7 @@ Output:
 
 Output a brief sync summary:
 
-```
+```text
 Blueprint sync complete:
 - Spec Outline: [Spec Outline NNN] → [✅ Complete / 🚧 In Progress]
 - Stage "[stage name]": [✅ Complete (all Spec Outlines done) / incomplete Spec Outlines remain]

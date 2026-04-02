@@ -64,7 +64,7 @@ Check if `docs/blueprint/roadmap.md` exists.
    - (2) Regenerate from scratch
    - (3) Reset a Spec Outline status
    - (4) Cancel"
-3. If the user chooses (1): identify which stages to update from `$ARGUMENTS` or from their reply. Stages whose Spec Outline is marked ✅ Complete or 🚧 In Progress are **immutable** — do not re-analyze or overwrite them. Proceed to Step 2 for only the targeted stages.
+3. If the user chooses (1): identify which stages to update from `$ARGUMENTS` or from their reply. Stages whose Spec Outline is marked ✅ Complete or 🚧 In Progress are **immutable** — do not re-analyze or overwrite them. For each skipped immutable stage, output: "Skipping Stage [N] — Spec Outline [NNN] is [🚧 In Progress / ✅ Complete]. Use option (3) to reset it first." Proceed to Step 2 for only the targeted stages.
 4. If the user chooses (2): proceed to Step 2 for all stages.
 5. If the user chooses (3): ask "Which Spec Outline would you like to reset? (provide number or goal)" — find the matching Spec Outline, then ask:
 
@@ -174,7 +174,7 @@ Incorporate feedback, then proceed to write the output file.
 
 Load `templates/roadmap-template.md` to understand the required sections.
 
-Fill each Stage and Spec Outline with the confirmed output from Phases 1–3, following the **For AI Generation** guidelines below.
+Fill each Stage and Spec Outline with the confirmed output from Phases 1–3, following the **For AI Generation** guidelines at the end of this file.
 
 Include a `_Last updated: [date]_` line with today's date.
 
@@ -193,7 +193,7 @@ Flag each violation before confirming completion:
 | Multiple Spec Outlines per Stage | Merge into one Spec Outline or split the Stage |
 | More than 3 objectives in a Spec Outline | Trim to 3 or split the Stage |
 | Implementation detail in an objective | Move to spec |
-| Spec Outline sized under ~1 sprint | Consider merging with an adjacent stage |
+| Spec Outline sized under ~2 sprints | Consider merging with an adjacent stage |
 | Stage Deliverables section present (old format) | Remove — the Spec Outline covers this |
 
 For each violation found, output:
@@ -281,7 +281,7 @@ When filling `templates/roadmap-template.md`:
 
 **Objectives** — 1–3 only. Each becomes a P1/P2/P3 section in `spec.md`. Phrase as outcomes ("Users can X"), not tasks ("Implement X").
 
-**Size** — Round to nearest sprint. Use `~1`, `~2`, `~3`. Do not write ranges.
+**Size** — Round to nearest sprint. Use `~2`, `~3`, `~4`. Minimum ~2; if smaller, merge with an adjacent stage. Do not write ranges.
 
 **Deps** — List Spec Outline IDs (e.g., `Spec Outline 001`). Write `—` if no dependencies.
 
@@ -292,7 +292,7 @@ When filling `templates/roadmap-template.md`:
 | Marker | Meaning | When to set |
 | --- | --- | --- |
 | `[📋]` | Planned | Default — not yet specified |
-| `[🚧]` | In Progress | After `/speckit.specify` starts |
+| `[🚧]` | In Progress | After partial coverage confirmed by `_roadmap-sync` |
 | `[✅]` | Complete | After `_roadmap-sync` confirms completion |
 
 Never change markers manually unless the user explicitly asks to reset a status.

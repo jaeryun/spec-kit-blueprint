@@ -153,16 +153,13 @@ Blueprint fits between `constitution` (project setup) and `specify` (spec writin
 /speckit.constitution              # one-time project setup
     ↓
 /speckit.blueprint.vision          # interview → vision.md
-    ↓ [_vision-roadmap-check] auto-runs after vision saved
 /speckit.blueprint.roadmap         # vision → roadmap.md (stages + Spec Outlines + deps)
-    ↓ [_vision-check] auto-runs before roadmap
-    ↓ [_vision-sync] auto-runs after roadmap saved
 For each Spec Outline (in dependency order):
     ↓ [_roadmap-check] auto-runs before specify (includes dependency order check)
     /speckit.specify [Spec Outline goal]
         ↓ [_roadmap-sync] auto-runs after spec completed
     /speckit.clarify [changes]          # optional — refine spec after feedback
-        ↓ [_roadmap-sync] auto-runs after clarify
+        ↓ [_roadmap-sync] auto-runs after clarify (optional)
     /speckit.plan → /speckit.tasks → /speckit.implement
 ```
 
@@ -174,10 +171,7 @@ Fleet handles the specify → implement cycle with human gates. Blueprint provid
 /speckit.constitution              # one-time project setup
     ↓
 /speckit.blueprint.vision          # interview → vision.md
-    ↓ [_vision-roadmap-check] auto-runs after vision saved
 /speckit.blueprint.roadmap         # vision → roadmap.md (stages + Spec Outlines + deps)
-    ↓ [_vision-check] auto-runs before roadmap
-    ↓ [_vision-sync] auto-runs after roadmap saved
 For each Spec Outline (in dependency order):
     ↓ [_roadmap-check] auto-runs before specify (includes dependency order check)
     /speckit.fleet [Spec Outline goal]     # Fleet orchestrates specify → plan → tasks → implement

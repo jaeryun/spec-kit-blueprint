@@ -106,7 +106,7 @@ If the user says "I don't know" or "not sure" for any answer — record it as `T
 
 Load `templates/vision-template.md` to understand the required sections.
 
-Fill each section with the interview answers, following the **For AI Generation** guidelines below.
+Fill each section with the interview answers, following the **For AI Generation** guidelines at the end of this file.
 
 Include a `_Last updated: [date]_` line with today's date.
 

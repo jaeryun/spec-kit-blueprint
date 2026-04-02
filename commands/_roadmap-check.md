@@ -12,6 +12,8 @@ Pre-flight validation before `/speckit.specify`. Checks the argument, resolves i
 
 This command is invoked as a `before_specify` hook. The argument the user passed to `/speckit.specify` is available from the current conversation context.
 
+This hook intentionally does not fire before `/speckit.clarify` — clarify operates on an existing spec within an already-matched Spec Outline and does not require re-validation.
+
 ## Instructions
 
 ### Step 1: Check argument
@@ -28,7 +30,7 @@ Accepted forms:
   - Spec Outline number or goal: /speckit.specify "Spec Outline 001" or /speckit.specify "user authentication"
   - Spec file name: /speckit.specify auth.md
 
-Spec Outline 및 spec 파일 없이 진행하겠습니까? (yes / no)
+Proceed without a Spec Outline or spec file? (yes / no)
 ```
 
 Wait for user response.
@@ -117,7 +119,7 @@ Stop. Allow specify to proceed.
 
 #### Case B — Clear match, Spec Outline is [🚧] In Progress or [✅] Complete
 
-Run the same dependency check as Case A. If any dep is incomplete, output the Dependency Not Ready warning and wait for user response before proceeding.
+Run the same dependency check as Case A. If any dep is incomplete, output the Dependency Not Ready warning and wait for user response. If the user chooses A or C (stop), stop entirely. If the user chooses B (proceed), continue to the Case B confirmation prompt below.
 
 If dependency check passes (or deps are `—`), output:
 ```text

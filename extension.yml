@@ -25,7 +25,7 @@ hooks:
 
   after_clarify:
     command: "speckit.blueprint._roadmap-sync"
-    optional: false
+    optional: true
     description: "Sync Spec Outline and roadmap stage status after a spec is updated via clarify."
 
 provides:
