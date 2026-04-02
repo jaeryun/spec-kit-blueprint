@@ -91,9 +91,17 @@ If the spec file path cannot be determined, leave `Spec:` unchanged.
 
 Append a row to the History table reflecting the actual transition:
 
+**When invoked via `after_specify`:**
+
 - yes: `[TIMESTAMP] | Spec Outline [NNN] | 🚧 → ✅`
 - partial (status changed): `[TIMESTAMP] | Spec Outline [NNN] | 📋 → 🚧`
 - partial (already 🚧, no change): skip the History row
+
+**When invoked via `after_clarify`:**
+
+- yes or partial: `[TIMESTAMP] | Spec Outline [NNN] | Clarified`
+- wrong (re-matched to different Spec Outline): `[TIMESTAMP] | Spec Outline [NNN] | Clarified`
+- no status change occurs in the clarify path — do not write a transition arrow row
 
 **Before saving:** Verify the roadmap.md content is valid — check that no duplicate Spec Outline IDs exist and all status markers use the correct format (`[📋]`, `[🚧]`, or `[✅]`). If invalid content is detected, output an error and do not save.
 

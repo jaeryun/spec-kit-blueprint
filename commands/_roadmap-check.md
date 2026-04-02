@@ -148,7 +148,11 @@ Proceed? (yes / no)
 
 Wait for user response.
 
-- **yes** → append a row to the History table: `[TIMESTAMP] | Spec Outline [NNN] | Re-specified (was 🚧/✅)` — then save `docs/blueprint/roadmap.md`. Allow specify to proceed.
+- **yes** → append a row to the History table reflecting the actual current status:
+  - If was `[🚧]`: `[TIMESTAMP] | Spec Outline [NNN] | Re-specified (was 🚧)`
+  - If was `[✅]`: `[TIMESTAMP] | Spec Outline [NNN] | Re-specified (was ✅)`
+
+  Then save `docs/blueprint/roadmap.md`. Allow specify to proceed.
 - **no** → stop. Suggest: "Consider running `/speckit.blueprint.roadmap` to add a new Spec Outline first."
 
 ---

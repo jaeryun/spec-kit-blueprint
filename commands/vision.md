@@ -61,7 +61,7 @@ Check if `docs/blueprint/vision.md` exists.
 
 **If it exists:**
 
-1. Read and summarize the existing vision (project name, problem, core features, current stage)
+1. Read and summarize the existing vision (project name, problem, core features, current state)
 2. Ask: "Your existing vision is summarized above. What would you like to do?
    - (1) Update specific sections
    - (2) Start over
@@ -136,7 +136,7 @@ For each violation found, output:
 
 ```text
 ⚠️ Scope issue in vision.md: "[excerpt]"
-This level of detail belongs in [roadmap / spec]. Remove it from vision.md or move it to the appropriate stage.
+This level of detail belongs in [roadmap / spec]. Remove it from vision.md or move it to the appropriate file (`roadmap.md` or `spec.md`).
 ```
 
 Ask the user: "Found [N] scope issue(s) above. Fix before proceeding? (yes / no / skip)"
