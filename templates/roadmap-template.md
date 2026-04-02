@@ -46,6 +46,7 @@ _Last updated: [DATE]_
 
 ## Stage 2: [STAGE NAME]
 
+<!-- See Stage 1 comments above for full field guidance. -->
 **Goal:** [What this stage delivers]
 
 **Dependencies:** Stage 1

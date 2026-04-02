@@ -20,7 +20,7 @@ Inspect the argument passed to `/speckit.specify`.
 
 **If no argument was provided:**
 → Output:
-```
+```text
 ⚠️ No argument passed to /speckit.specify.
 
 Roadmap alignment and spec file tracking require knowing what you are specifying.
@@ -87,7 +87,7 @@ Check the `Deps:` field of the matched Spec Outline.
 - If all listed dependencies are `[✅]` Complete → proceed.
 - If any listed dependency is `[📋]` Planned or `[🚧]` In Progress → output:
 
-```
+```text
 ⚠️ Dependency Not Ready
 
 Spec Outline [NNN] depends on [Spec Outline MMM — goal], which is not yet complete ([📋 Planned / 🚧 In Progress]).
@@ -106,7 +106,7 @@ Wait for user response.
 - **C** → stop.
 
 If all dependency checks pass, output:
-```
+```text
 ✅ Roadmap aligned: maps to Spec Outline [NNN] — [Spec Outline goal]
 Proceeding with specification.
 ```
@@ -120,7 +120,7 @@ Stop. Allow specify to proceed.
 Run the same dependency check as Case A. If any dep is incomplete, output the Dependency Not Ready warning and wait for user response before proceeding.
 
 If dependency check passes (or deps are `—`), output:
-```
+```text
 ⚠️ Spec Outline [NNN] is already [in progress / complete].
 
 Confirm this is an extension or fix within that Spec Outline's scope, not a duplicate or scope creep.
@@ -137,7 +137,7 @@ Wait for user response.
 #### Case C — No matching Spec Outline found
 
 Output:
-```
+```text
 ⚠️ Roadmap Divergence Detected
 
 "[argument]" does not map to any Spec Outline in the current roadmap.
@@ -158,7 +158,7 @@ Wait for user response.
 #### Case D — Ambiguous match (argument spans multiple Spec Outlines)
 
 Output:
-```
+```text
 ⚠️ This argument overlaps multiple Spec Outlines: [Spec Outline NNN, Spec Outline NNM, ...]
 
 Spanning multiple Spec Outlines in a single spec risks scope creep and unclear ownership.
