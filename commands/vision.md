@@ -76,7 +76,9 @@ Proceed to Step 2.
 
 ### Step 2: Adaptive Interview
 
-Conduct a conversational interview in **3 rounds**. Do not present all questions at once — ask, listen, then adapt the next question based on the answer.
+Conduct a conversational interview in **3 rounds**. Ask **one question at a time** — wait for the answer, then ask the next. Adapt follow-up questions based on what you hear. Never bundle multiple questions in a single message.
+
+If the user says "I don't know" or "not sure" for any answer — record it as `TBD` and move on. Do not block progress.
 
 #### Round 1 — Core Understanding (always ask these)
 
@@ -91,8 +93,6 @@ After Round 1, briefly reflect back what you heard and ask: "Is that a fair summ
 1. "What is explicitly OUT of scope for the initial version? What are you intentionally deferring?"
 2. "Are there any hard technical constraints? (existing stack, hosting environment, must-use libraries, etc.)"
 3. "What are the non-functional requirements? Think about: performance targets, security requirements, accessibility, offline support, etc."
-
-If the user says "I don't know" or "not sure" for any answer — record it as `TBD` and move on. Do not block progress.
 
 #### Round 3 — Execution Context (adapt based on rounds 1-2)
 
@@ -148,35 +148,40 @@ If no violations found → output: "✅ Scope check passed."
 
 ---
 
-### Step 5: Roadmap Alignment Check
+### Step 5: Roadmap Alignment Check (re-run only)
+
+> This step only applies when vision is being **updated** and a roadmap already exists. On first run, skip this step.
 
 Check if `docs/blueprint/roadmap.md` exists. If it does not exist, skip this step.
 
-Read `docs/blueprint/roadmap.md`. Compare each of the following against the updated `vision.md`:
+Read `docs/blueprint/roadmap.md`. Check at a high level whether the existing Spec Outlines are still consistent with the updated vision:
 
-- **Spec Outline goals** — do any Spec Outline goals contradict or no longer reflect the updated Core Features or Problem Statement?
-- **Spec Outline phases** — do any objectives reference features that are now Out of Scope, or miss features newly added to Core Features?
-- **Out of Scope alignment** — does the roadmap include anything that vision now explicitly marks as Out of Scope?
-- **Target Users** — do any Spec Outline phases serve a user segment no longer in the vision?
+- Do any Spec Outline goals contradict the updated Problem Statement or Core Features?
+- Does the roadmap include work that vision now explicitly marks as Out of Scope?
+- Does the roadmap omit any Core Feature that vision now considers essential?
 
-For each misalignment found, produce a specific proposed change:
+If conflicts are found, output:
 
 ```text
-⚠️ Roadmap alignment issue found:
+⚠️ Vision change affects existing roadmap.
 
-[For each issue:]
-Location: Spec Outline [NNN]
-Current:  "[current text]"
-Proposed: "[updated text]"
-Reason:   "[one-line explanation based on vision change]"
+[For each conflict:]
+Spec Outline [NNN] — [goal]
+Issue: [one-line description of the conflict]
 ```
 
-If issues are found, ask: "Found [N] roadmap alignment issue(s) above. Apply these updates now? (yes / no)"
+Then output:
 
-- **yes** → apply all proposed changes to `docs/blueprint/roadmap.md`, append a `Synced with vision.md` row to roadmap.md's History, save, and output: "✅ roadmap.md updated to reflect vision changes."
-- **no** → output: "ℹ️ roadmap.md not updated. Run `/speckit.blueprint.roadmap` when ready to re-align."
+```text
+The roadmap needs to be re-run to reflect the updated vision.
+Run `/speckit.blueprint.roadmap` to regenerate or update affected Spec Outlines.
 
-If no issues found → output: "✅ Roadmap is consistent with updated vision."
+Note: if any conflicting Spec Outline has already been specified or implemented,
+those downstream steps (specify, plan, tasks, implement) may also need to be re-run
+depending on the extent of the vision change.
+```
+
+If no conflicts found → output: "✅ Roadmap is consistent with updated vision."
 
 ---
 

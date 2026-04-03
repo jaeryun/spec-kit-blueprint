@@ -14,21 +14,21 @@ _Last updated: [DATE]_
        [🚧] In Progress — set by _roadmap-check when /speckit.specify starts; also set by _roadmap-sync for partial coverage
        [✅] Complete — after _roadmap-sync confirms completion
 
-     Goal: one sentence, user-facing. Bad: "Implement auth". Good: "Users can sign up and log in."
-     Phases: 1–3 only. Phrase as outcomes ("Users can X"), not tasks ("Implement X").
-       Each phase becomes a P1/P2/P3 section in spec.md.
+     Summary: one sentence, user-facing. Bad: "Implement auth". Good: "Users can sign up and log in."
+     Scope: free-form description of what this Epic encompasses. Keep abstract — phase breakdown
+       (P1/P2/P3) is determined later during /speckit.specify through a requirements interview.
      Size: sprint estimate, e.g. ~2. Do not write ranges.
      Deps: Spec Outline IDs this depends on, or — if none.
      Spec: spec file path once specified, or — until then. -->
 
 - [📋] **Spec Outline 001** — [User-facing goal]
-  - Phases: [phase 1], [phase 2]
+  - Scope: [What this Epic encompasses, written at an abstract level. e.g. "Sign-up flow, login/logout, password reset, and session management."]
   - Size: ~N sprints
   - Deps: —
   - Spec: —
 
 - [📋] **Spec Outline 002** — [User-facing goal]
-  - Phases: [phase 1], [phase 2]
+  - Scope: [What this Epic encompasses, written at an abstract level. e.g. "User profile page, avatar upload, notification preferences, and account deletion."]
   - Size: ~N sprints
   - Deps: Spec Outline 001
   - Spec: —

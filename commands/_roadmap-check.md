@@ -71,8 +71,8 @@ If no Spec Outlines are found:
 Using the resolved match target from Step 1:
 
 - **Spec Outline reference**: look up by number directly. If not found, treat as no match (Case C).
-- **Spec file reference**: match the extracted spec title/description against Spec Outline goals and phases.
-- **Feature description**: match semantically against Spec Outline goals and phases.
+- **Spec file reference**: match the extracted spec title/description against Spec Outline summaries and scope.
+- **Feature description**: match semantically against Spec Outline summaries and scope.
 
 **Match criteria:** When confidence is low or the match is ambiguous, ask the user to confirm before proceeding — this hook writes to `roadmap.md` and a wrong match would corrupt status.
 
@@ -121,6 +121,10 @@ Output:
 ```text
 ✅ Roadmap aligned: maps to Spec Outline [NNN] — [Spec Outline goal]
 Status updated: [📋] Planned → [🚧] In Progress
+
+Spec Outline scope (use as context for the requirements interview):
+[Spec Outline scope field content]
+
 Proceeding with specification.
 ```
 
@@ -152,7 +156,16 @@ Wait for user response.
   - If was `[🚧]`: `[TIMESTAMP] | Spec Outline [NNN] | Re-specified (was 🚧)`
   - If was `[✅]`: `[TIMESTAMP] | Spec Outline [NNN] | Re-specified (was ✅)`
 
-  Then save `docs/blueprint/roadmap.md`. Allow specify to proceed.
+  Then save `docs/blueprint/roadmap.md`. Output:
+
+  ```text
+  Spec Outline scope (use as context for the requirements interview):
+  [Spec Outline scope field content]
+
+  Proceeding with specification.
+  ```
+
+  Allow specify to proceed.
 - **no** → stop. Suggest: "Consider running `/speckit.blueprint.roadmap` to add a new Spec Outline first."
 
 ---
