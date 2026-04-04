@@ -166,7 +166,7 @@ If conflicts are found, output:
 ⚠️ Vision change affects existing roadmap.
 
 [For each conflict:]
-Spec Outline [NNN] — [goal]
+SO-[NN] — [goal]
 Issue: [one-line description of the conflict]
 ```
 

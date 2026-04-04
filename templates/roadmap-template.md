@@ -1,36 +1,31 @@
 # Roadmap: [PROJECT NAME]
 
-_Last updated: [DATE]_
-
----
-
 ## Spec Outlines
 
-<!-- ACTION REQUIRED: One Spec Outline per Epic. Each maps to one /speckit.specify run.
-     Number sequentially: 001, 002, 003, ...
+<!-- ACTION REQUIRED: One Spec Outline per /speckit.specify run.
+     Number sequentially: SO-01, SO-02, SO-03, ...
 
      Status markers:
        [📋] Planned — default, not yet specified
        [🚧] In Progress — set by _roadmap-check when /speckit.specify starts; also set by _roadmap-sync for partial coverage
        [✅] Complete — after _roadmap-sync confirms completion
+       [⏸️] Deferred — scope confirmed but execution postponed to a later roadmap
+       [❌] Excluded — formally removed from the roadmap scope
 
      Summary: one sentence, user-facing. Bad: "Implement auth". Good: "Users can sign up and log in."
-     Scope: free-form description of what this Epic encompasses. Keep abstract — phase breakdown
-       (P1/P2/P3) is determined later during /speckit.specify through a requirements interview.
-     Size: sprint estimate, e.g. ~2. Do not write ranges.
+     Scope: free-form description of what this Spec Outline encompasses. Keep abstract — phase
+       breakdown (P1/P2/P3) is determined later during /speckit.specify through a requirements interview.
      Deps: Spec Outline IDs this depends on, or — if none.
      Spec: spec file path once specified, or — until then. -->
 
-- [📋] **Spec Outline 001** — [User-facing goal]
-  - Scope: [What this Epic encompasses, written at an abstract level. e.g. "Sign-up flow, login/logout, password reset, and session management."]
-  - Size: ~N sprints
+- [📋] **SO-01** — [User-facing goal]
+  - Scope: [What this Spec Outline encompasses, written at an abstract level. e.g. "Sign-up flow, login/logout, password reset, and session management."]
   - Deps: —
   - Spec: —
 
-- [📋] **Spec Outline 002** — [User-facing goal]
-  - Scope: [What this Epic encompasses, written at an abstract level. e.g. "User profile page, avatar upload, notification preferences, and account deletion."]
-  - Size: ~N sprints
-  - Deps: Spec Outline 001
+- [📋] **SO-02** — [User-facing goal]
+  - Scope: [What this Spec Outline encompasses, written at an abstract level. e.g. "User profile page, avatar upload, notification preferences, and account deletion."]
+  - Deps: SO-01
   - Spec: —
 
 <!-- Add more Spec Outlines as needed. -->
@@ -42,7 +37,7 @@ _Last updated: [DATE]_
 ### Sequence (must be done in order)
 
 <!-- ACTION REQUIRED: List only the critical path — Spec Outlines that must run serially. -->
-Spec Outline 001 → Spec Outline 002 → ...
+SO-01 → SO-02 → ...
 
 ### Parallel Groups
 
@@ -51,7 +46,7 @@ Spec Outline 001 → Spec Outline 002 → ...
      "Can start after" must name a specific Spec Outline ID. -->
 | Group | Spec Outlines | Can start after |
 | --- | --- | --- |
-| A | Spec Outline 003, Spec Outline 005 | Spec Outline 001 complete |
+| A | SO-03, SO-05 | SO-01 complete |
 
 ---
 
@@ -59,13 +54,10 @@ Spec Outline 001 → Spec Outline 002 → ...
 
 <!-- ACTION REQUIRED: Fill in after all Spec Outlines are confirmed. -->
 - Total Spec Outlines: [N]
-- Estimated total: [N sprints]
-- Critical path: Spec Outline 001 → Spec Outline 002 → ...
+- Critical path: SO-01 → SO-02 → ...
 
 ---
 
 ## History
 
-| Timestamp | Subject | Note |
-| --- | --- | --- |
-| [YYYY-MM-DD HH:MM] | roadmap.md | Created |
+[YYYY-MM-DD HH:MM] | Initial roadmap created from vision.md

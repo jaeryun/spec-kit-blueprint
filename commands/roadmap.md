@@ -8,52 +8,37 @@ Generate a delivery roadmap of Spec Outlines from the confirmed vision.
 
 ## Purpose
 
-Using the confirmed `vision.md`, produce a single `roadmap.md` that:
+Defining specs one at a time — without a shared view of the whole project — leads to specs that are too large or too small. There's no basis for calibrating scope when each spec is written in isolation.
 
-- Analyzes the project vision and interviews the user to surface all work needed
-- Defines Spec Outlines (Jira Epics, 2–4+ sprints each) with goals, scope, and size estimates
-- Maps dependencies between Spec Outlines and produces an execution order
+This command addresses that by building the full roadmap before any spec is written. Through a user interview, it surfaces all work at the Spec Outline level, calibrates each scope as a set — weighing priority, dependencies, and parallelism — and determines the execution order. The output is a roadmap of right-sized Spec Outlines in execution order — each one the input to a single `/speckit.specify` run.
 
 ## What is a Spec Outline
 
-A **Spec Outline** is the planning blueprint for one Jira Epic. It is defined at roadmap time — before detailed requirements are known — using only three components:
+A **Spec Outline** is the planning blueprint for one `/speckit.specify` run. The spec it produces covers work comparable to a Jira Epic — a cohesive, independently deliverable unit of work. It is defined at roadmap time — before detailed requirements are known — using only three components:
 
 | Component | Description |
 | --- | --- |
-| **Summary** | One sentence describing what this Epic delivers, from the user's perspective |
-| **Scope** | Free-form description of what this Epic encompasses — written at an abstract level based on vision analysis and user interview |
+| **Summary** | One sentence describing what this Spec Outline delivers, from the user's perspective |
+| **Scope** | Free-form description of what this Spec Outline encompasses — written at an abstract level based on vision analysis and user interview |
 | **Deps** | Other Spec Outlines that must be completed before this one can start |
 
 ```
 Spec Outline (roadmap.md) — planning time, abstract
     ├─ Summary: "Users can register and log in with email/password."
     ├─ Scope: "Sign-up flow, login/logout, password reset, session management."
-    └─ Deps: —
-         └─► /speckit.specify → requirements interview → spec.md
-                 ├─ P1 User Story (must-have, built first)
-                 ├─ P2 User Story (should-have, built second)
-                 └─ P3 User Story (nice-to-have, built last / first to cut)
-                         └─► /speckit.plan → /speckit.tasks → /speckit.implement
+    └─ Deps: SO-01
 ```
 
 Key implications for generation:
-- Each Spec Outline = one `/speckit.specify` run = one feature branch
+- Each Spec Outline = one `/speckit.specify` run.
+- **Scope is calibrated as a set** — sizes are adjusted relative to each other across the whole roadmap, factoring in priority, dependencies, and team parallelism.
 - **Scope is intentionally abstract** — the exact phase breakdown (P1/P2/P3) is determined during `/speckit.specify` through a detailed requirements interview. Scope items written here may be decomposed into multiple phases, merged, or reframed during that interview.
-- The **Size** estimate covers the full branch lifecycle: specify → clarify → plan → tasks → implement — not just spec writing time
-
-## Scope Boundary
-
-`roadmap.md` answers **what Spec Outlines exist, in what order, and what each covers** — nothing more.
-
-**Belongs here:** Spec Outline summaries, abstract scope descriptions, size estimates, dependencies between Spec Outlines, execution order.
-
-**Does NOT belong here:** implementation details, code snippets, task-level breakdowns, test cases, phase-level breakdowns (P1/P2/P3 belong in `spec.md`), sprint-by-sprint assignments, team member allocation. If any of these appear in a draft, they belong in a spec — remove them.
 
 ## User Input
 
 $ARGUMENTS
 
-If `$ARGUMENTS` names a specific Spec Outline (e.g., "Spec Outline 002"), re-run only that Spec Outline and leave all others unchanged. If `$ARGUMENTS` contains a general focus hint (e.g., "focus on the backend Spec Outlines"), apply it during generation.
+If provided, interpret `$ARGUMENTS` as user intent and apply it during generation.
 
 ## Hooks
 
@@ -73,120 +58,53 @@ If missing, stop and output: "Run `/speckit.blueprint.vision` first."
 
 ### Step 1: Check Existing Roadmap
 
-Check if `docs/blueprint/roadmap.md` exists.
+If `docs/blueprint/roadmap.md` does not exist, proceed to Step 2.
 
-**If it exists:**
+If it exists, summarize it (Spec Outline count, IDs, statuses) and ask:
 
-1. Read the file and output a brief summary: number of Spec Outlines, their IDs and statuses (📋 / 🚧 / ✅).
-2. Ask: "Your existing roadmap is summarized above. What would you like to do?
-   - (1) Update specific Spec Outlines
-   - (2) Regenerate from scratch
-   - (3) Reset a Spec Outline status
-   - (4) Cancel"
-3. If the user chooses (1): identify which Spec Outlines to update from `$ARGUMENTS` or from their reply. Spec Outlines marked ✅ Complete or 🚧 In Progress are **immutable** — do not re-analyze or overwrite them. For each skipped immutable Spec Outline, output: "Skipping Spec Outline [NNN] — status is [🚧 In Progress / ✅ Complete]. Use option (3) to reset it first." Proceed to Step 2 for only the targeted Spec Outlines.
-4. If the user chooses (2): proceed to Step 2 for all Spec Outlines.
-5. If the user chooses (3): ask "Which Spec Outline would you like to reset? (provide number or goal)" — find the matching Spec Outline, then ask:
+"What would you like to do?
+  (1) Update — re-analyze specific Spec Outlines
+  (2) Regenerate — start from scratch
+  (3) Reset a Spec Outline status to 📋 Planned
+  (4) Cancel"
 
-   ```text
-   Reset Spec Outline [NNN] — [goal]?
-
-   Current status: [✅ Complete / 🚧 In Progress]
-   Reset to: 📋 Planned
-
-   This will allow it to be re-specified. Confirm? (yes / no)
-   ```
-
-   - **yes** → change the Spec Outline marker back to `[📋]`, clear the `Spec:` field back to `—`, append a `[TIMESTAMP] | Spec Outline [NNN] | ✅/🚧 → 📋 (reset)` row to the History table, save `docs/blueprint/roadmap.md`, and output: "✅ Spec Outline [NNN] reset to 📋 Planned. Note: the previously linked spec file (if any) is no longer referenced — archive or delete it manually if no longer needed."
-   - **no** → return to the options menu.
-6. If the user chooses (4): stop.
-
-**If it does not exist:** proceed to Step 2.
+- **(1)** Identify targets from `$ARGUMENTS` or user reply. Skip 🚧/✅ Spec Outlines (immutable) and notify. Proceed to Step 2 for targets only.
+- **(2)** Proceed to Step 2 for all Spec Outlines.
+- **(3)** Ask which Spec Outline to reset. Confirm with the user, then set marker to `[📋]`, clear `Spec:` to `—`, append a reset row to History, and save.
+- **(4)** Stop.
 
 ---
 
-### Step 2: Phase 1 — Spec Outline Definition
+### Step 2: Interview & Initial Draft
 
-Output: `[Phase 1 of 2] Spec Outline Definition`
+Read `docs/blueprint/vision.md`. Pay special attention to sprint cadence, team size, core features, and out-of-scope items.
 
-**Vision alignment check:** Before proceeding, assess whether the current roadmap change intent conflicts with `docs/blueprint/vision.md` across these four dimensions:
+Conduct an adaptive user interview to surface work not captured in vision.md. Ask one question at a time, skip topics already answered by vision.md, and follow up naturally based on the user's responses. Cover the following topics — not as a fixed script, but as areas to ensure are addressed:
 
-- **Core Features** — does the proposed change drop or significantly reduce a Core Feature?
-- **Out of Scope** — does the proposed change introduce something vision explicitly marks as Out of Scope?
-- **Target Users** — does the proposed change shift focus to a different user segment?
-- **Non-Functional Requirements** — does the proposed change contradict a stated NFR?
+- External integrations (legacy APIs, third-party services, internal tools)
+- Non-functional requirements not in vision (performance, compliance, accessibility)
+- Foundational work required before the first user-facing feature can ship
+- Known constraints, risks, or external dependencies
+- MVP scope — which capabilities are essential for initial release vs. deferrable
+- Anything the user expects to be included that hasn't come up yet
 
-If a conflict is found, present it specifically and ask the user to confirm before continuing:
-
-```text
-⚠️ Vision Conflict: [dimension]
-"[specific conflict description]"
-
-Proceed anyway? (yes / no)
-```
-
-- **yes** → continue.
-- **no** → stop. Output: "Update `docs/blueprint/vision.md` first to reflect the intended change."
-
-If no conflicts found, continue silently.
-
-Read `docs/blueprint/vision.md`. Pay special attention to:
-
-- Sprint cadence and team size (Execution Context section)
-- Core features and out-of-scope items
-
-**2-1. User Interview**
-
-Before drafting anything, ask the user targeted questions one at a time to surface work not captured in vision.md. Wait for the answer to each question before asking the next.
-
-Ask in this order:
-
-1. "Are there any existing systems or services this project needs to integrate with? (e.g., legacy APIs, third-party services, internal tools)"
-2. "Are there infrastructure or platform concerns to account for? (e.g., CI/CD setup, cloud provider, deployment targets)"
-3. "Are there any non-functional requirements not covered in the vision? (e.g., performance targets, compliance, accessibility, i18n)"
-4. "Is there any work that must happen before the first user-facing feature can ship? (e.g., repo setup, auth foundation, database schema)"
-5. "Any known constraints, risks, or external dependencies I should factor in?"
-
-After all five answers are collected, proceed to 2-2.
-
-**2-2. Draft Spec Outlines**
-
-Using vision.md + interview answers, draft the Spec Outlines. For each, determine:
-
-- **Summary**: one sentence describing what this Epic delivers, from the user's perspective
-- **Scope**: free-form description of what this Epic encompasses — write at an abstract level. This becomes the raw input for `/speckit.specify`, where the exact phase breakdown (P1/P2/P3) is determined through a requirements interview. Scope items may be decomposed, merged, or reframed at that point.
-- **Size**: estimated sprint count — apply the Sizing Guide (For AI Generation section) including split/merge rules
-
-Principles:
-
-- Each Spec Outline delivers a cohesive, user-observable capability
-- Earlier Spec Outlines cover foundational/blocking work; later ones add depth and polish
-- Do not prescribe phases here — keep scope abstract
-- After estimating size, explicitly apply the split/merge rules from the Sizing Guide:
-  - If adjusted size > 4 sprints → split into two Spec Outlines
-  - If adjusted size < 2 sprints AND doesn't block others → merge with adjacent
-
-**2-3. User Confirmation**
-
-Present the Spec Outline list to the user and ask: "Do the Spec Outlines make sense? Are the scopes and sizes realistic for your team?"
-
-Incorporate feedback. Repeat until the user confirms.
+Using vision.md + interview answers, draft an initial set of Spec Outlines. Apply the **Spec Outline Boundary Principles** and **Scope Guide** when deciding scope boundaries and sizing. Do not present the draft yet — proceed to Step 3.
 
 ---
 
-### Step 3: Phase 2 — Dependency Mapping
+### Step 3: Validate & Calibrate
 
-Output: `[Phase 2 of 2] Dependency Mapping`
+Present the full initial draft to the user. Then validate across all four dimensions and include findings in the same response:
 
-For each Spec Outline, identify which prior Spec Outlines it depends on (write `—` if none).
+- **Vision alignment** — does any scope contradict core features, out-of-scope items, target users, or NFRs in vision.md? **Strict adherence is mandatory.** If the user wants to introduce goals outside the current vision, they must stop and run `/speckit.blueprint.vision` first to update the core project definition.
+- **Scope sizing** — is any Spec Outline too broad or too narrow? (See Scope Guide)
+- **Scope placement** — is each scope item in the right Spec Outline? Flag anything that would fit better elsewhere or that logically belongs with another Spec Outline.
+- **Dependencies** — which Spec Outlines must be completed before others? Set the `Deps` field accordingly.
+- **Parallelism** — which Spec Outlines can run concurrently? Produce a critical path sequence and parallel groups.
 
-From the dependency graph, produce two outputs:
+If issues are found, propose specific adjustments alongside the draft. Ask: "Does this look correct? Any changes?"
 
-- **Sequence** — the linear chain of Spec Outlines that must be completed in strict order (the critical path)
-- **Parallel Groups** — sets of Spec Outlines that can run concurrently, labeled Group A, B, C, …, and the condition under which each group can start
-
-Present the execution order to the user and ask: "Does this dependency and parallelism plan look correct?"
-
-Incorporate feedback, then proceed to write the output file.
+Incorporate feedback and repeat until the user confirms.
 
 ---
 
@@ -196,73 +114,15 @@ Load `templates/roadmap-template.md` to understand the required sections.
 
 Fill each Spec Outline with the confirmed output from Steps 2 and 3, following the **For AI Generation** guidelines at the end of this file.
 
-Include a `_Last updated: [date]_` line with today's date.
+If `docs/blueprint/roadmap.md` does not yet exist, include the initial history entry from the template. If it already exists, preserve all existing history entries and append a new line: `[TIMESTAMP] | [Summary]`.
 
-If `docs/blueprint/roadmap.md` does not yet exist, the History section in the template will carry a `Created` entry. If it already exists (regenerate or update), preserve all existing History rows and append a new row: `[TIMESTAMP] | roadmap.md | Updated` (for full regeneration) or `[TIMESTAMP] | Spec Outline [NNN] | Updated` (for targeted update).
+Keep summaries concise (one line) and descriptive of the specific action taken (e.g., "Full regeneration from vision.md", "SO-02 updated to include API requirements", "SO-01 status reset to Planned").
 
 Save to `docs/blueprint/roadmap.md`.
 
 ---
 
-### Step 5: Scope Check
-
-After saving, review `docs/blueprint/roadmap.md` against the Scope Boundary defined above.
-
-Flag each violation before confirming completion:
-
-| Violation | Guidance |
-| --- | --- |
-| Scope written as a task list or step-by-step breakdown | Rewrite as abstract capability description — what the Epic covers, not how it will be built |
-| Implementation detail in scope | Move to spec |
-| Spec Outline sized under ~2 sprints | Consider merging with an adjacent Spec Outline |
-
-For each violation found, output:
-
-```text
-[!] Scope issue in roadmap.md: "[excerpt]"
-This level of detail belongs in [spec / project management]. Remove it from roadmap.md.
-```
-
-Ask the user: "Found [N] scope issue(s) above. Fix before proceeding? (yes / no / skip)"
-
-- **yes** — apply fixes, re-save, and re-confirm the file
-- **no / skip** — proceed as-is and note issues remain
-
-If no violations are found, output: "Scope check passed."
-
----
-
-### Step 6: Vision Sync
-
-Read `docs/blueprint/vision.md`. Compare the finalized `roadmap.md` against the four vision dimensions:
-
-- **Out of Scope violations** — do any Spec Outline summaries or scope descriptions introduce something vision marks as Out of Scope?
-- **Core Feature drift** — are any Core Features absent or contradicted by the roadmap?
-- **Target User drift** — does any scope description serve a user segment not defined in vision?
-- **Non-Functional Requirements** — does any scope description conflict with a stated NFR?
-
-If drift is detected, produce specific proposed changes to `vision.md`:
-
-```text
-⚠️ Vision Sync: Scope changes detected
-
-[For each issue:]
-Section: [Core Features / Out of Scope / Target Users / NFR]
-Action:  [Add / Remove / Modify]
-Item:    "[item text]"
-Reason:  "[one-line explanation based on roadmap evidence]"
-```
-
-Ask: "Found [N] vision sync issue(s) above. Apply these updates to vision.md now? (yes / no)"
-
-- **yes** → apply all proposed changes to `docs/blueprint/vision.md`, append a `Synced with roadmap.md` row to vision.md's History, save, and output: "✅ vision.md updated to reflect roadmap scope changes."
-- **no** → output: "ℹ️ vision.md not updated. Re-run `/speckit.blueprint.vision` when ready to re-align."
-
-If no drift found → output: "✅ Vision consistent with roadmap."
-
----
-
-### Step 7: Completion
+### Step 5: Completion
 
 Confirm the file is saved:
 
@@ -273,7 +133,7 @@ Output:
 ```text
 Roadmap complete. [N] Spec Outlines defined.
 
-Next: /speckit.specify [Spec Outline 001 goal]
+Next: /speckit.specify [SO-01 goal]
 After each Spec is complete, run the next Spec Outline in dependency order.
 ```
 
@@ -293,75 +153,55 @@ When filling `templates/roadmap-template.md`:
 
 **Summary** — User-facing, one sentence. Bad: "Implement authentication". Good: "Users can register and log in with email/password."
 
-**Scope** — Free-form prose describing what this Epic encompasses, at an abstract level. Write what the feature covers, not how it will be built or how many phases it will have. This is the raw input for `/speckit.specify` — phase breakdown happens there, not here.
+**Scope** — Free-form prose. Write what this Spec Outline covers at an abstract level — not how it will be built, not how many phases it will have. Phase breakdown happens during `/speckit.specify`.
 
-**Size** — Use the Sizing Guide below. Round to the nearest sprint: `~2`, `~3`, `~4`. Do not write ranges.
-
-**Deps** — List Spec Outline IDs (e.g., `Spec Outline 001`). Write `—` if no dependencies.
+**Deps** — List Spec Outline IDs (e.g., `SO-01`). Write `—` if no dependencies.
 
 **Spec** — Write `—` until the spec file exists. Updated automatically by `_roadmap-sync` after `/speckit.specify`.
 
-### Sizing Guide
+### Spec Outline Boundary Principles
 
-Size represents the estimated total duration of one Spec Outline from `/speckit.specify` through `/speckit.implement` — the full Epic lifecycle, not just spec writing time.
+Apply these when deciding where one Spec Outline ends and the next begins:
 
-**Step 1 — Baseline from scope complexity**
+- **Vertical slice, not horizontal layer** — one Spec Outline covers a complete capability end-to-end (e.g., "user authentication" including both API and UI), not a technical layer in isolation (e.g., "auth API" and "auth UI" as separate Spec Outlines). Horizontal cuts produce Spec Outlines that cannot be demoed or shipped independently.
+- **One complete user journey** — do not split a single user journey across two Spec Outlines unless one part genuinely blocks the other and is large enough to stand alone. A user who can't complete the flow after this Spec Outline ships gets no value.
+- **Independent demo-ability** — when a Spec Outline is complete, there must be something meaningful to show a stakeholder. If completing it requires another Spec Outline to be useful, reconsider the boundary.
+- **Dependency minimization** — if Spec Outline A is always needed for Spec Outline B to make sense, consider merging them. Cross-Spec-Outline dependencies are a signal that the boundary may be wrong.
+- **Foundational work is the exception** — auth, DB schema, core infrastructure, and CI/CD setup are legitimately separate even if they don't deliver user-visible value alone, because everything downstream depends on them.
 
-| Scope breadth | Baseline |
+### Spec Outline Scope Guide
+
+The goal is ensuring each Spec Outline is scoped appropriately: not too broad to manage in a single `/speckit.specify` run, and not so narrow it doesn't warrant its own spec.
+
+**Too broad — consider splitting if:**
+
+- Scope spans unrelated domains (e.g., payment processing + user profiles in one Spec Outline)
+- Scope contains multiple independent user journeys that don't need each other
+- Part of the scope clearly blocks the rest and is substantial enough to stand alone
+
+**Too narrow — consider merging if:**
+
+- Scope is a trivial capability that doesn't stand alone as a deliverable
+- Completing this Spec Outline requires another one to be useful (and they're not a dependency — they're just incomplete without each other)
+
+**Context signals to weigh when assessing scope balance:**
+
+Read `vision.md` (Execution Context) and interview answers before judging:
+
+| Signal | What it means for scope |
 | --- | --- |
-| Narrow: single, well-defined capability | ~2 sprints |
-| Moderate: 2–3 related capabilities | ~3 sprints |
-| Broad: cross-cutting or multi-capability | ~4 sprints |
-
-**Step 2 — Adjust for context factors**
-
-Read the `Execution Context` section of `vision.md` before adjusting:
-
-| Factor | Adjustment |
-| --- | --- |
-| Solo developer | ×1.5 the baseline |
-| First Spec Outline in the project | +1 sprint (environment setup, conventions, CI/CD) |
-| Foundational / infrastructure work (auth, DB schema, core APIs) | +1 sprint (high uncertainty, blocks everything else) |
-| External API or third-party integration | +0.5–1 sprint per external dependency |
-| Unfamiliar domain or tech stack for the team | +1 sprint |
-| UI/frontend-heavy work | base (UI polish tends to expand — watch P3) |
-| Well-understood CRUD / business logic | base |
-
-**Step 3 — Split or merge**
-
-Split into two Spec Outlines if:
-
-- Adjusted estimate exceeds 4 sprints
-- Scope spans unrelated domains (e.g., payment processing + user profiles)
-- Part of the scope clearly blocks the rest and is large enough to stand alone (~2 sprints)
-
-Keep foundational work as its own Spec Outline even if small — auth, DB schema, and core infrastructure block all downstream Spec Outlines and must not be merged with feature work.
-
-Merge with an adjacent Spec Outline if:
-
-- Adjusted estimate is under 2 sprints AND the work does not block any other Spec Outline
+| Solo developer | Err toward narrower scopes — less parallelism available |
+| First Spec Outline | Keep scope tighter — environment setup adds hidden work |
+| External API / third-party integration | Each integration adds uncertainty; factor in when judging breadth |
+| Unfamiliar domain or tech stack | Narrower scope reduces risk of underestimating |
+| Well-understood CRUD / business logic | Broader scope acceptable |
 
 ### Status Markers
 
-| Marker | Meaning | When to set |
-| --- | --- | --- |
-| `[📋]` | Planned | Default — not yet specified |
-| `[🚧]` | In Progress | Set by `_roadmap-check` when specify starts; also set by `_roadmap-sync` for partial coverage |
-| `[✅]` | Complete | After `_roadmap-sync` confirms completion |
-
-Never change markers manually unless the user explicitly asks to reset a status.
+Refer to `templates/roadmap-template.md` for the defined status markers and their meanings. Never change markers manually unless the user explicitly asks to reset a status or transition to Deferred/Excluded.
 
 ### Execution Order Rules
 
 **Sequence** — Critical path only. Spec Outlines that can run in parallel do not belong here.
 
 **Parallel Groups** — Include only if two or more Spec Outlines can genuinely run concurrently. Remove the table entirely if everything is sequential. "Can start after" must name a specific Spec Outline ID.
-
-### Scope Signals — Remove Before Saving
-
-| Found in draft | Where it belongs instead |
-| --- | --- |
-| Code snippets or technical implementation details | `spec.md` |
-| Scope written as a task list or phase breakdown | Rewrite as abstract capability description |
-| Task-level breakdowns or test cases | `spec.md` |
-| Sprint-by-sprint assignments or team member allocation | Project management tool |

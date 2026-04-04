@@ -28,7 +28,7 @@ Inspect the argument passed to `/speckit.specify`.
 
 Roadmap alignment and spec file tracking require knowing what you are specifying.
 Accepted forms:
-  - Spec Outline number or goal: /speckit.specify "Spec Outline 001" or /speckit.specify "user authentication"
+  - Spec Outline number or goal: /speckit.specify "SO-01" or /speckit.specify "user authentication"
   - Spec file name: /speckit.specify auth.md
 
 Proceed without a Spec Outline or spec file? (yes / no)
@@ -46,7 +46,7 @@ Wait for user response.
 - **Spec file reference** — argument ends with `.md` or looks like a file path (e.g., `auth.md`, `docs/spec/auth.md`)
   → Read the file. Extract the spec title and any feature description from its content to use as the match target in Step 3.
 
-- **Spec Outline reference** — argument contains "Spec Outline" followed by a number, or is a plain number (e.g., `001`, `1`)
+- **Spec Outline reference** — argument matches the SO-NN format (e.g., `SO-01`) or is a plain number (e.g., `1`)
   → Use the number to directly look up the matching Spec Outline in Step 3.
 
 - **Feature description** — free-form text describing what to build
@@ -59,7 +59,7 @@ Wait for user response.
 If `docs/blueprint/roadmap.md` does not exist:
 → Output: "ℹ️ Blueprint roadmap not found — skipping roadmap alignment check." and stop (allow specify to proceed).
 
-Read `docs/blueprint/roadmap.md`. Find all Spec Outline entries (under `**Spec Outline:**` sections, identified by Spec Outline 001, 002...).
+Read `docs/blueprint/roadmap.md`. Find all Spec Outline entries.
 
 If no Spec Outlines are found:
 → Output: "ℹ️ No Spec Outlines found in `docs/blueprint/roadmap.md` — skipping roadmap alignment check." and stop (allow specify to proceed).
@@ -74,7 +74,7 @@ Using the resolved match target from Step 1:
 - **Spec file reference**: match the extracted spec title/description against Spec Outline summaries and scope.
 - **Feature description**: match semantically against Spec Outline summaries and scope.
 
-**Match criteria:** When confidence is low or the match is ambiguous, ask the user to confirm before proceeding — this hook writes to `roadmap.md` and a wrong match would corrupt status.
+**Match criteria:** When confidence is low or the match is ambiguous, ask the user to confirm before proceeding.
 
 ---
 
@@ -89,17 +89,17 @@ Check the `Deps:` field of the matched Spec Outline.
 **If deps lists one or more Spec Outlines:** check the status of each listed dependency in `roadmap.md`.
 
 - If all listed dependencies are `[✅]` Complete → proceed.
-- If any listed dependency is `[📋]` Planned or `[🚧]` In Progress → output:
+- If any listed dependency is not yet Complete → output:
 
 ```text
 ⚠️ Dependency Not Ready
 
-Spec Outline [NNN] depends on [Spec Outline MMM — goal], which is not yet complete ([📋 Planned / 🚧 In Progress]).
+SO-[NN] depends on [SO-[MM] — goal], which is not yet complete.
 
 Proceeding out of order risks building on an incomplete foundation.
 
 Options:
-  A) Complete Spec Outline [MMM] first — run `/speckit.specify [MMM goal]` first.
+  A) Complete SO-[MM] first — run `/speckit.specify [MM goal]` first.
   B) Proceed anyway — I understand the dependency risk.
   C) Cancel.
 ```
@@ -107,23 +107,18 @@ Options:
 Wait for user response.
 
 - **A** → stop.
-- **B** → allow specify to proceed. Output: "⚠️ Proceeding out of dependency order. Ensure Spec Outline [MMM] is completed before integrating."
+- **B** → allow specify to proceed. Output: "⚠️ Proceeding out of dependency order. Ensure SO-[MM] is completed before integrating."
 - **C** → stop.
-
-If all dependency checks pass, update `docs/blueprint/roadmap.md`:
-
-- Change the matched Spec Outline marker from `[📋]` to `[🚧]`
-- Append a row to the History table: `[TIMESTAMP] | Spec Outline [NNN] | 📋 → 🚧`
-- Save the file
 
 Output:
 
 ```text
-✅ Roadmap aligned: maps to Spec Outline [NNN] — [Spec Outline goal]
-Status updated: [📋] Planned → [🚧] In Progress
+✅ Roadmap aligned: maps to SO-[NN] — [Spec Outline goal]
 
 Spec Outline scope (use as context for the requirements interview):
 [Spec Outline scope field content]
+
+Roadmap status will be updated to [🚧] In Progress upon successful completion of this spec.
 
 Proceeding with specification.
 ```
@@ -138,12 +133,10 @@ Stop. Allow specify to proceed.
 
 **If the Spec Outline is `[✅]` Complete:** Skip the dependency check — dependencies were already satisfied when this Spec Outline was originally specified. Proceed directly to the confirmation prompt below.
 
-No status transition occurs in Case B.
-
 Output:
 
 ```text
-⚠️ Spec Outline [NNN] is already [in progress / complete].
+⚠️ SO-[NN] is already [in progress / complete].
 
 Confirm this is an extension or fix within that Spec Outline's scope, not a duplicate or scope creep.
 
@@ -152,19 +145,13 @@ Proceed? (yes / no)
 
 Wait for user response.
 
-- **yes** → append a row to the History table reflecting the actual current status:
-  - If was `[🚧]`: `[TIMESTAMP] | Spec Outline [NNN] | Re-specified (was 🚧)`
-  - If was `[✅]`: `[TIMESTAMP] | Spec Outline [NNN] | Re-specified (was ✅)`
-
-  Then save `docs/blueprint/roadmap.md`. Output:
-
+- **yes** → Output:
   ```text
   Spec Outline scope (use as context for the requirements interview):
   [Spec Outline scope field content]
 
   Proceeding with specification.
   ```
-
   Allow specify to proceed.
 - **no** → stop. Suggest: "Consider running `/speckit.blueprint.roadmap` to add a new Spec Outline first."
 
@@ -188,7 +175,7 @@ Options:
 Wait for user response.
 
 - **A** → stop. Output: "Run `/speckit.blueprint.roadmap` to update the Spec Outline plan first."
-- **B** → allow specify to proceed. Output: "⚠️ Proceeding without a Spec Outline entry. Consider updating `docs/blueprint/roadmap.md` manually after this spec is complete."
+- **B** → allow specify to proceed. Output: "⚠️ Proceeding without a Spec Outline entry. Roadmap will not be updated automatically for this run."
 - **C** → stop.
 
 ---
@@ -198,7 +185,7 @@ Wait for user response.
 Output:
 
 ```text
-⚠️ This argument overlaps multiple Spec Outlines: [Spec Outline NNN, Spec Outline NNM, ...]
+⚠️ This argument overlaps multiple Spec Outlines: [SO-NN, SO-NM, ...]
 
 Spanning multiple Spec Outlines in a single spec risks scope creep and unclear ownership.
 

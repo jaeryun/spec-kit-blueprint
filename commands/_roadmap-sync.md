@@ -29,7 +29,7 @@ If `docs/blueprint/roadmap.md` does not exist:
 
 Read `docs/blueprint/roadmap.md`.
 
-Find all Spec Outline entries. Spec Outlines are identified by their Spec Outline identifier (Spec Outline 001, Spec Outline 002...).
+Find all Spec Outline entries. Spec Outlines are identified by their ID (SO-01, SO-02...).
 
 Using the completed feature description from the current conversation context, find the Spec Outline that was just specified.
 
@@ -46,8 +46,8 @@ If no matching Spec Outline is found:
 ℹ️ No matching Spec Outline found — skipping sync.
 
 Top candidates (closest semantic match):
-  - Spec Outline [NNN] — [goal]
-  - Spec Outline [NNM] — [goal]
+  - SO-[NN] — [goal]
+  - SO-[NM] — [goal]
 
 To update manually, open docs/blueprint/roadmap.md and change the Spec Outline's status marker:
   [📋] → [🚧] for In Progress
@@ -56,30 +56,37 @@ To update manually, open docs/blueprint/roadmap.md and change the Spec Outline's
 
 ---
 
-### Step 3: Confirm coverage and update Spec Outline status
+### Step 3: Evaluate coverage and propose status update
 
-Ask the user:
+Compare the completed feature description against the matched **SO-NN — [goal]** and its defined scope.
+
+**Proactive Judgment:**
+- If the spec fully addresses the Spec Outline's scope → Propose `[✅]` Complete.
+- If the spec addresses only part of the scope or implies further work → Propose `[🚧]` In Progress.
+
+Present your judgment and reasoning to the user:
 
 ```text
-This spec appears to match **Spec Outline NNN — [goal]**.
+I've matched this spec to **SO-NN — [goal]**.
+Based on the content, this covers the scope [fully / partially] because [brief reasoning].
 
-Did this spec cover it?
-  (yes) → Mark ✅ Complete
-  (partial) → Mark 🚧 In Progress
-  (wrong) → Let me identify the correct Spec Outline
+I'll mark this as [✅ Complete / 🚧 In Progress]. Is this correct? (yes / no)
 ```
 
 Wait for user response.
 
-- **yes** → mark the Spec Outline as `[✅]` Complete
-- **partial** → if the Spec Outline is already `[🚧]` (set by `_roadmap-check` at specify start), leave the marker unchanged; if it is `[📋]` for any reason, set it to `[🚧]`
-- **wrong** → ask: "Which Spec Outline did this spec cover? (provide number or goal)" — re-match against the user's answer and proceed from Step 3 with the corrected Spec Outline. If re-match also fails, output the manual update message from Step 2 and stop.
+- **yes** → Apply the proposed status.
+- **no** → Ask for clarification: "Should it be marked as [Complete / In Progress / Deferred], or did I match the wrong Spec Outline?"
+  - If the user provides a different status → Apply it and proceed.
+  - If the user says it's the wrong Spec Outline → Ask: "Which Spec Outline should this be linked to?" — re-match and repeat from Step 3.
 
-The status markers used in `roadmap.md` are:
+The status markers used in `roadmap.md` are (refer to `roadmap-template.md` for full definitions):
 
 - `[📋]` Planned
 - `[🚧]` In Progress
 - `[✅]` Complete
+- `[⏸️]` Deferred
+- `[❌]` Excluded
 
 **Spec file mapping:** Identify the spec file produced by this specify run from the current conversation context (typically the file path of the generated `spec.md`). The path must be relative to the project root (e.g., `docs/spec/auth.md`). Update the `Spec:` field of the matched Spec Outline:
 
@@ -89,30 +96,24 @@ The status markers used in `roadmap.md` are:
 
 If the spec file path cannot be determined, leave `Spec:` unchanged.
 
-Append a row to the History table reflecting the actual transition:
+Append a new line to the History section reflecting the result of the sync:
 
-**When invoked via `after_specify`:**
+Format: `[TIMESTAMP] | SO-[NN] [Outcome summary]`
 
-- yes: `[TIMESTAMP] | Spec Outline [NNN] | 🚧 → ✅`
-- partial (status changed): `[TIMESTAMP] | Spec Outline [NNN] | 📋 → 🚧`
-- partial (already 🚧, no change): skip the History row
+Examples of concise summaries:
+- `SO-01 status updated to Complete`
+- `SO-02 status updated to In Progress`
+- `SO-03 spec file updated`
+- `SO-04 spec clarified: [one-line summary of change]`
 
-**When invoked via `after_clarify`:**
-
-- yes or partial: `[TIMESTAMP] | Spec Outline [NNN] | Clarified`
-- wrong (re-matched to different Spec Outline): `[TIMESTAMP] | Spec Outline [NNN] | Clarified`
-- no status change occurs in the clarify path — do not write a transition arrow row
-
-**Before saving:** Verify the roadmap.md content is valid — check that no duplicate Spec Outline IDs exist and all status markers use the correct format (`[📋]`, `[🚧]`, or `[✅]`). If invalid content is detected, output an error and do not save.
+**Before saving:** Verify the roadmap.md content is valid — check that no duplicate Spec Outline IDs exist and all status markers use the correct format (`[📋]`, `[🚧]`, `[✅]`, `[⏸️]`, or `[❌]`). If invalid content is detected, output an error and do not save.
 
 Save the updated `docs/blueprint/roadmap.md`.
-
-**After saving:** Re-read `docs/blueprint/roadmap.md` and confirm the status marker for the updated Spec Outline reflects the intended change. If the file does not contain the expected marker, output a warning and instruct the user to update manually.
 
 Output:
 
 ```text
-✅ roadmap.md updated: [Spec Outline NNN] — [Spec Outline goal] → [✅ Complete / 🚧 In Progress]
+✅ roadmap.md updated: [SO-NN] — [Spec Outline goal] → [✅ Complete / 🚧 In Progress]
    Spec: [spec file path]
 ```
 
@@ -124,5 +125,5 @@ Output a brief sync summary:
 
 ```text
 Blueprint sync complete:
-- Spec Outline: [Spec Outline NNN] → [✅ Complete / 🚧 In Progress]
+- Spec Outline: [SO-NN] → [✅ Complete / 🚧 In Progress]
 ```
