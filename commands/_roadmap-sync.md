@@ -14,6 +14,8 @@ This command is invoked as an `after_specify` or `after_clarify` hook. The compl
 
 When invoked via `after_clarify`, the argument is a change description for a specific spec file. Identify the spec file being clarified from the current conversation context, then match it against the `Spec:` field in `roadmap.md` to find the corresponding Spec Outline — do not rely on semantic matching or `[🚧]` status for this case.
 
+**Fallback when `Spec:` fields are all `—`:** If no Spec Outline has a populated `Spec:` field (e.g., after an interrupted session where `after_specify` never ran), fall back to strict semantic matching against Spec Outline goals using the clarify argument — apply the same STRICT match criteria defined in Step 2. Ask the user to confirm the match before writing.
+
 **Recovery after interrupted session:** If the specify run was interrupted (session ended before `after_specify` fired), this hook will not have run. To recover manually: do NOT use `/speckit.blueprint.roadmap` option (3) — instead, open `docs/blueprint/roadmap.md` directly and update the Spec Outline status and `Spec:` field manually, following the format in Step 2 below.
 
 ## Instructions
@@ -76,7 +78,9 @@ I'll mark this as [✅ Complete / 🚧 In Progress]. Is this correct? (yes / no)
 Wait for user response.
 
 - **yes** → Apply the proposed status.
-- **no** → Ask for clarification: "Should it be marked as [Complete / In Progress / Deferred], or did I match the wrong Spec Outline?"
+- **no** → Ask for clarification: "Should it be marked as [Complete / In Progress / Deferred / Excluded], or did I match the wrong Spec Outline?"
+
+**Progressing from [🚧] to [✅]:** A Spec Outline marked [🚧] In Progress will be re-evaluated each time `_roadmap-sync` fires for that Spec Outline. To promote it to [✅] Complete, run `/speckit.specify` or `/speckit.clarify` on the remaining scope — this triggers `_roadmap-sync` again with updated coverage.
   - If the user provides a different status → Apply it and proceed.
   - If the user says it's the wrong Spec Outline → Ask: "Which Spec Outline should this be linked to?" — re-match and repeat from Step 3.
 
@@ -113,7 +117,7 @@ Save the updated `docs/blueprint/roadmap.md`.
 Output:
 
 ```text
-✅ roadmap.md updated: [SO-NN] — [Spec Outline goal] → [✅ Complete / 🚧 In Progress]
+✅ roadmap.md updated: [SO-NN] — [Spec Outline goal] → [new status]
    Spec: [spec file path]
 ```
 
@@ -125,5 +129,5 @@ Output a brief sync summary:
 
 ```text
 Blueprint sync complete:
-- Spec Outline: [SO-NN] → [✅ Complete / 🚧 In Progress]
+- Spec Outline: [SO-NN] → [new status]
 ```

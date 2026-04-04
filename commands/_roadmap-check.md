@@ -110,6 +110,23 @@ Wait for user response.
 - **B** → allow specify to proceed. Output: "⚠️ Proceeding out of dependency order. Ensure SO-[MM] is completed before integrating."
 - **C** → stop.
 
+**If any blocking dependency is `[⏸️]` Deferred or `[❌]` Excluded**, replace the above warning with:
+
+```text
+⚠️ Dependency Not Ready
+
+SO-[NN] depends on SO-[MM], which is currently [deferred / excluded] and cannot be completed in the normal flow.
+
+Options:
+  A) Re-activate SO-[MM] via `/speckit.blueprint.roadmap` option (3), then specify it first.
+  B) Remove the dependency — edit `Deps:` in `roadmap.md` if it no longer applies.
+  C) Proceed anyway — I understand this dependency is unresolved.
+```
+
+- **A** → stop.
+- **B** → stop. Output: "Update the `Deps:` field in `roadmap.md` manually, then re-run."
+- **C** → allow specify to proceed. Output: "⚠️ Proceeding with an unresolved deferred/excluded dependency."
+
 Output:
 
 ```text
@@ -118,7 +135,7 @@ Output:
 Spec Outline scope (use as context for the requirements interview):
 [Spec Outline scope field content]
 
-Roadmap status will be updated to [🚧] In Progress upon successful completion of this spec.
+After `/speckit.specify` completes, `_roadmap-sync` will update this Spec Outline's status to [🚧] In Progress or [✅] Complete based on coverage.
 
 Proceeding with specification.
 ```
@@ -129,7 +146,7 @@ Stop. Allow specify to proceed.
 
 #### Case B — Clear match, Spec Outline is [🚧] In Progress or [✅] Complete
 
-**If the Spec Outline is `[🚧]` In Progress:** Run the same dependency check as Case A. If any dep is incomplete, output the Dependency Not Ready warning and wait for user response. If the user chooses A or C (stop), stop entirely. If the user chooses B (proceed), continue to the confirmation prompt below.
+**If the Spec Outline is `[🚧]` In Progress:** Skip the dependency check — the Spec Outline already passed a dependency gate to reach this state. Proceed directly to the confirmation prompt below.
 
 **If the Spec Outline is `[✅]` Complete:** Skip the dependency check — dependencies were already satisfied when this Spec Outline was originally specified. Proceed directly to the confirmation prompt below.
 
@@ -154,6 +171,23 @@ Wait for user response.
   ```
   Allow specify to proceed.
 - **no** → stop. Suggest: "Consider running `/speckit.blueprint.roadmap` to add a new Spec Outline first."
+
+---
+
+#### Case E — Spec Outline is [⏸️] Deferred or [❌] Excluded
+
+Output:
+
+```text
+⚠️ SO-[NN] is [deferred / excluded] and is not scheduled for execution.
+
+[⏸️ Deferred] means this scope was postponed to a later roadmap.
+[❌ Excluded] means this scope was formally removed from the roadmap.
+
+To re-activate it, run `/speckit.blueprint.roadmap` and use option (3) to reset the status to [📋] Planned first.
+```
+
+Stop. Do not allow specify to proceed.
 
 ---
 

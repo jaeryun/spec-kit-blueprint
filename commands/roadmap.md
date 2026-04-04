@@ -68,7 +68,7 @@ If it exists, summarize it (Spec Outline count, IDs, statuses) and ask:
   (3) Reset a Spec Outline status to 📋 Planned
   (4) Cancel"
 
-- **(1)** Identify targets from `$ARGUMENTS` or user reply. Skip 🚧/✅ Spec Outlines (immutable) and notify. Proceed to Step 2 for targets only.
+- **(1)** Identify targets from `$ARGUMENTS` or user reply. Skip [✅] Complete Spec Outlines (scope is locked — further changes belong in a new Spec Outline or a clarify run) and notify. For [🚧] In Progress Spec Outlines, warn: "Spec work is already underway for this Spec Outline. Proceed with the scope update anyway? (yes / no)" — skip if no, include if yes. Proceed to Step 2 for confirmed targets only.
 - **(2)** Proceed to Step 2 for all Spec Outlines.
 - **(3)** Ask which Spec Outline to reset. Confirm with the user, then set marker to `[📋]`, clear `Spec:` to `—`, append a reset row to History, and save.
 - **(4)** Stop.
@@ -133,7 +133,7 @@ Output:
 ```text
 Roadmap complete. [N] Spec Outlines defined.
 
-Next: /speckit.specify [SO-01 goal]
+Next: /speckit.specify [first [📋] Planned Spec Outline with no incomplete dependencies — use its ID and goal]
 After each Spec is complete, run the next Spec Outline in dependency order.
 ```
 

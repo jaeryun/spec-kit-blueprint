@@ -66,7 +66,7 @@ Check if `docs/blueprint/vision.md` exists.
    - (1) Update specific sections
    - (2) Start over
    - (3) Cancel"
-3. Proceed based on user choice. For option (1), ask which sections to update, then apply changes and re-confirm.
+3. Proceed based on user choice. For option (1), ask which sections to update. For each section, accept the user's freeform input describing the desired change, apply it to the draft, and show the revised section for confirmation before saving.
 4. If vision changes, ask: "Your vision has changed. Should I update the roadmap to reflect this?" If yes, suggest running `/speckit.blueprint.roadmap`.
 
 **If it does not exist:**
@@ -193,6 +193,12 @@ Confirm the file is saved:
 
 Tell the user:
 "Vision defined. Next step: run `/speckit.blueprint.roadmap` to create a delivery roadmap."
+
+If Step 0 found no constitution and the user chose to proceed anyway, append this reminder:
+
+```text
+⚠️ Note: constitution setup is still pending. Run `/speckit.constitution` before writing specs to ensure coding standards are applied.
+```
 
 ## Output Files
 

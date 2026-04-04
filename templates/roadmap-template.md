@@ -7,7 +7,7 @@
 
      Status markers:
        [📋] Planned — default, not yet specified
-       [🚧] In Progress — set by _roadmap-check when /speckit.specify starts; also set by _roadmap-sync for partial coverage
+       [🚧] In Progress — set by _roadmap-sync after /speckit.specify completes with partial scope coverage
        [✅] Complete — after _roadmap-sync confirms completion
        [⏸️] Deferred — scope confirmed but execution postponed to a later roadmap
        [❌] Excluded — formally removed from the roadmap scope
