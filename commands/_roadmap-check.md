@@ -89,7 +89,11 @@ Check the `Deps:` field of the matched Spec Outline.
 **If deps lists one or more Spec Outlines:** check the status of each listed dependency in `roadmap.md`.
 
 - If all listed dependencies are `[✅]` Complete → proceed.
-- If any listed dependency is not yet Complete → output:
+- If any dependency is not yet Complete, evaluate all blocking deps first:
+  - **If any blocking dep is `[⏸️]` Deferred or `[❌]` Excluded** → this takes precedence. Use the Deferred/Excluded warning below, listing all blocking deps (including any that are simply incomplete).
+  - **Otherwise (all blocking deps are `[📋]` or `[🚧]`)** → use the standard incomplete warning.
+
+**Standard incomplete dep warning:**
 
 ```text
 ⚠️ Dependency Not Ready
@@ -107,10 +111,10 @@ Options:
 Wait for user response.
 
 - **A** → stop.
-- **B** → allow specify to proceed. Output: "⚠️ Proceeding out of dependency order. Ensure SO-[MM] is completed before integrating."
+- **B** → allow specify to proceed. Output: "⚠️ Proceeding out of dependency order. Ensure SO-[MM] is completed before integrating." Then output the ✅ success block below and stop.
 - **C** → stop.
 
-**If any blocking dependency is `[⏸️]` Deferred or `[❌]` Excluded**, replace the above warning with:
+**Deferred/Excluded dep warning** (used when any blocking dep is `[⏸️]` or `[❌]`, lists all blocking deps):
 
 ```text
 ⚠️ Dependency Not Ready
@@ -123,9 +127,15 @@ Options:
   C) Proceed anyway — I understand this dependency is unresolved.
 ```
 
+Wait for user response.
+
+Wait for user response.
+
 - **A** → stop.
 - **B** → stop. Output: "Update the `Deps:` field in `roadmap.md` manually, then re-run."
-- **C** → allow specify to proceed. Output: "⚠️ Proceeding with an unresolved deferred/excluded dependency."
+- **C** → allow specify to proceed. Output: "⚠️ Proceeding with an unresolved deferred/excluded dependency." Then output the ✅ success block below and stop.
+
+**If no dep issues exist (all deps Complete, or user chose B above on standard warning):**
 
 Output:
 
@@ -185,6 +195,8 @@ Output:
 [❌ Excluded] means this scope was formally removed from the roadmap.
 
 To re-activate it, run `/speckit.blueprint.roadmap` and use option (3) to reset the status to [📋] Planned first.
+
+Note: option (3) clears the existing Spec: field. If a spec file was already created for this Spec Outline, you will need to re-link it manually after re-activation (edit the Spec: field in roadmap.md), or re-run /speckit.specify to produce a fresh spec.
 ```
 
 Stop. Do not allow specify to proceed.
