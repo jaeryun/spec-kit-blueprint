@@ -1,30 +1,40 @@
 # spec-kit-blueprint
 
-A [Spec Kit](https://github.com/github/spec-kit) extension that establishes project vision and roadmap before diving into specs.
+A [Spec Kit](https://github.com/github/spec-kit) extension that establishes **project vision and strategic roadmap** before any spec is written.
 
 ## Overview
 
-A **Spec Outline** is a planning artifact in `roadmap.md` — it defines the goal, scope, and dependencies for one `/speckit.specify` run, sized to a single Jira Epic (2–4+ sprints).
+### Motivation
 
-Starting a new project directly with `/speckit.specify` creates specs that are too large — trying to cover everything at once. Blueprint solves this by adding a vision-first step before any spec is written: it interviews you to define project vision, then produces a delivery roadmap of Spec Outlines (each sized to a single `/speckit.specify` run) and maps their dependencies so you know what to build in what order.
+If you've used /speckit.specify, you've likely experienced specs that are too broad or too narrow, or struggled to define appropriate work boundaries between specs. This happens when projects start without a shared vision and strategic roadmap, causing each spec to be written in isolation. Blueprint addresses this through its "Big Picture First" workflow, which helps appropriately scope and calibrate spec outlines:
+
+### Goal
+- Vision-First: It interviews you to define the problem, target users, and core value — ensuring you know why you are building before you decide what.
+- Strategic Decomposition: It translates that vision into a delivery roadmap — decomposing scope into right-sized Spec Outlines (scoped units each mapped to one `/speckit.specify` run), ordered by dependency so you deliver early value first.
+- Contextual Integrity: Every spec you write is automatically checked against this roadmap, ensuring your implementation never loses sight of the original vision.
+
+## Non-Goals
+
+- **Not a spec writer**: Blueprint produces Spec Outlines as input to `/speckit.specify` — it does not write specs or replace any step in SpecKit's core workflow.
+- **No orchestration or tracking**: Blueprint maps dependencies — scheduling, execution coordination, and progress tracking are out of scope and belong to your team or other extensions.
 
 ```mermaid
 flowchart TD
     A["/speckit.constitution\nProject setup & conventions"] --> B
 
-    subgraph bp ["Blueprint — Big Picture First"]
-        B["/speckit.blueprint.vision : Brainstorming Interview"]
+    subgraph bp ["Blueprint — Strategy & Alignment"]
+        B["/speckit.blueprint.vision"]
         B --> C["vision.md"]
-        C --> D["/speckit.blueprint.roadmap : Vision to Roadmap"]
-        D --> R["roadmap.md\nSpec Outline 001 ➜ Spec Outline 002 ➜ Spec Outline 003 …"]
+        C --> D["/speckit.blueprint.roadmap"]
+        D --> R["roadmap.md\nSpec Outlines (SO-01 ➜ SO-02 ➜ …)"]
     end
 
     R --> F & G & H
 
-    subgraph impl ["Per-Spec-Outline — Repeat for each Spec Outline"]
-        F["/speckit.specify Spec Outline 001"] --> spec1["spec.md"]
-        G["/speckit.specify Spec Outline 002"] --> spec2["spec.md"]
-        H["/speckit.specify Spec Outline 003"] --> spec3["spec.md"]
+    subgraph impl ["Implementation — Tactical Execution"]
+        F["/speckit.specify SO-01"] --> spec1["spec.md"]
+        G["/speckit.specify SO-02"] --> spec2["spec.md"]
+        H["/speckit.specify SO-03"] --> spec3["spec.md"]
     end
 
     style bp fill:#e8edf5,stroke:#1e40af,stroke-width:1.5px
@@ -42,31 +52,6 @@ flowchart TD
     style spec3 fill:#ffffff,stroke:#6ee7b7,color:#134e4a
 ```
 
-## Goals
-
-- **Clarify requirements through conversation**: An adaptive interview surfaces goals, users, constraints, and scope — turning a rough idea into a concrete plan before any spec is written
-- **Prevent scope creep**: Break large visions into right-sized Spec Outlines — each one completable as a single `/speckit.specify` run
-- **Identify dependencies at planning time**: Surface what blocks what before mid-sprint surprises, not after
-- **Zero-extension conflict**: Blueprint hooks only into planning and spec lifecycle events — leaving `plan → tasks → implement` and every other extension completely untouched
-
-## Non-Goals
-
-- **Not a spec writer**: Blueprint produces Spec Outlines as *input* to `/speckit.specify` — it does not write specs itself or replace any step in SpecKit's core workflow
-- **Dependencies yes, orchestration and tracking no**: Blueprint maps which Spec Outlines block which — but scheduling when to build them, coordinating execution, and tracking progress are out of scope. No sprint planning, no status dashboards, no external tool sync — those belong to your team or other extensions (e.g., spec-kit-jira)
-
-## Features
-
-| | |
-|---|---|
-| **Adaptive interview** | Conversational setup that extracts vision, constraints, and team context |
-| **Delivery roadmap** | Vision is translated into a delivery plan with Spec Outlines sized to Jira Epics and ordered by dependency |
-| **Integrated Spec Outlines** | Spec Outlines live inside roadmap.md — each sized to a single `/speckit.specify` run with a clear goal and 1–3 scope items |
-| **Dependency mapping** | Deps between Spec Outlines are mapped at planning time — know what blocks what before you start |
-| **Parallel group analysis** | Spec Outlines that can be worked simultaneously are grouped, so team bandwidth isn't wasted |
-| **Idempotent by design** | Re-run `vision` or `roadmap` any time. Completed and in-progress Spec Outlines are never overwritten |
-| **Alignment hooks** | Lifecycle hooks catch vision drift, unmapped features, and keep roadmap status current automatically |
-| **Full extension compatibility** | Blueprint hooks only into planning and spec lifecycle events — SpecKit's core workflow is untouched, so Fleet, Jira, and other extensions work alongside it without conflict |
-
 ## Installation
 
 Requires Spec Kit >= 0.4.0.
@@ -74,10 +59,10 @@ Requires Spec Kit >= 0.4.0.
 ### From GitHub Release
 
 ```bash
-specify extension add blueprint --from https://github.com/jaeryun/spec-kit-blueprint/archive/refs/tags/v0.3.0.zip
+specify extension add blueprint --from https://github.com/jaeryun/spec-kit-blueprint/archive/refs/tags/vX.Y.Z.zip
 ```
 
-### From Local Path (For develop)
+### From Local Path (For Development)
 
 ```bash
 specify extension add --dev /path/to/spec-kit-blueprint
@@ -89,35 +74,36 @@ specify extension add --dev /path/to/spec-kit-blueprint
 specify extension list
 ```
 
+## Quick Start
+
+> Blueprint is a [Spec Kit](https://github.com/github/spec-kit) extension. It runs before SpecKit's core `specify → plan → tasks → implement` workflow.
+
+```bash
+# 1. Install
+specify extension add blueprint --from https://github.com/jaeryun/spec-kit-blueprint/archive/refs/tags/vX.Y.Z.zip
+
+# 2. Set up project conventions (one-time)
+/speckit.constitution
+
+# 3. Define your vision
+/speckit.blueprint.vision
+
+# 4. Build the roadmap
+/speckit.blueprint.roadmap
+
+# 5. For each Spec Outline (repeat in dependency order):
+/speckit.specify SO-01                     # by Spec Outline ID
+# → /speckit.plan → /speckit.tasks → /speckit.implement
+/speckit.specify "user authentication"     # auto-mapped to the matching Spec Outline
+# Independent Spec Outlines can run concurrently in separate worktrees
+```
+
 ## Commands
 
-Commands run in sequence. Each requires the previous command's output to exist.
-
-| Command | Purpose | Requires |
-|---------|---------|---------|
-| `/speckit.blueprint.vision` | Adaptive interview → vision.md | — |
-| `/speckit.blueprint.roadmap` | 2-phase: Spec Outlines → dependencies → roadmap.md | vision.md |
-
-### Hooks
-
-Hooks fire automatically at lifecycle events — you do not invoke them directly. Each hook blocks or updates based on the current state of your blueprint files.
-
-**Registered hooks** (Blueprint subscribes to these SpecKit events):
-
-| Hook | Trigger Condition | Action | Purpose |
-|------|------------------|--------|---------|
-| `before_specify` | Before specify runs | `_roadmap-check` | Validates feature maps to a Spec Outline and dependencies are met |
-| `after_specify` | After spec completed | `_roadmap-sync` | Updates Spec Outline status in roadmap.md |
-| `after_clarify` | After spec updated via clarify | `_roadmap-sync` | Updates Spec Outline status in roadmap.md |
-
-**Emitted hook events** (available for other extensions to subscribe to):
-
-| Event | Fired when |
-|-------|-----------|
-| `before_blueprint_vision` | Before the vision interview begins |
-| `after_blueprint_vision` | After vision.md is confirmed and saved |
-| `before_blueprint_roadmap` | Before roadmap generation begins |
-| `after_blueprint_roadmap` | After roadmap.md is confirmed and saved |
+| Command | Description | Requires |
+|---------|-------------|---------|
+| `/speckit.blueprint.vision` | Interviews you to define problem, users, and core value — outputs vision.md | — |
+| `/speckit.blueprint.roadmap` | Decomposes vision into right-sized Spec Outlines with dependency order — outputs roadmap.md | vision.md |
 
 ### Usage Examples
 
@@ -143,42 +129,27 @@ All commands accept an optional argument to skip ahead or narrow the scope.
 /speckit.blueprint.roadmap focus on the backend Spec Outlines
 ```
 
-## Workflow
+### Hooks
 
-Blueprint fits between `constitution` (project setup) and `specify` (spec writing).
+Hooks fire automatically at lifecycle events. Each hook blocks or updates based on the current state of your blueprint files.
 
-### With standard SpecKit
+**Registered hooks** (Blueprint subscribes to these SpecKit events):
 
-```text
-/speckit.constitution              # one-time project setup
-    ↓
-/speckit.blueprint.vision          # interview → vision.md
-/speckit.blueprint.roadmap         # vision → roadmap.md (Spec Outlines + deps)
-For each Spec Outline (in dependency order):
-    ↓ [_roadmap-check] auto-runs before specify (includes dependency order check)
-    /speckit.specify [Spec Outline goal]
-        ↓ [_roadmap-sync] auto-runs after spec completed
-    /speckit.clarify [changes]          # optional — refine spec after feedback
-        ↓ [_roadmap-sync] auto-runs after clarify (optional)
-    /speckit.plan → /speckit.tasks → /speckit.implement
-```
+| Hook | Trigger Condition | Action | Purpose |
+|------|------------------|--------|---------|
+| `before_specify` | Before specify runs | `_roadmap-check` | Validates feature maps to a Spec Outline and dependencies are met |
+| `after_specify` | After spec completed | `_roadmap-sync` | Updates Spec Outline status in roadmap.md |
+| `after_clarify` | After spec updated via clarify | `_roadmap-sync` | Updates Spec Outline status in roadmap.md |
 
-### With Fleet extension
+**Emitted hook events** (available for other extensions to subscribe to):
 
-Fleet handles the specify → implement cycle with human gates. Blueprint provides the upfront planning that Fleet lacks.
+| Event | Fired when |
+|-------|-----------|
+| `before_blueprint_vision` | Before the vision interview begins |
+| `after_blueprint_vision` | After vision.md is confirmed and saved |
+| `before_blueprint_roadmap` | Before roadmap generation begins |
+| `after_blueprint_roadmap` | After roadmap.md is confirmed and saved |
 
-```text
-/speckit.constitution              # one-time project setup
-    ↓
-/speckit.blueprint.vision          # interview → vision.md
-/speckit.blueprint.roadmap         # vision → roadmap.md (Spec Outlines + deps)
-For each Spec Outline (in dependency order):
-    ↓ [_roadmap-check] auto-runs before specify (includes dependency order check)
-    /speckit.fleet [Spec Outline goal]     # Fleet orchestrates specify → plan → tasks → implement
-        ↓ [_roadmap-sync] auto-runs after spec completed / after clarify
-```
-
-> Fleet extension: [spec-kit-fleet](https://github.com/sharathsatish/spec-kit-fleet)
 
 ## Output Files
 
@@ -188,21 +159,39 @@ docs/blueprint/
 └── roadmap.md   # Delivery plan with Spec Outlines and dependencies
 ```
 
-## Upgrading
+**vision.md** — problem, users, scope boundary:
+```markdown
+# Vision
+Problem: Small teams lose spec coherence when writing specs in isolation.
+Target Users: Engineering leads on 2–5 person teams.
+Core Features: Vision interview, roadmap generation, spec alignment hooks.
+Out of Scope: Sprint planning, task tracking, implementation orchestration.
+```
 
-After updating Blueprint, run the following to apply the latest extension manifest and commands:
+**roadmap.md** — Spec Outline entry:
+```markdown
+## [📋] SO-01 — User Authentication
+
+Summary: Users can register and log in with email/password.
+Scope: Sign-up flow, login/logout, password reset, session management.
+Deps: —
+Spec: —
+```
+
+
+
+## Upgrading
 
 ```bash
 specify extension update blueprint
 ```
 
-### Migrating from v0.1.x
+## Uninstalling
 
-The `decompose` command and `spec-outlines.md` file have been removed. Spec Outlines now live inside `roadmap.md`.
+```bash
+specify extension remove blueprint
+```
 
-- `docs/blueprint/spec-outlines.md` → content merged into `docs/blueprint/roadmap.md`
-- `/speckit.blueprint.decompose` → replaced by Phase 2 of `/speckit.blueprint.roadmap`
-- The `before_blueprint_decompose` and `after_blueprint_decompose` hook events are deprecated and will be removed in a future release.
 
 ## License
 
