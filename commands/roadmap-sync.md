@@ -84,7 +84,7 @@ Wait for user response.
   - If the user provides a different status → Apply it and proceed.
   - If the user says it's the wrong Spec Outline → Ask: "Which Spec Outline should this be linked to?" — re-match and repeat from Step 3.
 
-**Progressing from [🚧] to [✅]:** A Spec Outline marked [🚧] In Progress will be re-evaluated each time `_roadmap-sync` fires for that Spec Outline. To promote it to [✅] Complete, run `/speckit.specify` or `/speckit.clarify` on the remaining scope — this triggers `_roadmap-sync` again with updated coverage.
+**Progressing from [🚧] to [✅]:** A Spec Outline marked [🚧] In Progress will be re-evaluated each time `roadmap-sync` fires for that Spec Outline. To promote it to [✅] Complete, run `/speckit.specify` or `/speckit.clarify` on the remaining scope — this triggers `roadmap-sync` again with updated coverage.
 
 The status markers used in `roadmap.md` are (refer to `roadmap-template.md` for full definitions):
 

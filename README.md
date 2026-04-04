@@ -137,9 +137,9 @@ Hooks fire automatically at lifecycle events. Each hook blocks or updates based 
 
 | Hook | Trigger Condition | Action | Purpose |
 |------|------------------|--------|---------|
-| `before_specify` | Before specify runs | `_roadmap-check` | Validates feature maps to a Spec Outline and dependencies are met |
-| `after_specify` | After spec completed | `_roadmap-sync` | Updates Spec Outline status in roadmap.md |
-| `after_clarify` | After spec updated via clarify | `_roadmap-sync` | Updates Spec Outline status in roadmap.md |
+| `before_specify` | Before specify runs | `roadmap-check` | Validates feature maps to a Spec Outline and dependencies are met |
+| `after_specify` | After spec completed | `roadmap-sync` | Updates Spec Outline status in roadmap.md |
+| `after_clarify` | After spec updated via clarify | `roadmap-sync` | Updates Spec Outline status in roadmap.md |
 
 **Emitted hook events** (available for other extensions to subscribe to):
 

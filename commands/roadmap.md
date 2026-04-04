@@ -157,7 +157,7 @@ When filling `templates/roadmap-template.md`:
 
 **Deps** — List Spec Outline IDs (e.g., `SO-01`). Write `—` if no dependencies.
 
-**Spec** — Write `—` until the spec file exists. Updated automatically by `_roadmap-sync` after `/speckit.specify`.
+**Spec** — Write `—` until the spec file exists. Updated automatically by `roadmap-sync` after `/speckit.specify`.
 
 ### Spec Outline Boundary Principles
 

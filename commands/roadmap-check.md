@@ -148,7 +148,7 @@ Output:
 Spec Outline scope (use as context for the requirements interview):
 [Spec Outline scope field content]
 
-After `/speckit.specify` completes, `_roadmap-sync` will update this Spec Outline's status to [🚧] In Progress or [✅] Complete based on coverage.
+After `/speckit.specify` completes, `roadmap-sync` will update this Spec Outline's status to [🚧] In Progress or [✅] Complete based on coverage.
 
 Proceeding with specification.
 ```
