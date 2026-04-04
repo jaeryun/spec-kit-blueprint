@@ -14,7 +14,7 @@ This command is invoked as an `after_specify` or `after_clarify` hook. The compl
 
 When invoked via `after_clarify`, the argument is a change description for a specific spec file. Identify the spec file being clarified from the current conversation context, then match it against the `Spec:` field in `roadmap.md` to find the corresponding Spec Outline — do not rely on semantic matching or `[🚧]` status for this case.
 
-**Fallback when spec file is not linked:** If the spec file being clarified does not match any `Spec:` field in `roadmap.md` (e.g., after an interrupted session, or after a single SO was reset via option (3)), fall back to matching against Spec Outline goals using the same STRICT match criteria defined in Step 2. Ask the user to confirm the match before writing.
+**Fallback when spec file is not linked (after_clarify only):** If the spec file being clarified does not match any `Spec:` field in `roadmap.md` (e.g., after an interrupted session, or after a single SO was reset via option (3)), fall back to matching against Spec Outline goals using the same STRICT match criteria defined in Step 2. Ask the user to confirm the match before writing.
 
 **Recovery after interrupted session:** If the specify run was interrupted (session ended before `after_specify` fired), this hook will not have run. To recover manually: do NOT use `/speckit.blueprint.roadmap` option (3) — instead, open `docs/blueprint/roadmap.md` directly and update the Spec Outline status and `Spec:` field manually, following the format in Step 2 below.
 

@@ -84,12 +84,12 @@ Using the resolved match target from Step 1:
 
 Check the `Deps:` field of the matched Spec Outline.
 
-**If deps is `—` (none):** proceed directly.
+**If deps is `—` (none):** proceed directly to the ✅ success block below.
 
 **If deps lists one or more Spec Outlines:** check the status of each listed dependency in `roadmap.md`.
 
-- If all listed dependencies are `[✅]` Complete → proceed.
-- If any dependency is not yet Complete, evaluate all blocking deps first:
+- If all listed dependencies are `[✅]` Complete → proceed to the ✅ success block below.
+- If any dependency is not yet Complete:
   - **If any blocking dep is `[⏸️]` Deferred or `[❌]` Excluded** → this takes precedence. Use the Deferred/Excluded warning below, listing all blocking deps (including any that are simply incomplete).
   - **Otherwise (all blocking deps are `[📋]` or `[🚧]`)** → use the standard incomplete warning.
 
@@ -98,12 +98,14 @@ Check the `Deps:` field of the matched Spec Outline.
 ```text
 ⚠️ Dependency Not Ready
 
-SO-[NN] depends on [SO-[MM] — goal], which is not yet complete.
+SO-[NN] depends on the following Spec Outlines that are not yet complete:
+  - SO-[MM] — [goal]
+  (list all blocking deps)
 
 Proceeding out of order risks building on an incomplete foundation.
 
 Options:
-  A) Complete SO-[MM] first — run `/speckit.specify [MM goal]` first.
+  A) Complete the above first — run `/speckit.specify` for each in dependency order.
   B) Proceed anyway — I understand the dependency risk.
   C) Cancel.
 ```
@@ -119,15 +121,16 @@ Wait for user response.
 ```text
 ⚠️ Dependency Not Ready
 
-SO-[NN] depends on SO-[MM], which is currently [deferred / excluded] and cannot be completed in the normal flow.
+SO-[NN] depends on the following Spec Outlines that cannot be completed in the normal flow:
+  - SO-[MM] — [deferred / excluded]
+  - SO-[MK] — [incomplete]  (if also blocking)
+  (list all blocking deps with their status)
 
 Options:
-  A) Re-activate SO-[MM] via `/speckit.blueprint.roadmap` option (3), then specify it first.
-  B) Remove the dependency — edit `Deps:` in `roadmap.md` if it no longer applies.
-  C) Proceed anyway — I understand this dependency is unresolved.
+  A) Re-activate deferred/excluded deps via `/speckit.blueprint.roadmap` option (3), then specify them first.
+  B) Remove the dependencies — edit `Deps:` in `roadmap.md` if they no longer apply.
+  C) Proceed anyway — I understand these dependencies are unresolved.
 ```
-
-Wait for user response.
 
 Wait for user response.
 
@@ -135,7 +138,7 @@ Wait for user response.
 - **B** → stop. Output: "Update the `Deps:` field in `roadmap.md` manually, then re-run."
 - **C** → allow specify to proceed. Output: "⚠️ Proceeding with an unresolved deferred/excluded dependency." Then output the ✅ success block below and stop.
 
-**If no dep issues exist (all deps Complete, or user chose B above on standard warning):**
+**If no dep issues exist (all deps Complete, or user chose B on the standard warning, or user chose C on the Deferred/Excluded warning):**
 
 Output:
 
@@ -196,7 +199,7 @@ Output:
 
 To re-activate it, run `/speckit.blueprint.roadmap` and use option (3) to reset the status to [📋] Planned first.
 
-Note: option (3) clears the existing Spec: field. If a spec file was already created for this Spec Outline, you will need to re-link it manually after re-activation (edit the Spec: field in roadmap.md), or re-run /speckit.specify to produce a fresh spec.
+Note: option (3) clears the existing Spec: field. If a spec file was already linked to this Spec Outline, you will need to re-link it manually after re-activation (edit the Spec: field in roadmap.md), or re-run /speckit.specify to produce a fresh spec.
 ```
 
 Stop. Do not allow specify to proceed.
