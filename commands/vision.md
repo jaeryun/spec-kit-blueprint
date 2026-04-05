@@ -76,7 +76,25 @@ Proceed to Step 2.
 
 ### Step 2: Adaptive Interview
 
-Conduct a conversational interview covering the areas below. Ask **one question at a time**, adapt follow-ups based on answers, and skip areas already covered.
+Begin the interview with an introduction that explains what will happen:
+
+> **Starting Blueprint Vision Interview**
+>
+> This conversation defines the **essence of your project (What & Why)**. Technical choices and implementation plans (How & When) come in later steps.
+>
+> **We'll cover 7 areas** in order:
+>
+> - **Overview** — What you're building and why it matters
+> - **Goals** — What success looks like
+> - **Users** — Who will use this and their context
+> - **Features** — Core capabilities users need
+> - **Out of Scope** — What you're **intentionally** excluding
+> - **Constraints** — Technical/business/timeline boundaries
+> - **NFRs & Success** — Quality standards and measurable outcomes
+>
+> I'll ask one question at a time, skipping areas you've already covered. If you're unsure about something, simply say "I don't know" and I'll mark it as `TBD` and move on.
+
+Then conduct the conversational interview covering the areas below. Ask **one question at a time**, adapt follow-ups based on answers, and skip areas already covered.
 
 | Area | Intent | Template Section | Guidance |
 | --- | --- | --- | --- |
@@ -89,13 +107,33 @@ Conduct a conversational interview covering the areas below. Ask **one question 
 | **NFRs** | Quality attributes | Non-Functional Requirements | Focus on needs over targets. Example: "What quality aspects matter? (speed, security, scale)" → "Any specific requirements?" |
 | **Success** | How to measure success | Success Criteria | Push for measurability. Example: "How will you know this worked?" → "Any metrics in mind?" |
 
-**Interview Flow:**
+**Interview Rules (Strict):**
 
-1. Start with **Overview** — always ask this first
-2. Ask follow-up questions **one at a time**, adapting based on what you hear
-3. Skip any area already answered in previous responses
-4. If user says "I don't know" — record as `TBD` and move on
-5. After covering 4–6 areas, briefly reflect back and ask: "Is that a fair summary so far?"
+1. **ONE question at a time** — Never ask multiple questions in one turn. After each user response, provide feedback before asking the next question.
+
+2. **Immediate scope guard** — After receiving each answer, check for content that belongs elsewhere:
+   - Technology choices ("We'll use React", "PostgreSQL"), implementation methods, architecture decisions → belongs in roadmap/spec
+   - Delivery phases, milestones, sprint plans → belongs in roadmap
+   - Detailed API design, data models, UI mockups → belongs in spec
+
+   If detected: "That detail belongs in [roadmap/spec]. We'll cover How & When later. For now, let's focus on What & Why — [rephrase original question focusing on essence only]"
+
+3. **Confirm and get approval** — After each valid answer:
+   - Summarize what was understood: "**[Area]**: [1-2 sentence summary]"
+   - Ask for confirmation: "Is this correct? (yes / no / add more)"
+   - Wait for explicit approval before proceeding to the next area
+   - If the user says "add more", prompt: "What else should I capture?"
+   - If the user says "no", ask: "What would you like to change?"
+
+4. **Single-threaded flow**:
+   - Ask one question → Wait for answer → Provide scope feedback if needed → Confirm/get approval → Ask next question
+   - Never stack questions like "What are you building? Who is it for? What's the timeline?"
+
+5. **Skip answered areas** — If a previous response already covered an area, mark it complete and move to the next
+
+6. **Handle "I don't know"** — Record as `TBD` and proceed to the next area
+
+7. **Progress check** — After covering 4–6 areas, briefly reflect back and ask: "Is that a fair summary so far?"
 
 ---
 

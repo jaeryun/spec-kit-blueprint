@@ -6,7 +6,7 @@ description: "Validate that the feature being specified aligns with a Spec Outli
 
 > Auto-invoked hook — fires automatically before `/speckit.specify`. Do not invoke directly.
 
-Pre-flight validation before `/speckit.specify`. Checks the argument, resolves it to a Spec Outline, and validates roadmap alignment and dependency order.
+Pre-flight validation before `/speckit.specify`. Checks the argument, resolves it to a Spec Outline, and validates roadmap alignment.
 
 ## Context
 
@@ -80,65 +80,7 @@ Using the resolved match target from Step 1:
 
 ### Step 4: Handle match result
 
-#### Case A — Clear match, Spec Outline is [📋] Planned
-
-Check the `Deps:` field of the matched Spec Outline.
-
-**If deps is `—` (none):** proceed directly to the ✅ success block below.
-
-**If deps lists one or more Spec Outlines:** check the status of each listed dependency in `roadmap.md`.
-
-- If all listed dependencies are `[✅]` Complete → proceed to the ✅ success block below.
-- If any dependency is not yet Complete:
-  - **If any blocking dep is `[⏸️]` Deferred or `[❌]` Excluded** → this takes precedence. Use the Deferred/Excluded warning below, listing all blocking deps (including any that are simply incomplete).
-  - **Otherwise (all blocking deps are `[📋]` or `[🚧]`)** → use the standard incomplete warning.
-
-**Standard incomplete dep warning:**
-
-```text
-⚠️ Dependency Not Ready
-
-SO-[NN] depends on the following Spec Outlines that are not yet complete:
-  - SO-[MM] — [goal]
-  (list all blocking deps)
-
-Proceeding out of order risks building on an incomplete foundation.
-
-Options:
-  A) Complete the above first — run `/speckit.specify` for each in dependency order.
-  B) Proceed anyway — I understand the dependency risk.
-  C) Cancel.
-```
-
-Wait for user response.
-
-- **A** → stop.
-- **B** → allow specify to proceed. Output: "⚠️ Proceeding out of dependency order. Ensure SO-[MM] is completed before integrating." Then output the ✅ success block below and stop.
-- **C** → stop.
-
-**Deferred/Excluded dep warning** (used when any blocking dep is `[⏸️]` or `[❌]`, lists all blocking deps):
-
-```text
-⚠️ Dependency Not Ready
-
-SO-[NN] depends on the following Spec Outlines that cannot be completed in the normal flow:
-  - SO-[MM] — [deferred / excluded]
-  - SO-[MK] — [incomplete]  (if also blocking)
-  (list all blocking deps with their status)
-
-Options:
-  A) Re-activate deferred/excluded deps via `/speckit.blueprint.roadmap` option (3), then specify them first.
-  B) Remove the dependencies — edit `Deps:` in `roadmap.md` if they no longer apply.
-  C) Proceed anyway — I understand these dependencies are unresolved.
-```
-
-Wait for user response.
-
-- **A** → stop.
-- **B** → stop. Output: "Update the `Deps:` field in `roadmap.md` manually, then re-run."
-- **C** → allow specify to proceed. Output: "⚠️ Proceeding with an unresolved deferred/excluded dependency." Then output the ✅ success block below and stop.
-
-**If no dep issues exist (all deps Complete, or user chose B on the standard warning, or user chose C on the Deferred/Excluded warning):**
+#### Case A — Clear match, no existing spec linked (Spec: —)
 
 Output:
 
@@ -148,8 +90,6 @@ Output:
 Spec Outline scope (use as context for the requirements interview):
 [Spec Outline scope field content]
 
-After `/speckit.specify` completes, `roadmap-sync` will update this Spec Outline's status to [🚧] In Progress or [✅] Complete based on coverage.
-
 Proceeding with specification.
 ```
 
@@ -157,25 +97,23 @@ Stop. Allow specify to proceed.
 
 ---
 
-#### Case B — Clear match, Spec Outline is [🚧] In Progress or [✅] Complete
-
-**If the Spec Outline is `[🚧]` In Progress:** Skip the dependency check — the Spec Outline already passed a dependency gate to reach this state. Proceed directly to the confirmation prompt below.
-
-**If the Spec Outline is `[✅]` Complete:** Skip the dependency check — dependencies were already satisfied when this Spec Outline was originally specified. Proceed directly to the confirmation prompt below.
+#### Case B — Clear match, spec already linked
 
 Output:
 
 ```text
-⚠️ SO-[NN] is already [in progress / complete].
+⚠️ SO-[NN] already has a linked spec: [existing spec file path]
 
-Confirm this is an extension or fix within that Spec Outline's scope, not a duplicate or scope creep.
-
-Proceed? (yes / no)
+Options:
+  A) Proceed with specify — extend or rewrite the spec for this Spec Outline
+  B) Use /speckit.clarify instead — for targeted changes to the existing spec
+  C) Add a new Spec Outline first — run /speckit.blueprint.roadmap if this is new scope
+  D) Cancel
 ```
 
 Wait for user response.
 
-- **yes** → Output:
+- **A** → Output:
   ```text
   Spec Outline scope (use as context for the requirements interview):
   [Spec Outline scope field content]
@@ -183,26 +121,9 @@ Wait for user response.
   Proceeding with specification.
   ```
   Allow specify to proceed.
-- **no** → stop. Suggest: "Consider running `/speckit.blueprint.roadmap` to add a new Spec Outline first."
-
----
-
-#### Case E — Spec Outline is [⏸️] Deferred or [❌] Excluded
-
-Output:
-
-```text
-⚠️ SO-[NN] is [deferred / excluded] and is not scheduled for execution.
-
-[⏸️ Deferred] means this scope was postponed to a later roadmap.
-[❌ Excluded] means this scope was formally removed from the roadmap.
-
-To re-activate it, run `/speckit.blueprint.roadmap` and use option (3) to reset the status to [📋] Planned first.
-
-Note: option (3) clears the existing Spec: field. If a spec file was already linked to this Spec Outline, you will need to re-link it manually after re-activation (edit the Spec: field in roadmap.md), or re-run /speckit.specify to produce a fresh spec.
-```
-
-Stop. Do not allow specify to proceed.
+- **B** → stop. Output: "Re-run as `/speckit.clarify` to make targeted changes to the existing spec."
+- **C** → stop. Output: "Run `/speckit.blueprint.roadmap` to add a new Spec Outline, then specify it."
+- **D** → stop.
 
 ---
 

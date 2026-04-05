@@ -10,13 +10,13 @@ If you've used /speckit.specify, you've likely experienced specs that are too br
 
 ### Goal
 - Vision-First: It interviews you to define the problem, target users, and core value — ensuring you know why you are building before you decide what.
-- Strategic Decomposition: It translates that vision into a delivery roadmap — decomposing scope into right-sized Spec Outlines (scoped units each mapped to one `/speckit.specify` run), ordered by dependency so you deliver early value first.
+- Strategic Decomposition: It translates that vision into a delivery roadmap — decomposing scope into right-sized Spec Outlines (scoped units each mapped to one `/speckit.specify` run).
 - Contextual Integrity: Every spec you write is automatically checked against this roadmap, ensuring your implementation never loses sight of the original vision.
 
 ## Non-Goals
 
 - **Not a spec writer**: Blueprint produces Spec Outlines as input to `/speckit.specify` — it does not write specs or replace any step in SpecKit's core workflow.
-- **No orchestration or tracking**: Blueprint maps dependencies — scheduling, execution coordination, and progress tracking are out of scope and belong to your team or other extensions.
+- **No orchestration or tracking**: Scheduling, execution coordination, and progress tracking are out of scope and belong to your team or other extensions.
 
 ```mermaid
 flowchart TD
@@ -91,7 +91,7 @@ specify extension add blueprint --from https://github.com/jaeryun/spec-kit-bluep
 # 4. Build the roadmap
 /speckit.blueprint.roadmap
 
-# 5. For each Spec Outline (repeat in dependency order):
+# 5. For each Spec Outline:
 /speckit.specify SO-01                     # by Spec Outline ID
 # → /speckit.plan → /speckit.tasks → /speckit.implement
 /speckit.specify "user authentication"     # auto-mapped to the matching Spec Outline
@@ -103,7 +103,7 @@ specify extension add blueprint --from https://github.com/jaeryun/spec-kit-bluep
 | Command | Description | Requires |
 |---------|-------------|---------|
 | `/speckit.blueprint.vision` | Interviews you to define problem, users, and core value — outputs vision.md | — |
-| `/speckit.blueprint.roadmap` | Decomposes vision into right-sized Spec Outlines with dependency order — outputs roadmap.md | vision.md |
+| `/speckit.blueprint.roadmap` | Decomposes vision into right-sized Spec Outlines — outputs roadmap.md | vision.md |
 
 ### Usage Examples
 
@@ -122,7 +122,7 @@ All commands accept an optional argument to skip ahead or narrow the scope.
 **`/speckit.blueprint.roadmap`**
 
 ```text
-# Run both phases: Spec Outline definition and dependency mapping
+# Run the roadmap interview and generate Spec Outlines
 /speckit.blueprint.roadmap
 
 # Re-plan from a specific concern
@@ -137,9 +137,9 @@ Hooks fire automatically at lifecycle events. Each hook blocks or updates based 
 
 | Hook | Trigger Condition | Action | Purpose |
 |------|------------------|--------|---------|
-| `before_specify` | Before specify runs | `roadmap-check` | Validates feature maps to a Spec Outline and dependencies are met |
-| `after_specify` | After spec completed | `roadmap-sync` | Updates Spec Outline status in roadmap.md |
-| `after_clarify` | After spec updated via clarify | `roadmap-sync` | Updates Spec Outline status in roadmap.md |
+| `before_specify` | Before specify runs | `roadmap-check` | Validates feature maps to a Spec Outline in roadmap.md |
+| `after_specify` | After spec completed | `roadmap-sync` | Links generated spec file to the matched Spec Outline in roadmap.md |
+| `after_clarify` | After spec updated via clarify | `roadmap-sync` | Updates spec file link for the matched Spec Outline in roadmap.md |
 
 **Emitted hook events** (available for other extensions to subscribe to):
 
@@ -156,7 +156,7 @@ Hooks fire automatically at lifecycle events. Each hook blocks or updates based 
 ```text
 docs/blueprint/
 ├── vision.md    # Project vision
-└── roadmap.md   # Delivery plan with Spec Outlines and dependencies
+└── roadmap.md   # Delivery plan with Spec Outlines
 ```
 
 **vision.md** — problem, users, scope boundary:
@@ -170,12 +170,9 @@ Out of Scope: Sprint planning, task tracking, implementation orchestration.
 
 **roadmap.md** — Spec Outline entry:
 ```markdown
-## [📋] SO-01 — User Authentication
-
-Summary: Users can register and log in with email/password.
-Scope: Sign-up flow, login/logout, password reset, session management.
-Deps: —
-Spec: —
+- **SO-01** — Users can register and log in with email/password.
+  - Scope: Sign-up flow, login/logout, password reset, session management.
+  - Spec: —
 ```
 
 

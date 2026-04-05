@@ -21,12 +21,12 @@ hooks:
   after_specify:
     command: "speckit.blueprint.roadmap-sync"
     optional: false
-    description: "Sync Spec Outline status in roadmap.md after a spec is completed."
+    description: "Link the generated spec file to the matched Spec Outline in roadmap.md."
 
   after_clarify:
     command: "speckit.blueprint.roadmap-sync"
     optional: true
-    description: "Sync Spec Outline status in roadmap.md after a spec is updated via clarify. Optional because clarify is a refinement operation and may not always change Spec Outline scope."
+    description: "Update the spec file link for the matched Spec Outline in roadmap.md. Optional because clarify may not always produce a new spec file."
 
 provides:
   commands:
@@ -36,7 +36,7 @@ provides:
 
     - name: speckit.blueprint.roadmap
       file: commands/roadmap.md
-      description: "Generate a delivery roadmap with Spec Outlines and dependency mapping (2 phases: Spec Outline definition → dependency mapping)."
+      description: "Generate a delivery roadmap of Spec Outlines from the confirmed vision."
 
     - name: speckit.blueprint.roadmap-check
       file: commands/roadmap-check.md
@@ -44,7 +44,7 @@ provides:
 
     - name: speckit.blueprint.roadmap-sync
       file: commands/roadmap-sync.md
-      description: "Post-specify sync: update Spec Outline status in roadmap.md after completion."
+      description: "Post-specify sync: link generated spec file to Spec Outline in roadmap.md."
 
   hooks:
     - event: before_blueprint_vision
