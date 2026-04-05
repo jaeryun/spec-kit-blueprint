@@ -76,29 +76,26 @@ Proceed to Step 2.
 
 ### Step 2: Adaptive Interview
 
-Conduct a conversational interview in **3 rounds**. Ask **one question at a time** — wait for the answer, then ask the next. Adapt follow-up questions based on what you hear. Never bundle multiple questions in a single message.
+Conduct a conversational interview covering the areas below. Ask **one question at a time**, adapt follow-ups based on answers, and skip areas already covered.
 
-If the user says "I don't know" or "not sure" for any answer — record it as `TBD` and move on. Do not block progress.
+| Area | Intent | Template Section | Guidance |
+| --- | --- | --- | --- |
+| **Overview** | What is being built and why | Project Overview | Start with open-ended questions. Adjust depth based on user response. Example: "What are you building?" → "Why does this matter?" → "What led to this?" |
+| **Goals** | What success looks like | Goals & Objectives | Focus on outcomes, not features. Probe for business value. Example: "What are you trying to achieve?" → "What would make this successful?" |
+| **Users** | Who it's for and their context | Target Users | Get specific. Avoid generic roles. Example: "Who will use this?" → "What are they trying to do?" → "What frustrates them today?" |
+| **Features** | What capabilities it must provide | Core Features | Ask from user perspective. Example: "What should users be able to do?" → "Which 3–5 are most important?" |
+| **Out of Scope** | What is explicitly excluded | Out of Scope | Be concrete. Example: "What are you intentionally NOT building?" → "Are there features commonly assumed but excluded?" |
+| **Constraints** | Technical, business, timeline, and architectural boundaries | Constraints | Hard limits shaping the solution. Example: "What constraints exist?" → "Technical? Business? Timeline?" → "Any architectural preferences? (cloud-native, etc.)" |
+| **NFRs** | Quality attributes | Non-Functional Requirements | Focus on needs over targets. Example: "What quality aspects matter? (speed, security, scale)" → "Any specific requirements?" |
+| **Success** | How to measure success | Success Criteria | Push for measurability. Example: "How will you know this worked?" → "Any metrics in mind?" |
 
-#### Round 1 — Core Understanding (always ask these)
+**Interview Flow:**
 
-1. "What problem are you solving? Describe it in one or two sentences."
-2. "Who are the primary users? Be specific — not just 'developers' but what kind, what context."
-3. "What are the 3–5 most important things the product must do? (Core features, not nice-to-haves)"
-
-After Round 1, briefly reflect back what you heard and ask: "Is that a fair summary so far?"
-
-#### Round 2 — Scope & Constraints (adapt based on Round 1)
-
-1. "What is explicitly OUT of scope for the initial version? What are you intentionally deferring?"
-2. "Are there any hard technical constraints? (existing stack, hosting environment, must-use libraries, etc.)"
-3. "What are the non-functional requirements? Think about: performance targets, security requirements, accessibility, offline support, etc."
-
-#### Round 3 — Execution Context (adapt based on rounds 1-2)
-
-1. "Is this a new project or an existing codebase?"
-2. "What's the team size and rough sprint cadence? (e.g., 3 devs, 2-week sprints)"
-3. "What's the target timeline for a first working version?"
+1. Start with **Overview** — always ask this first
+2. Ask follow-up questions **one at a time**, adapting based on what you hear
+3. Skip any area already answered in previous responses
+4. If user says "I don't know" — record as `TBD` and move on
+5. After covering 4–6 areas, briefly reflect back and ask: "Is that a fair summary so far?"
 
 ---
 
@@ -106,7 +103,7 @@ After Round 1, briefly reflect back what you heard and ask: "Is that a fair summ
 
 Load `templates/vision-template.md` to understand the required sections.
 
-Fill each section with the interview answers, following the **For AI Generation** guidelines at the end of this file.
+Fill each section with the interview answers, following the **Filling Rules** from the table above.
 
 Include a `_Last updated: [date]_` line with today's date.
 
@@ -208,33 +205,11 @@ If Step 0 found no constitution and the user chose to proceed anyway, append thi
 
 ---
 
-## For AI Generation
-
-When filling `templates/vision-template.md`:
-
-### Section Rules
-
-**Problem Statement** — State the problem only. No solution hints, no technology, no delivery phases.
-
-**Target Users** — Be specific. "Small e-commerce teams of 2–5 people running Shopify stores" beats "business users". Include their context.
-
-**Core Features** — User-facing capabilities only. If the user listed more than 5, ask which 3–5 are non-negotiable.
-
-**Technical Context** — Record only what the user stated. Do not infer a tech stack.
-
-**Non-Functional Requirements** — If not mentioned, write "No specific NFRs identified." Do not invent targets.
-
-**Out of Scope** — Be specific. "No mobile app" is useful; "out of scope for v1" is not.
-
-**Success Criteria** — Prefer measurable outcomes. If the user gave none, propose 2–3 based on Core Features and confirm before saving.
-
-**Execution Context** — Use `TBD` for any unknown value. Never estimate team size, sprint cadence, or release target.
-
-### When to Mark TBD
+## Reference: When to Mark TBD
 
 Use `TBD` when the user said "I don't know" or the question was skipped. Never infer a value for team size, sprint cadence, or release target.
 
-### Scope Signals — Remove Before Saving
+## Reference: Scope Signals — Remove Before Saving
 
 If any of the following appear in the draft, move or remove them before saving:
 
