@@ -16,7 +16,8 @@ When invoked via `after_clarify`, the argument is a change description for a spe
 
 **Fallback when spec file is not linked (after_clarify only):** If the spec file being clarified does not match any `Spec:` field in `roadmap.md` (e.g., after an interrupted session, or after a single SO was reset via option (3)), fall back to matching against Spec Outline goals using the same STRICT match criteria defined in Step 2. Ask the user to confirm the match before writing.
 
-**Recovery after interrupted session:** If the specify run was interrupted (session ended before `after_specify` fired), this hook will not have run. To recover manually: open `docs/blueprint/roadmap.md` directly and update the `Spec:` field manually, following the format in Step 3 below.
+**Recovery after interrupted session:** If the specify run was interrupted (session ended before `after_specify` fired), this hook will not have run. To recover manually, run the sync script directly:
+`bash .specify/extensions/blueprint/scripts/bash/blueprint-sync.sh --so-id [SO_ID] --spec-path [path] --json`
 
 ## Instructions
 
@@ -58,43 +59,52 @@ To update manually, open docs/blueprint/roadmap.md and set the Spec: field to th
 
 ### Step 3: Link the spec file
 
-Identify the spec file produced by this specify run from the current conversation context (typically the file path of the generated `spec.md`). The path must be relative to the project root (e.g., `docs/spec/auth.md`).
+Identify:
 
-Update the `Spec:` field of the matched Spec Outline:
+- `SO_ID` — matched Spec Outline ID from Step 2 (e.g., `SO-01`)
+- `SPEC_FILE` — relative path to the spec file from this specify run (e.g., `docs/spec/auth.md`)
+- `SUMMARY` — one-line description (e.g., `"auth spec created"`)
 
-```text
-  - Spec: [spec file path]
+Run from repo root:
+
+```bash
+bash .specify/extensions/blueprint/scripts/bash/blueprint-sync.sh \
+    --so-id [SO_ID] \
+    --spec-path [SPEC_FILE] \
+    --message "[SUMMARY]" \
+    --json
 ```
 
-If the spec file path cannot be determined, leave `Spec:` unchanged and note this in the History entry.
+Parse JSON response:
 
-Append a new line to the History section:
+- `SUCCESS` is `true` → proceed to Step 4
+- `SUCCESS` is `false` → output `ERROR` value and stop
 
-Format: `[TIMESTAMP] | SO-[NN] [Outcome summary]`
+**Do NOT manually edit roadmap.md.** The script handles atomic update and history entry insertion.
 
-Examples of concise summaries:
-- `SO-01 spec linked: docs/spec/auth.md`
-- `SO-02 spec updated via clarify: [one-line summary of change]`
-- `SO-03 spec file could not be determined — Spec: field left unchanged`
-
-**Before saving:** Verify the roadmap.md content is valid — check that no duplicate Spec Outline IDs exist. If invalid content is detected, output an error and do not save.
-
-Save the updated `docs/blueprint/roadmap.md`.
-
-Output:
+If `SPEC_FILE` cannot be determined from conversation context:
 
 ```text
-✅ roadmap.md updated: [SO-NN] — [Spec Outline goal]
-   Spec: [spec file path]
+⚠️ Spec file path could not be determined — skipping sync.
+To update manually:
+  bash .specify/extensions/blueprint/scripts/bash/blueprint-sync.sh \
+    --so-id [SO_ID] --spec-path [path] --json
 ```
 
 ---
 
 ### Step 4: Summary
 
-Output a brief sync summary:
+Output:
+
+```text
+✅ roadmap.md updated: [SO_ID] — [Spec Outline goal]
+   Spec: [SPEC_FILE]
+```
+
+Then:
 
 ```text
 Blueprint sync complete:
-- Spec Outline: [SO-NN] — spec linked → [spec file path]
+- Spec Outline: [SO_ID] — spec linked → [SPEC_FILE]
 ```
