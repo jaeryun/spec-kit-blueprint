@@ -56,13 +56,25 @@ Wait for user response.
 
 ### Step 2: Check prerequisites
 
-If `docs/blueprint/roadmap.md` does not exist:
+Run from repo root:
+
+```bash
+bash .specify/extensions/blueprint/scripts/bash/blueprint-prereqs.sh --json
+```
+
+Parse JSON output into:
+
+- `ROADMAP_EXISTS` — boolean
+- `ROADMAP_PATH` — absolute path to roadmap.md
+- `SPEC_OUTLINES` — array of `{id, goal, spec_linked}` objects
+
+If `ROADMAP_EXISTS` is `false`:
 → Output: "ℹ️ Blueprint roadmap not found — skipping roadmap alignment check." and stop (allow specify to proceed).
 
-Read `docs/blueprint/roadmap.md`. Find all Spec Outline entries.
-
-If no Spec Outlines are found:
+If `SPEC_OUTLINES` is empty:
 → Output: "ℹ️ No Spec Outlines found in `docs/blueprint/roadmap.md` — skipping roadmap alignment check." and stop (allow specify to proceed).
+
+Use `SPEC_OUTLINES` directly for matching in Step 3. Do **not** re-read roadmap.md manually.
 
 ---
 
