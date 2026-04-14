@@ -35,8 +35,8 @@ flowchart TD
         spec3 --> NEXT3["/speckit.plan\n/speckit.tasks\n/speckit.implement\n(＋ any extensions)"]
     end
 
-    style bp fill:#e8edf5,stroke:#1e40af,stroke-width:1.5px
-    style impl fill:#e6f2ee,stroke:#0f766e,stroke-width:1.5px
+    style bp fill:#e8edf5,stroke:#1e40af,stroke-width:1.5px,color:#1e3a5f
+    style impl fill:#e6f2ee,stroke:#0f766e,stroke-width:1.5px,color:#134e4a
     style A fill:#1e293b,stroke:#1e293b,color:#f8fafc
     style B fill:#1e40af,stroke:#1e40af,color:#f8fafc
     style C fill:#ffffff,stroke:#93c5fd,color:#1e3a5f
