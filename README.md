@@ -1,6 +1,6 @@
 <div align="center">
 
-# spec-kit-blueprint
+# Spec Kit Blueprint
 
 **Vision-first project planning for [Spec Kit](https://github.com/github/spec-kit).**
 
@@ -193,7 +193,7 @@ Hooks fire automatically at lifecycle events. Each hook blocks or updates based 
 | `before_blueprint_roadmap` | Before roadmap generation begins |
 | `after_blueprint_roadmap` | After roadmap.md is confirmed and saved |
 
-## Output Files
+## Output Examples
 
 ```text
 docs/blueprint/
@@ -203,48 +203,51 @@ docs/blueprint/
 
 **vision.md** — structured sections covering problem, users, goals, constraints, and out of scope:
 ```markdown
-# Vision: <Project Name>
+# Vision: Simple SaaS App
 
 ## Problem Statement
-...
+<!-- The core pain point this project solves. -->
+Teams lack a unified entry point for user management, forcing manual aggregation.
 
 ## Target Users
-- **End users**: ...
-- **Administrators**: ...
+<!-- Who uses the product and in what role. -->
+- **End users**: Team members who sign up and manage their own accounts.
+- **Administrators**: Team leaders who monitor overall user activity.
 
 ## Core Features
-1. ...
+<!-- Numbered list of key capabilities. -->
+1. Email/password sign-up, login, logout, and password reset.
 
 ## Constraints
-- Team size, timeline, integration limits.
+<!-- Team size, timeline, and integration limits. -->
+- 1–2 developers. MVP within 3 months. No third-party integrations.
 
 ## Out of Scope
-- ...
+<!-- What is explicitly excluded. -->
+- Social login, billing, mobile app.
 
 ## Success Criteria
-- ...
+<!-- Measurable outcomes that define done. -->
+- New users can complete sign-up in under 5 minutes.
 ```
 
 > See [`examples/vision.md`](examples/vision.md) for a complete worked example.
 
 **roadmap.md** — Spec Outline list with scope and spec link, plus Untracked Specs:
 ```markdown
-# Roadmap: <Project Name>
+# Roadmap: Simple SaaS App
 
 ## Spec Outlines
-
+<!-- One entry per Spec Outline. Each maps to one /speckit.specify run. -->
+<!-- Spec: filled automatically by roadmap-sync after specify completes. Use — if not yet linked. -->
 - **SO-01** — Users can register and log in with email/password.
   - Scope: Sign-up flow, login/logout, password reset, session management.
   - Spec: specs/001-user-auth/
 
-- **SO-02** — Users can manage their profile.
-  - Scope: Profile page, notification preferences, account deletion.
-  - Spec: —
-
 ## Untracked Specs
-
-<!-- Spec files intentionally not linked to any Spec Outline.
-     roadmap-sync skips these automatically. -->
+<!-- Spec files intentionally not linked to any Spec Outline. -->
+<!-- roadmap-sync skips these automatically. -->
+- specs/004-auth-spike/
 ```
 
 > See [`examples/roadmap.md`](examples/roadmap.md) for a complete worked example.
