@@ -17,7 +17,7 @@ flowchart TD
         B --> C["vision.md"]
         C --> D["/speckit.blueprint.roadmap"]
         D --> R["roadmap.md"]
-        R --> SO1["SO-01\nUsers can register & log in"]
+        R --> SO1["SO-01\nUsers can register and log in"]
         R --> SO2["SO-02\nUsers can manage their profile"]
         R --> SO3["SO-03\nAdmins can view analytics"]
     end
@@ -27,9 +27,9 @@ flowchart TD
     SO3 --> H
 
     subgraph impl ["Implementation — Tactical Execution"]
-        F["/speckit.specify SO-01"] --> spec1["specs/001-auth/*.md"]
-        G["/speckit.specify SO-02"] --> spec2["specs/002-profile/*.md"]
-        H["/speckit.specify SO-03"] --> spec3["specs/003-analytics/*.md"]
+        F["/speckit.specify SO-01"] --> spec1["specs/001-user-auth/spec.md"]
+        G["/speckit.specify SO-02"] --> spec2["specs/002-profile/spec.md"]
+        H["/speckit.specify SO-03"] --> spec3["specs/003-analytics/spec.md"]
         spec1 --> NEXT1["/speckit.plan\n/speckit.tasks\n/speckit.implement\n(＋ any extensions)"]
         spec2 --> NEXT2["/speckit.plan\n/speckit.tasks\n/speckit.implement\n(＋ any extensions)"]
         spec3 --> NEXT3["/speckit.plan\n/speckit.tasks\n/speckit.implement\n(＋ any extensions)"]
@@ -106,24 +106,30 @@ specify extension add blueprint --from https://github.com/jaeryun/spec-kit-bluep
 # 4. Build the roadmap
 /speckit.blueprint.roadmap
 
-# 5. For each Spec Outline:
-/speckit.specify SO-01                     # by Spec Outline ID
-# 
+# 5. For each Spec Outline (independent ones can run concurrently in separate worktrees):
+/speckit.specify SO-01               # by Spec Outline ID
+/speckit.specify "user authentication"  # or by keyword — auto-mapped to the matching Spec Outline
 
-# or 
-/speckit.specify "user authentication"     # auto-mapped to the matching Spec Outline
-# Independent Spec Outlines can run concurrently in separate worktrees
-
-# 6. /speckit.plan → /speckit.tasks → /speckit.implement ...
+# 6. Continue with the standard SpecKit workflow:
+# /speckit.plan → /speckit.tasks → /speckit.implement ...
 
 ```
 
 ## Commands
 
+**Manual commands** — run explicitly by the user:
+
 | Command | Description | Requires |
 |---------|-------------|---------|
 | `/speckit.blueprint.vision` | Interviews you to define problem, users, and core value — outputs vision.md | — |
 | `/speckit.blueprint.roadmap` | Decomposes vision into right-sized Spec Outlines — outputs roadmap.md | vision.md |
+
+**Auto-triggered commands** — fired by hooks, not run directly:
+
+| Command | Trigger | Description |
+|---------|---------|-------------|
+| `speckit.blueprint.roadmap-check` | `before_specify` | Validates the requested feature maps to a Spec Outline in roadmap.md — blocks if no match found |
+| `speckit.blueprint.roadmap-sync` | `after_specify`, `after_clarify` | Scans `specs/` for unlinked spec files and links each to its matching Spec Outline in roadmap.md |
 
 ### Usage Examples
 
@@ -184,27 +190,53 @@ docs/blueprint/
 └── roadmap.md   # Delivery plan with Spec Outlines
 ```
 
-**vision.md** — problem, users, scope boundary:
+**vision.md** — structured sections covering problem, users, goals, constraints, and out of scope:
 ```markdown
-# Vision
-Problem: Small teams lose spec coherence when writing specs in isolation.
-Target Users: Engineering leads on 2–5 person teams.
-Core Features: Vision interview, roadmap generation, spec alignment hooks.
-Out of Scope: Sprint planning, task tracking, implementation orchestration.
+# Vision: <Project Name>
+
+## Problem Statement
+...
+
+## Target Users
+- **End users**: ...
+- **Administrators**: ...
+
+## Core Features
+1. ...
+
+## Constraints
+- Team size, timeline, integration limits.
+
+## Out of Scope
+- ...
+
+## Success Criteria
+- ...
 ```
 
-**roadmap.md** — Spec Outline entry and Untracked Specs:
+> See [`examples/vision.md`](examples/vision.md) for a complete worked example.
+
+**roadmap.md** — Spec Outline list with scope and spec link, plus Untracked Specs:
 ```markdown
+# Roadmap: <Project Name>
+
+## Spec Outlines
+
 - **SO-01** — Users can register and log in with email/password.
   - Scope: Sign-up flow, login/logout, password reset, session management.
-  - Spec: specs/001-auth/
+  - Spec: specs/001-user-auth/
+
+- **SO-02** — Users can manage their profile.
+  - Scope: Profile page, notification preferences, account deletion.
+  - Spec: —
 
 ## Untracked Specs
 
 <!-- Spec files intentionally not linked to any Spec Outline.
      roadmap-sync skips these automatically. -->
-- specs/004-auth-spike/
 ```
+
+> See [`examples/roadmap.md`](examples/roadmap.md) for a complete worked example.
 
 ## Upgrading
 
