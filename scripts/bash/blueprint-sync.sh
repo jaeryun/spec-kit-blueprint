@@ -37,6 +37,12 @@ if [ -z "$SO_ID" ] || [ -z "$SPEC_PATH" ]; then
     exit 1
 fi
 
+# Validate SO_ID format — prevent ERE injection in grep patterns below
+case "$SO_ID" in
+    SO-[0-9]*) : ;;
+    *) echo "Error: --so-id must match SO-NN format (e.g. SO-01)" >&2; exit 1 ;;
+esac
+
 # Reject absolute paths — spec path must be relative to repo root
 case "$SPEC_PATH" in
     /*) echo "Error: --spec-path must be a relative path (e.g. docs/spec/auth.md)" >&2; exit 1 ;;
@@ -119,7 +125,7 @@ done < "$ROADMAP_PATH"
 $FOUND || fail "Spec: field not found for $SO_ID — check roadmap.md format"
 
 # Append history entry immediately after "## History" header
-TIMESTAMP=$(date +"%Y-%m-%d %H:%M")
+TIMESTAMP=$(date +"%Y-%m-%d %H:%M:%S")
 if [ -n "$MESSAGE" ]; then
     HISTORY_ENTRY="$TIMESTAMP | $SO_ID spec linked: $SPEC_PATH — $MESSAGE"
 else
@@ -129,8 +135,8 @@ fi
 TEMP_FILE2=$(mktemp "$(dirname "$ROADMAP_PATH")/.blueprint-sync2.XXXXXX")
 trap 'rm -f "$TEMP_FILE" "$TEMP_FILE2"' EXIT
 
-awk -v entry="$HISTORY_ENTRY" '
-    /^## History$/ { print; print entry; next }
+HISTORY_ENTRY="$HISTORY_ENTRY" awk '
+    /^## History$/ { print; print ENVIRON["HISTORY_ENTRY"]; next }
     { print }
 ' "$TEMP_FILE" > "$TEMP_FILE2"
 
@@ -159,6 +165,6 @@ if $JSON_MODE; then
 EOF
     fi
 else
-    echo "✅ $SO_ID → Spec: $SPEC_PATH"
+    echo "[OK] $SO_ID -> Spec: $SPEC_PATH"
     echo "History: $HISTORY_ENTRY"
 fi

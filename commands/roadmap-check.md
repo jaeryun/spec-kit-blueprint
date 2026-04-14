@@ -66,7 +66,7 @@ Parse JSON output into:
 
 - `ROADMAP_EXISTS` — boolean
 - `ROADMAP_PATH` — absolute path to roadmap.md
-- `SPEC_OUTLINES` — array of `{id, goal, spec_linked}` objects
+- `SPEC_OUTLINES` — array of `{id, goal, scope, spec_linked}` objects
 
 If `ROADMAP_EXISTS` is `false`:
 → Output: "ℹ️ Blueprint roadmap not found — skipping roadmap alignment check." and stop (allow specify to proceed).
@@ -86,7 +86,7 @@ Using the resolved match target from Step 1:
 - **Spec file reference**: match the extracted spec title/description against Spec Outline summaries and scope.
 - **Feature description**: match semantically against Spec Outline summaries and scope.
 
-**Match criteria:** When confidence is low or the match is ambiguous, ask the user to confirm before proceeding.
+**Match criteria:** Always present the matched Spec Outline to the user and ask for confirmation before proceeding. Do not proceed silently even when the match appears clear.
 
 ---
 
@@ -99,13 +99,15 @@ Output:
 ```text
 ✅ Roadmap aligned: maps to SO-[NN] — [Spec Outline goal]
 
-Spec Outline scope (use as context for the requirements interview):
-[Spec Outline scope field content]
+Scope: [Spec Outline scope field content]
 
-Proceeding with specification.
+Proceed with this Spec Outline? (yes / no)
 ```
 
-Stop. Allow specify to proceed.
+Wait for user response.
+
+- **yes** → Output: "Proceeding with specification." and allow specify to proceed.
+- **no** → treat as Case C.
 
 ---
 
@@ -127,8 +129,7 @@ Wait for user response.
 
 - **A** → Output:
   ```text
-  Spec Outline scope (use as context for the requirements interview):
-  [Spec Outline scope field content]
+  Scope: [Spec Outline scope field content]
 
   Proceeding with specification.
   ```

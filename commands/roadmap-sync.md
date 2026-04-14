@@ -4,7 +4,7 @@ description: "Link generated spec file to Spec Outline in roadmap.md after a spe
 
 # Blueprint Roadmap Sync
 
-> Auto-invoked hook — fires automatically after `/speckit.specify`. Do not invoke directly.
+> Auto-invoked hook — fires automatically after `/speckit.specify` and `/speckit.clarify`. Do not invoke directly.
 
 Post-completion sync after `/speckit.specify`. Links the generated spec file to the matched Spec Outline in `roadmap.md`.
 
@@ -12,9 +12,9 @@ Post-completion sync after `/speckit.specify`. Links the generated spec file to 
 
 This command is invoked as an `after_specify` or `after_clarify` hook. The completed feature description is available from the current conversation context — it is the argument the user passed to `/speckit.specify` or `/speckit.clarify`.
 
-When invoked via `after_clarify`, the argument is a change description for a specific spec file. Identify the spec file being clarified from the current conversation context, then match it against the `Spec:` field in `roadmap.md` to find the corresponding Spec Outline — do not rely on semantic matching for this case.
+When invoked via `after_clarify`, the argument is a change description for a specific spec file. Identify the spec file being clarified from the current conversation context — either from an explicit file path argument, or from the most recently written spec file mentioned in the conversation. Match it against the `spec_linked` field in `SPEC_OUTLINES` (from Step 1) to find the corresponding Spec Outline — do not rely on semantic matching for this case.
 
-**Fallback when spec file is not linked (after_clarify only):** If the spec file being clarified does not match any `Spec:` field in `roadmap.md` (e.g., after an interrupted session, or after a single SO was reset via option (3)), fall back to matching against Spec Outline goals using the same STRICT match criteria defined in Step 2. Ask the user to confirm the match before writing.
+**Fallback when spec file is not linked (after_clarify only):** If no SO has a matching `spec_linked` value (e.g., after an interrupted session, or after a single SO was reset via option (3)), fall back to matching against Spec Outline goals using the same STRICT match criteria defined in Step 2. Ask the user to confirm the match before writing.
 
 **Recovery after interrupted session:** If the specify run was interrupted (session ended before `after_specify` fired), this hook will not have run. To recover manually, run the sync script directly:
 `bash .specify/extensions/blueprint/scripts/bash/blueprint-sync.sh --so-id [SO_ID] --spec-path [path] --json`
@@ -23,24 +23,36 @@ When invoked via `after_clarify`, the argument is a change description for a spe
 
 ### Step 1: Check prerequisites
 
-If `docs/blueprint/roadmap.md` does not exist:
+Run from repo root:
+
+```bash
+bash .specify/extensions/blueprint/scripts/bash/blueprint-prereqs.sh --json
+```
+
+Parse JSON output into:
+
+- `ROADMAP_EXISTS` — boolean
+- `ROADMAP_PATH` — absolute path to roadmap.md
+- `SPEC_OUTLINES` — array of `{id, goal, scope, spec_linked}` objects
+
+If `ROADMAP_EXISTS` is `false`:
 → Output: "ℹ️ Blueprint roadmap not found — skipping roadmap sync." and stop.
 
 ---
 
 ### Step 2: Identify the completed Spec Outline
 
-Read `docs/blueprint/roadmap.md`.
-
-Find all Spec Outline entries. Spec Outlines are identified by their ID (SO-01, SO-02...).
+Use `SPEC_OUTLINES` from Step 1 directly. Do **not** re-read roadmap.md manually.
 
 Using the completed feature description from the current conversation context, find the Spec Outline that was just specified.
+
+**When invoked via `after_clarify`:** First try to match by `spec_linked` field — find the SO whose `spec_linked` value matches the spec file being clarified. Only fall back to goal matching if no `spec_linked` match is found.
 
 **Match criteria:** The match must be STRICT — this is a write operation that modifies roadmap.md:
 
 - The feature description must clearly and specifically match the Spec Outline's user-facing goal
-- Partial or ambiguous overlap is NOT enough — when in doubt, ask the user to confirm
-- If match confidence is low, output the top candidate and ask: "Is this the Spec Outline you just specified? (yes / no)" — if no, treat as no match
+- Partial or ambiguous overlap is NOT enough — always ask the user to confirm before writing
+- Present the top candidate and ask: "Is this the Spec Outline you just specified? (yes / no)" — if no, treat as no match
 
 If no matching Spec Outline is found:
 → Output the message below and stop.

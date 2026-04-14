@@ -202,7 +202,7 @@ Apply these when deciding where one Spec-outline ends and the next begins:
 |-----------|-----------|
 | **Duration** | 1–3 months from start to delivery |
 | **Team** | 1–2 people owning the work |
-| **Decomposition** | Epic 하위 작업 단위 5–15개로 세분화 가능한 범위 |
+| **Decomposition** | Decomposable into 5–15 subtasks |
 
 The goal is ensuring each Spec-outline is scoped appropriately: not too broad to manage in a single `/speckit.specify` run, and not so narrow it doesn't warrant its own spec.
 
