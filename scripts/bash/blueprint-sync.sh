@@ -38,10 +38,9 @@ if [ -z "$SO_ID" ] || [ -z "$SPEC_PATH" ]; then
 fi
 
 # Validate SO_ID format — prevent ERE injection in grep patterns below
-case "$SO_ID" in
-    SO-[0-9]*) : ;;
-    *) echo "Error: --so-id must match SO-NN format (e.g. SO-01)" >&2; exit 1 ;;
-esac
+if ! printf '%s' "$SO_ID" | grep -qE '^SO-[0-9]+$'; then
+    echo "Error: --so-id must match SO-NN format (e.g. SO-01)" >&2; exit 1
+fi
 
 # Reject absolute paths — spec path must be relative to repo root
 case "$SPEC_PATH" in
