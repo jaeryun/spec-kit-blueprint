@@ -1,6 +1,17 @@
+<div align="center">
+
 # spec-kit-blueprint
 
-A [Spec Kit](https://github.com/github/spec-kit) extension that establishes **project vision and strategic roadmap** before any spec is written.
+**Vision-first project planning for [Spec Kit](https://github.com/github/spec-kit).**
+
+*Start with vision. Shape it into a roadmap.*  
+*Then write specs that never lose sight of the big picture.*
+
+[![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square)](https://github.com/jaeryun/spec-kit-blueprint/releases)
+[![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)](LICENSE)
+[![Requires SpecKit](https://img.shields.io/badge/requires%20SpecKit-%3E%3D0.4.0-orange?style=flat-square)](https://github.com/github/spec-kit)
+
+</div>
 
 ## Overview
 
@@ -124,7 +135,7 @@ specify extension add blueprint --from https://github.com/jaeryun/spec-kit-bluep
 | `/speckit.blueprint.vision` | Interviews you to define problem, users, and core value — outputs vision.md | — |
 | `/speckit.blueprint.roadmap` | Decomposes vision into right-sized Spec Outlines — outputs roadmap.md | vision.md |
 
-**Auto-triggered commands** — fired by hooks, not run directly:
+**Hook commands** — fired automatically by hooks, but can also be run directly:
 
 | Command | Trigger | Description |
 |---------|---------|-------------|
