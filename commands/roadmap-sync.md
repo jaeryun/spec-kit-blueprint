@@ -4,20 +4,17 @@ description: "Link generated spec file to Spec Outline in roadmap.md after a spe
 
 # Blueprint Roadmap Sync
 
-> Auto-invoked hook — fires automatically after `/speckit.specify` and `/speckit.clarify`. Do not invoke directly.
+> Auto-invoked hook — fires automatically after `/speckit.specify` and `/speckit.clarify`. Can also be run directly to recover unlinked specs.
 
-Post-completion sync after `/speckit.specify`. Links the generated spec file to the matched Spec Outline in `roadmap.md`.
+Scans all spec files in `specs/`, finds those not yet linked in `roadmap.md`, and links each one to its matching Spec Outline. Prompts the user when a match is ambiguous.
 
 ## Context
 
-This command is invoked as an `after_specify` or `after_clarify` hook. The completed feature description is available from the current conversation context — it is the argument the user passed to `/speckit.specify` or `/speckit.clarify`.
+This command is invoked as an `after_specify` or `after_clarify` hook, or directly by the user. In all cases, it operates the same way: scan `specs/` for unlinked spec files and sync them into `roadmap.md`.
 
-When invoked via `after_clarify`, the argument is a change description for a specific spec file. Identify the spec file being clarified from the current conversation context — either from an explicit file path argument, or from the most recently written spec file mentioned in the conversation. Match it against the `spec_linked` field in `SPEC_OUTLINES` (from Step 1) to find the corresponding Spec Outline — do not rely on semantic matching for this case.
+**When invoked via `after_clarify`:** The spec file being clarified is already linked. This command will find it has no new unlinked specs to process and exit cleanly — unless the spec link was previously cleared or the session was interrupted.
 
-**Fallback when spec file is not linked (after_clarify only):** If no SO has a matching `spec_linked` value (e.g., after an interrupted session, or after a single SO was reset via option (3)), fall back to matching against Spec Outline goals using the same STRICT match criteria defined in Step 2. Ask the user to confirm the match before writing.
-
-**Recovery after interrupted session:** If the specify run was interrupted (session ended before `after_specify` fired), this hook will not have run. To recover manually, run the sync script directly:
-`bash .specify/extensions/blueprint/scripts/bash/blueprint-sync.sh --so-id [SO_ID] --spec-path [path] --json`
+**Recovery after interrupted session:** Run this command directly. It will detect any spec files that were created but never linked and sync them.
 
 ## Instructions
 
@@ -34,50 +31,93 @@ Parse JSON output into:
 - `ROADMAP_EXISTS` — boolean
 - `ROADMAP_PATH` — absolute path to roadmap.md
 - `SPEC_OUTLINES` — array of `{id, goal, scope, spec_linked}` objects
+- `UNTRACKED_SPECS` — array of spec path strings intentionally excluded from sync
 
 If `ROADMAP_EXISTS` is `false`:
 → Output: "ℹ️ Blueprint roadmap not found — skipping roadmap sync." and stop.
 
 ---
 
-### Step 2: Identify the completed Spec Outline
+### Step 2: Find unlinked spec files
 
-Use `SPEC_OUTLINES` from Step 1 directly. Do **not** re-read roadmap.md manually.
+Scan the `specs/` directory at repo root for all `.md` files.
 
-Using the completed feature description from the current conversation context, find the Spec Outline that was just specified.
+Build the list of already-linked paths from `SPEC_OUTLINES` — collect all non-empty `spec_linked` values.
 
-**When invoked via `after_clarify`:** First try to match by `spec_linked` field — find the SO whose `spec_linked` value matches the spec file being clarified. Only fall back to goal matching if no `spec_linked` match is found.
+**Unlinked spec** = a file in `specs/` whose path does not appear in any SO's `spec_linked` field.
 
-**Match criteria:** The match must be STRICT — this is a write operation that modifies roadmap.md:
+Filter out any paths that appear in `UNTRACKED_SPECS` — these have been intentionally excluded and must not be presented again.
 
-- The feature description must clearly and specifically match the Spec Outline's user-facing goal
-- Partial or ambiguous overlap is NOT enough — always ask the user to confirm before writing
-- Present the top candidate and ask: "Is this the Spec Outline you just specified? (yes / no)" — if no, treat as no match
-
-If no matching Spec Outline is found:
-→ Output the message below and stop.
-
-```text
-ℹ️ No matching Spec Outline found — skipping sync.
-
-Top candidates (closest semantic match):
-  - SO-[NN] — [goal]
-  - SO-[NM] — [goal]
-
-To update manually, open docs/blueprint/roadmap.md and set the Spec: field to the path of the generated spec file.
-```
+If no unlinked specs remain after filtering:
+→ Output: "✅ All specs are linked — roadmap is up to date." and stop.
 
 ---
 
-### Step 3: Link the spec file
+### Step 3: Match each unlinked spec to a Spec Outline
 
-Identify:
+For each unlinked spec file:
 
-- `SO_ID` — matched Spec Outline ID from Step 2 (e.g., `SO-01`)
-- `SPEC_FILE` — relative path to the spec file from this specify run (e.g., `docs/spec/auth.md`)
-- `SUMMARY` — one-line description (e.g., `"auth spec created"`)
+1. Read the file and extract its title and a brief description of what it covers.
+2. Find candidate Spec Outlines: SOs whose `spec_linked` is empty and whose goal/scope semantically matches the spec content.
 
-Run from repo root:
+Apply the following match rules:
+
+#### Clear match
+
+One SO with an empty `spec_linked` clearly matches the spec content.
+
+→ Present to user:
+
+```text
+📎 [spec file path]
+   → SO-[NN] — [Spec Outline goal]
+   Proceed with this link? (yes / no / skip)
+```
+
+- **yes** → add to confirmed link list
+- **no** → treat as ambiguous (ask user to pick)
+- **skip** → ask: "Add to Untracked Specs so future syncs skip it? (yes / no)" — if yes, call `blueprint-sync.sh --untrack`; note in summary either way
+
+#### Ambiguous match
+
+Multiple SOs are plausible candidates, or the spec content does not clearly align with any single SO.
+
+→ Present to user:
+
+```text
+⚠️ [spec file path] — ambiguous match.
+
+Candidates:
+  A) SO-[NN] — [goal]
+  B) SO-[NM] — [goal]
+  C) None of these — skip for now
+
+Which Spec Outline does this spec belong to?
+```
+
+Wait for user selection. If C → ask: "Add to Untracked Specs so future syncs skip it? (yes / no)" — if yes, call `blueprint-sync.sh --untrack`; note in summary either way.
+
+#### No match
+
+No SO has an empty `spec_linked` that fits the spec content.
+
+→ Output:
+
+```text
+ℹ️ [spec file path] — no matching Spec Outline found.
+   Add to Untracked Specs so future syncs skip it? (yes / no)
+```
+
+- **yes** → call `blueprint-sync.sh --untrack`; note in summary as untracked
+- **no** → note in summary as skipped (will appear again next sync)
+
+**Special case — Case D SO-ID in context:** If `roadmap-check` stored a confirmed SO-ID in conversation context during Case D Option A handling, apply that SO-ID directly to the matching spec file without semantic matching.
+
+---
+
+### Step 4: Apply all roadmap.md updates
+
+**For each confirmed (spec file, SO-ID) link pair**, run from repo root:
 
 ```bash
 bash .specify/extensions/blueprint/scripts/bash/blueprint-sync.sh \
@@ -87,36 +127,42 @@ bash .specify/extensions/blueprint/scripts/bash/blueprint-sync.sh \
     --json
 ```
 
-Parse JSON response:
+**For each spec file the user chose to untrack**, run from repo root:
 
-- `SUCCESS` is `true` → proceed to Step 4
-- `SUCCESS` is `false` → output `ERROR` value and stop
+```bash
+bash .specify/extensions/blueprint/scripts/bash/blueprint-sync.sh \
+    --untrack \
+    --spec-path [SPEC_FILE] \
+    --message "[REASON]" \
+    --json
+```
+
+For both: `SUCCESS` is `true` → proceed to next. `SUCCESS` is `false` → output `ERROR` value, skip this entry, continue with remaining.
 
 **Do NOT manually edit roadmap.md.** The script handles atomic update and history entry insertion.
 
-If `SPEC_FILE` cannot be determined from conversation context:
-
-```text
-⚠️ Spec file path could not be determined — skipping sync.
-To update manually:
-  bash .specify/extensions/blueprint/scripts/bash/blueprint-sync.sh \
-    --so-id [SO_ID] --spec-path [path] --json
-```
-
 ---
 
-### Step 4: Summary
+### Step 5: Summary
 
-Output:
+After processing all unlinked specs, output:
 
 ```text
-✅ roadmap.md updated: [SO_ID] — [Spec Outline goal]
-   Spec: [SPEC_FILE]
+Blueprint sync complete.
+
+Linked ([N]):
+  - SO-[NN] → [spec file path]
+  - SO-[NM] → [spec file path]
+
+Untracked ([N]):
+  - [spec file path] — added to Untracked Specs (future syncs will skip)
+
+Skipped ([N]):
+  - [spec file path] — [reason: no match / user skipped — will reappear next sync]
 ```
 
-Then:
+If all specs were either linked or untracked (nothing left floating):
 
 ```text
-Blueprint sync complete:
-- Spec Outline: [SO_ID] — spec linked → [SPEC_FILE]
+✅ roadmap.md is up to date.
 ```

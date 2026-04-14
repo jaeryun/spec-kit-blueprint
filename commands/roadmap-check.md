@@ -179,5 +179,5 @@ Options:
 
 Wait for user response.
 
-- **A** → allow specify to proceed.
+- **A** → Ask: "Which Spec Outline should this spec be linked to? (enter SO-ID, e.g. SO-02)" — wait for user to confirm a single SO. Once confirmed, output: "Proceeding with specification. Roadmap sync will link the spec to [SO-ID]." and allow specify to proceed. Store the confirmed SO-ID in conversation context so `roadmap-sync` can use it directly in its Step 2.
 - **B** → stop. Output: "Run `/speckit.specify` once per Spec Outline to keep scopes clean."

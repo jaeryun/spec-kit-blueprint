@@ -75,6 +75,43 @@ _emit_so_entry() {
     _so_outlines="${_so_outlines}{\"id\":\"${escaped_id}\",\"goal\":\"${escaped_goal}\",\"scope\":\"${escaped_scope}\",\"spec_linked\":\"${escaped_spec}\"}"
 }
 
+# Parse Untracked Specs from roadmap.md
+# Reads lines under "## Untracked Specs" heading until the next "##" heading or EOF.
+# Returns a JSON array of spec path strings.
+parse_untracked_specs() {
+    local roadmap="$1"
+    local _paths="["
+    local _first=true
+    local _in_section=false
+
+    while IFS= read -r line; do
+        if printf '%s' "$line" | grep -qE '^## Untracked Specs$'; then
+            _in_section=true
+            continue
+        fi
+        # Exit on next ## heading
+        if $_in_section && printf '%s' "$line" | grep -qE '^## '; then
+            _in_section=false
+        fi
+        # Match bullet entries: - path
+        if $_in_section && printf '%s' "$line" | grep -qE '^- '; then
+            local _path
+            _path=$(printf '%s' "$line" | sed 's/^-[[:space:]]*//')
+            local _escaped
+            _escaped=$(printf '%s' "$_path" | sed 's/\\/\\\\/g; s/"/\\"/g')
+            if [ "$_first" = true ]; then
+                _first=false
+            else
+                _paths="${_paths},"
+            fi
+            _paths="${_paths}\"${_escaped}\""
+        fi
+    done < "$roadmap"
+
+    _paths="${_paths}]"
+    printf '%s' "$_paths"
+}
+
 # Parse Spec Outlines from roadmap.md
 # Actual format (bullet list, NOT pipe table):
 #   - **SO-01** — User-facing goal
@@ -115,8 +152,10 @@ parse_spec_outlines() {
 
 if $JSON_MODE; then
     SPEC_OUTLINES_JSON="[]"
+    UNTRACKED_SPECS_JSON="[]"
     if [ "$ROADMAP_EXISTS" = true ]; then
         SPEC_OUTLINES_JSON=$(parse_spec_outlines "$ROADMAP_PATH")
+        UNTRACKED_SPECS_JSON=$(parse_untracked_specs "$ROADMAP_PATH")
     fi
 
     if command -v jq >/dev/null 2>&1; then
@@ -126,18 +165,20 @@ if $JSON_MODE; then
             --argjson roadmap_exists "$ROADMAP_EXISTS" \
             --arg roadmap_path "$ROADMAP_PATH" \
             --argjson spec_outlines "$SPEC_OUTLINES_JSON" \
+            --argjson untracked_specs "$UNTRACKED_SPECS_JSON" \
             '{
                 VISION_EXISTS: $vision_exists,
                 VISION_PATH: $vision_path,
                 ROADMAP_EXISTS: $roadmap_exists,
                 ROADMAP_PATH: $roadmap_path,
-                SPEC_OUTLINES: $spec_outlines
+                SPEC_OUTLINES: $spec_outlines,
+                UNTRACKED_SPECS: $untracked_specs
             }'
     else
         # printf fallback when jq is unavailable — avoids heredoc $() command substitution risk
         _escaped_vision=$(printf '%s' "$VISION_PATH" | sed 's/\\/\\\\/g; s/"/\\"/g')
         _escaped_roadmap=$(printf '%s' "$ROADMAP_PATH" | sed 's/\\/\\\\/g; s/"/\\"/g')
-        printf '%s\n' "{\"VISION_EXISTS\":${VISION_EXISTS},\"VISION_PATH\":\"${_escaped_vision}\",\"ROADMAP_EXISTS\":${ROADMAP_EXISTS},\"ROADMAP_PATH\":\"${_escaped_roadmap}\",\"SPEC_OUTLINES\":${SPEC_OUTLINES_JSON}}"
+        printf '%s\n' "{\"VISION_EXISTS\":${VISION_EXISTS},\"VISION_PATH\":\"${_escaped_vision}\",\"ROADMAP_EXISTS\":${ROADMAP_EXISTS},\"ROADMAP_PATH\":\"${_escaped_roadmap}\",\"SPEC_OUTLINES\":${SPEC_OUTLINES_JSON},\"UNTRACKED_SPECS\":${UNTRACKED_SPECS_JSON}}"
     fi
 else
     echo "VISION_EXISTS: $VISION_EXISTS"

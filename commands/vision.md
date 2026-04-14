@@ -20,7 +20,7 @@ The output feeds into `/speckit.blueprint.roadmap`.
 
 `vision.md` answers **what and why** — not how or when.
 
-**Belongs here:** problem statement, target users, core features, non-functional requirements, out-of-scope items, success criteria, team/timeline context.
+**Belongs here:** problem statement, target users, core features, non-functional requirements, out-of-scope items, success criteria, team/timeline context, existing stack and integrations.
 
 **Does NOT belong here:** delivery stages or phases, Spec Outline breakdowns, sprint assignments, specific technology choices, implementation approaches, API or data model design. If any of these appear in your draft, move them to roadmap or remove them.
 
@@ -82,7 +82,7 @@ Begin the interview with an introduction that explains what will happen:
 >
 > This conversation defines the **essence of your project (What & Why)**. Technical choices and implementation plans (How & When) come in later steps.
 >
-> **We'll cover 7 areas** in order:
+> **We'll cover 8 areas** in order:
 >
 > - **Overview** — What you're building and why it matters
 > - **Goals** — What success looks like
@@ -90,6 +90,7 @@ Begin the interview with an introduction that explains what will happen:
 > - **Features** — Core capabilities users need
 > - **Out of Scope** — What you're **intentionally** excluding
 > - **Constraints** — Technical/business/timeline boundaries
+> - **Technical Context** — Existing stack, hosting, and integrations
 > - **NFRs & Success** — Quality standards and measurable outcomes
 >
 > I'll ask one question at a time, skipping areas you've already covered. If you're unsure about something, simply say "I don't know" and I'll mark it as `TBD` and move on.
@@ -104,6 +105,7 @@ Then conduct the conversational interview covering the areas below. Ask **one qu
 | **Features** | What capabilities it must provide | Core Features | Ask from user perspective. Example: "What should users be able to do?" → "Which 3–5 are most important?" |
 | **Out of Scope** | What is explicitly excluded | Out of Scope | Be concrete. Example: "What are you intentionally NOT building?" → "Are there features commonly assumed but excluded?" |
 | **Constraints** | Technical, business, timeline, and architectural boundaries | Constraints | Hard limits shaping the solution. Example: "What constraints exist?" → "Technical? Business? Timeline?" → "Any architectural preferences? (cloud-native, etc.)" |
+| **Technical Context** | Existing systems, hosting environment, and integrations to consider | Technical Context | Context, not constraints — what exists, not what limits. Example: "What does your current stack look like?" → "Any existing systems or services this needs to integrate with?" → "Where will this be hosted?" |
 | **NFRs** | Quality attributes | Non-Functional Requirements | Focus on needs over targets. Example: "What quality aspects matter? (speed, security, scale)" → "Any specific requirements?" |
 | **Success** | How to measure success | Success Criteria | Push for measurability. Example: "How will you know this worked?" → "Any metrics in mind?" |
 

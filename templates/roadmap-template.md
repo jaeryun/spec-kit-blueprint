@@ -22,6 +22,14 @@
 
 ---
 
+## Untracked Specs
+
+<!-- Spec files intentionally not linked to any Spec Outline.
+     roadmap-sync skips these automatically.
+     Entries are added here when you choose "Add to Untracked" during roadmap-sync. -->
+
+---
+
 ## History
 
 [YYYY-MM-DD HH:MM] | Initial roadmap created from vision.md

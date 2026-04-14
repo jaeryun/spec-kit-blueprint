@@ -131,7 +131,7 @@ All commands accept an optional argument to skip ahead or narrow the scope.
 
 ### Hooks
 
-Hooks fire automatically at lifecycle events. Each hook blocks or updates based on the current state of your blueprint files.
+Hooks fire automatically at lifecycle events. Each hook blocks or updates based on the current state of your blueprint files. `roadmap-sync` can also be run directly to recover any unlinked specs.
 
 **Registered hooks** (Blueprint subscribes to these SpecKit events):
 
