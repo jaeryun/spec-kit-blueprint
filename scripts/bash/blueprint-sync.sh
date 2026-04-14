@@ -2,12 +2,12 @@
 # blueprint-sync.sh — Atomic roadmap.md updater
 #
 # Mode 1 — Link spec to SO:
-#   blueprint-sync.sh --so-id SO-01 --spec-path specs/auth.md [--message "summary"] [--json]
-#   {"SUCCESS":true,"SO_ID":"SO-01","SPEC_PATH":"specs/auth.md","ROADMAP_PATH":"..."}
+#   blueprint-sync.sh --so-id SO-01 --spec-path specs/001-auth/ [--message "summary"] [--json]
+#   {"SUCCESS":true,"SO_ID":"SO-01","SPEC_PATH":"specs/001-auth/","ROADMAP_PATH":"..."}
 #
 # Mode 2 — Mark spec as untracked:
-#   blueprint-sync.sh --untrack --spec-path specs/spike.md [--message "reason"] [--json]
-#   {"SUCCESS":true,"ACTION":"untrack","SPEC_PATH":"specs/spike.md","ROADMAP_PATH":"..."}
+#   blueprint-sync.sh --untrack --spec-path specs/004-auth-spike/ [--message "reason"] [--json]
+#   {"SUCCESS":true,"ACTION":"untrack","SPEC_PATH":"specs/004-auth-spike/","ROADMAP_PATH":"..."}
 #
 # Error output (both modes):
 #   {"SUCCESS":false,"ERROR":"..."}
@@ -35,8 +35,8 @@ while [ $# -gt 0 ]; do
             UNTRACK_MODE=true; shift ;;
         --help|-h)
             echo "Usage:"
-            echo "  $0 --so-id SO-01 --spec-path specs/auth.md [--message text] [--json]"
-            echo "  $0 --untrack --spec-path specs/spike.md [--message reason] [--json]"
+            echo "  $0 --so-id SO-01 --spec-path specs/001-auth/ [--message text] [--json]"
+            echo "  $0 --untrack --spec-path specs/004-auth-spike/ [--message reason] [--json]"
             exit 0 ;;
         *)
             echo "Unknown argument: $1" >&2; exit 1 ;;
@@ -63,7 +63,7 @@ fi
 
 # Reject absolute paths — spec path must be relative to repo root
 case "$SPEC_PATH" in
-    /*) echo "Error: --spec-path must be a relative path (e.g. specs/auth.md)" >&2; exit 1 ;;
+    /*) echo "Error: --spec-path must be a relative path (e.g. specs/001-auth/)" >&2; exit 1 ;;
 esac
 
 # Resolve repo root — trust only .git

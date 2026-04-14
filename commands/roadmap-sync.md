@@ -40,7 +40,7 @@ If `ROADMAP_EXISTS` is `false`:
 
 ### Step 2: Find unlinked spec files
 
-Scan the `specs/` directory at repo root for all `.md` files.
+Scan the `specs/` directory at repo root for all spec directories (format: `specs/NNN-<topic>/`).
 
 Build the list of already-linked paths from `SPEC_OUTLINES` — collect all non-empty `spec_linked` values.
 

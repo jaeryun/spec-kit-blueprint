@@ -43,7 +43,7 @@ Wait for user response.
 
 **If an argument was provided**, determine its type:
 
-- **Spec file reference** — argument ends with `.md` or looks like a file path (e.g., `auth.md`, `docs/spec/auth.md`)
+- **Spec file reference** — argument looks like a file path (e.g., `specs/001-auth/`, `specs/001-auth/spec.md`)
   → Read the file. Extract the spec title and any feature description from its content to use as the match target in Step 3.
 
 - **Spec Outline reference** — argument matches the SO-NN format (e.g., `SO-01`) or is a plain number (e.g., `1`)

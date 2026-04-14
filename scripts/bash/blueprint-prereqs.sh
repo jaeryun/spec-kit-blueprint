@@ -10,7 +10,7 @@
 #   "ROADMAP_EXISTS": true,
 #   "ROADMAP_PATH": "/abs/path/docs/blueprint/roadmap.md",
 #   "SPEC_OUTLINES": [
-#     {"id": "SO-01", "goal": "Users can register...", "scope": "Sign-up flow, login/logout...", "spec_linked": "docs/spec/auth.md"},
+#     {"id": "SO-01", "goal": "Users can register...", "scope": "Sign-up flow, login/logout...", "spec_linked": "specs/001-auth/"},
 #     {"id": "SO-02", "goal": "...", "scope": "...", "spec_linked": ""}
 #   ]
 # }
@@ -116,7 +116,7 @@ parse_untracked_specs() {
 # Actual format (bullet list, NOT pipe table):
 #   - **SO-01** — User-facing goal
 #     - Scope: ...
-#     - Spec: — (or docs/spec/auth.md)
+#     - Spec: — (or specs/001-auth/)
 parse_spec_outlines() {
     local roadmap="$1"
     # Use module-level globals prefixed with _so_ to avoid nested-function scope issues
