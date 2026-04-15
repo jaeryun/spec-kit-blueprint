@@ -256,18 +256,3 @@ specify extension remove blueprint
 ## License
 
 MIT — see [LICENSE](LICENSE)
-
-<!-- CONTENT NOTES
-- Removed `## Overview` wrapper; promoted Motivation and Goal as direct H2 sections.
-- Added a 2-sentence plain-English overview paragraph after the header block, before Motivation.
-- Moved `## Quick Start` before `## Output Examples` and `## Installation`.
-- Moved `## Output Examples` to after Quick Start and before Installation.
-- Moved `## Non-Goals` to after `## Hooks`.
-- Separated `## Hooks` into its own H2 section (was H3 under Commands).
-- Removed the install command from Quick Start (duplicated Installation); replaced with a prose reference to the Installation section. Changed the Quick Start code block language from `bash` to `text` since the commands are agent slash-commands, not shell commands — using `bash` implied they were terminal-executable.
-- Eliminated duplication between the Commands hook-command table and the Hooks section: the hook-command rows (`roadmap-check`, `roadmap-sync`) were present in both places. The Commands section now only lists manual commands; hook commands are documented solely under Hooks.
-- Goal list items: converted plain text labels to bold for scanability; changed "It interviews you" / "It translates" to direct second-person-free form matching the author's voice ("Interviews you", "Translates that vision") for consistency with the Commands table style.
-- Added backtick formatting to `vision.md` and `roadmap.md` file references throughout for consistency.
-- Tightened "Each hook blocks or updates based on" → "Each hook either blocks or updates state based on" for grammatical precision.
-- Removed the redundant blockquote callout at the top of Quick Start that described Blueprint as a "Spec Kit extension … runs before …" — this is now covered by the new overview paragraph and the diagram.
--->
