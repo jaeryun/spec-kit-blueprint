@@ -3,8 +3,8 @@ schema_version: "1.0"
 extension:
   id: blueprint
   name: "Blueprint"
-  version: "1.0.0"
-  description: "Vision-first project planning that decomposes ideas into right-sized Spec Outlines for SpecKit."
+  version: "2.0.0"
+  description: "Vision-first project planning for SpecKit. Decomposes project vision into a 3-level hierarchy: Epic → Story → Feature — each Feature mapping to one /speckit.specify run."
   author: "jaeryun"
   repository: "https://github.com/jaeryun/spec-kit-blueprint"
   license: MIT
@@ -14,19 +14,19 @@ requires:
 
 hooks:
   before_specify:
-    command: "speckit.blueprint.roadmap-check"
+    command: "speckit.blueprint.epics-check"
     optional: false
-    description: "Validate feature aligns with Spec Outlines in roadmap.md before specifying."
+    description: "Validate feature (FT) aligns with a Story in the epics hierarchy before specifying."
 
   after_specify:
-    command: "speckit.blueprint.roadmap-sync"
+    command: "speckit.blueprint.epics-sync"
     optional: false
-    description: "Scan specs/ for unlinked spec files and link each one to its matching Spec Outline in roadmap.md."
+    description: "Link generated FT spec to its Story in the epics hierarchy after specify completes."
 
   after_clarify:
-    command: "speckit.blueprint.roadmap-sync"
+    command: "speckit.blueprint.epics-sync"
     optional: true
-    description: "Scan specs/ for unlinked spec files and link each one to its matching Spec Outline in roadmap.md. Optional because clarify may not produce a new spec file."
+    description: "Sync FT spec link after clarify. Optional because clarify may not produce a new spec."
 
 provides:
   commands:
@@ -34,17 +34,21 @@ provides:
       file: commands/vision.md
       description: "Define project vision through an adaptive interview."
 
-    - name: speckit.blueprint.roadmap
-      file: commands/roadmap.md
-      description: "Generate a delivery roadmap of Spec Outlines from the confirmed vision."
+    - name: speckit.blueprint.epics
+      file: commands/epics.md
+      description: "Generate the Epic→Story hierarchy from the confirmed vision."
 
-    - name: speckit.blueprint.roadmap-check
-      file: commands/roadmap-check.md
-      description: "Pre-flight check: validate feature aligns with a Spec Outline in roadmap.md before specify."
+    - name: speckit.blueprint.story
+      file: commands/story.md
+      description: "Create or update story.md (technical Source of Truth) for a given Story."
 
-    - name: speckit.blueprint.roadmap-sync
-      file: commands/roadmap-sync.md
-      description: "Link generated spec file to Spec Outline in roadmap.md after a spec is completed."
+    - name: speckit.blueprint.epics-check
+      file: commands/epics-check.md
+      description: "Pre-flight check: validate FT aligns with a Story in the epics hierarchy before specify."
+
+    - name: speckit.blueprint.epics-sync
+      file: commands/epics-sync.md
+      description: "Link generated FT spec to its Story after specify completes."
 
   hooks:
     - event: before_blueprint_vision
@@ -53,15 +57,24 @@ provides:
     - event: after_blueprint_vision
       description: "Triggered after vision.md is confirmed and saved."
 
-    - event: before_blueprint_roadmap
-      description: "Triggered before roadmap generation begins."
+    - event: before_blueprint_epics
+      description: "Triggered before Epic→Story hierarchy generation begins."
 
-    - event: after_blueprint_roadmap
-      description: "Triggered after roadmap.md is confirmed and saved."
+    - event: after_blueprint_epics
+      description: "Triggered after the Epic→Story hierarchy is confirmed and saved. Use to create Jira Epics/Stories."
 
+    - event: before_blueprint_story
+      description: "Triggered before story.md generation begins."
+
+    - event: after_blueprint_story
+      description: "Triggered after story.md is saved. Use to link Jira Story."
+
+    - event: after_feature_complete
+      description: "Triggered after a Feature (FT) PR is merged and story.md is updated."
 
 tags:
   - planning
   - vision
   - roadmap
+  - epics
   - project-management
