@@ -27,8 +27,18 @@ Active user session. Expires after 30 minutes of inactivity (sliding).
 | `user_id` | `uuid` | Reference to User.id |
 | `created_at` | `ISO8601 string` | Session creation time |
 
+### PasswordReset (Redis — key: `reset:{token}`)
+
+Temporary token for password reset. Expires after 1 hour.
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `user_id` | `uuid` | Reference to User.id |
+| `created_at` | `ISO8601 string` | Token creation time |
+
 ---
 
 ## Relationships
 
-User → Session: one-to-many (a user may have multiple active sessions across devices).
+- User → Session: one-to-many (a user may have multiple active sessions across devices).
+- User → PasswordReset: one-to-many (a user may have multiple pending reset requests).
