@@ -34,6 +34,9 @@ provides:
       file: commands/vision.md
       description: "Define project vision through an adaptive interview."
 
+    # TODO(Plan 2): commands/epics.md, commands/story.md, commands/epics-check.md, commands/epics-sync.md
+    # will be created in Plan 2. Until then, v1 commands (roadmap, roadmap-check, roadmap-sync) remain
+    # available for backward compatibility.
     - name: speckit.blueprint.epics
       file: commands/epics.md
       description: "Generate the Epic→Story hierarchy from the confirmed vision."
@@ -49,6 +52,19 @@ provides:
     - name: speckit.blueprint.epics-sync
       file: commands/epics-sync.md
       description: "Link generated FT spec to its Story after specify completes."
+
+    # v1 backward compatibility — remove after Plan 2 completes
+    - name: speckit.blueprint.roadmap
+      file: commands/roadmap.md
+      description: "(v1) Decomposes vision into Spec Outlines — deprecated, use /speckit.blueprint.epics"
+
+    - name: speckit.blueprint.roadmap-check
+      file: commands/roadmap-check.md
+      description: "(v1) Pre-flight check for Spec Outline alignment — deprecated, use /speckit.blueprint.epics-check"
+
+    - name: speckit.blueprint.roadmap-sync
+      file: commands/roadmap-sync.md
+      description: "(v1) Sync spec links to roadmap — deprecated, use /speckit.blueprint.epics-sync"
 
   hooks:
     - event: before_blueprint_vision
