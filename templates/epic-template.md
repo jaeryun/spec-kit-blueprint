@@ -5,7 +5,9 @@
      Number Stories sequentially within this Epic: ST-01, ST-02, ...
 
      Summary: one sentence, user-facing outcome.
-     Jira: Jira Story link once created, or — until then. -->
+
+     Jira (Epic): Jira Epic link for this Epic, or — until then.
+     Jira (Story): Jira Story link for each Story below, or — until then. -->
 
 ## Stories
 
