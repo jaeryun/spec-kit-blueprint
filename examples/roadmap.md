@@ -1,3 +1,6 @@
+> **Deprecated (v1):** This file uses the old Spec Outline (SO) format.
+> The current format uses the EP→ST→FT hierarchy. See `examples/blueprint.md`.
+
 # Roadmap: Simple SaaS App
 
 ## Spec Outlines

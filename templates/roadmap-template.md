@@ -1,3 +1,6 @@
+> **Deprecated (v1):** This template uses the old Spec Outline (SO) format.
+> Use `templates/blueprint-template.md`, `epic-template.md`, and `story-template.md` instead.
+
 # Roadmap: [PROJECT NAME]
 
 ## Spec Outlines
