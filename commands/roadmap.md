@@ -1,48 +1,53 @@
 ---
-description: "Generate a delivery roadmap of Spec Outlines from the confirmed vision."
+description: "Generate the Epic→Story hierarchy and story.md drafts from the confirmed vision."
+tools:
+  - mcp-jira/create_issue
+  - mcp-jira/update_issue
 ---
 
 # Blueprint Roadmap
 
-Generate a delivery roadmap of Spec Outlines from the confirmed vision.
+Generate the Epic→Story hierarchy and story.md drafts from the confirmed vision.
 
 ## Purpose
 
 Defining specs one at a time — without a shared view of the whole project — leads to specs that are too large or too small. There's no basis for calibrating scope when each spec is written in isolation.
 
-This command addresses that by building the full roadmap before any spec is written. Through a user interview, it surfaces all work at the Spec Outline level, calibrates each scope as a set — weighing priority and parallelism — and determines the execution order. The output is a roadmap of right-sized Spec Outlines in execution order — each one the input to a single `/speckit.specify` run.
+This command addresses that by building the full 3-level hierarchy before any Feature spec is written. Through a user interview, it decomposes the vision into:
 
-## What is a Spec Outline
+| Level | ID Pattern | What It Represents |
+| --- | --- | --- |
+| **Epic (EP)** | EP-01, EP-02, ... | A coherent delivery goal, typically 1–2 months of work |
+| **Story (ST)** | ST-01, ST-02, ... | A user-facing feature area that may span multiple PRs |
+| **Feature (FT)** | FT-01, FT-02, ... | One unit of work = one `/speckit.specify` run |
 
-A **Spec Outline** is the planning blueprint for one `/speckit.specify` run. The spec it produces covers work comparable to a Jira Epic — a cohesive, independently deliverable unit of work. It is defined at roadmap time — before detailed requirements are known — using only two components:
-
-| Component | Description |
-| --- | --- |
-| **Summary** | One sentence describing what this Spec Outline delivers, from the user's perspective |
-| **Scope** | Free-form description of what this Spec Outline encompasses — written at an abstract level based on vision analysis and user interview |
+The output is a hierarchy of right-sized Epics and Stories in execution order — each Story the input to future `/speckit.specify` runs (via `/speckit.blueprint.sync-story`).
 
 ```
-Spec Outline (roadmap.md) — planning time, abstract
-    ├─ Summary: "Users can register and log in with email/password."
-    └─ Scope: "Sign-up flow, login/logout, password reset, session management."
+EP-01 — Foundation
+  ├─ ST-01 — Authentication core
+  │     ├─ FT-01 — Email/password sign-up
+  │     └─ FT-02 — Session management
+  └─ ST-02 — API scaffolding
+        └─ FT-03 — Core API endpoints
 ```
 
 Key implications for generation:
-- Each Spec Outline = one `/speckit.specify` run.
-- **Scope is calibrated as a set** — sizes are adjusted relative to each other across the whole roadmap, factoring in priority and team capacity.
-- **Scope is intentionally abstract** — the exact phase breakdown (P1/P2/P3) is determined during `/speckit.specify` through a detailed requirements interview. Scope items written here may be decomposed into multiple phases, merged, or reframed during that interview.
+- Each **Feature (FT)** = one `/speckit.specify` run.
+- **Story scope is calibrated as a set** — sizes are adjusted relative to each other across the whole roadmap, factoring in priority and team capacity.
+- **Story scope is intentionally abstract** — the exact phase breakdown (P1/P2/P3) is determined during `/speckit.specify` through a detailed requirements interview.
 
 ## User Input
 
-$ARGUMENTS
+`$ARGUMENTS`
 
-If provided, interpret `$ARGUMENTS` as user intent and apply it during generation.
+If provided, interpret `$ARGUMENTS` as user intent and apply it during generation (e.g., "focus on backend", "exclude mobile").
 
 ## Hooks
 
 Before starting, check `.specify/extensions.yml` for any handlers registered under `before_blueprint_roadmap` and execute them in order.
 
-After saving `docs/blueprint/roadmap.md`, check `.specify/extensions.yml` for any handlers registered under `after_blueprint_roadmap` and execute them in order.
+After saving all output files, check `.specify/extensions.yml` for any handlers registered under `after_blueprint_roadmap` and execute them in order.
 
 ## Instructions
 
@@ -52,28 +57,35 @@ Check that `docs/blueprint/vision.md` exists.
 
 If missing, stop and output: "Run `/speckit.blueprint.vision` first."
 
+Also check if `.specify/memory/blueprint.yml` exists. If missing, warn:
+
+> "⚠️ Blueprint setup not found. Jira integration will not be available during this session.
+> Run `/speckit.blueprint.setup` to enable Jira sync.
+> Proceed without Jira integration? (yes / no)"
+
+- If **no**: stop here.
+- If **yes**: continue, and note at the end that Jira setup is pending.
+
 ---
 
 ### Step 1: Check Existing Roadmap
 
-If `docs/blueprint/roadmap.md` does not exist, proceed to Step 2.
+If `docs/blueprint/blueprint.md` does not exist, proceed to Step 2.
 
-If it exists, summarize it (Spec Outline count, IDs, linked specs) and ask:
+If it exists, read it and summarize (Epic count, IDs, Stories with FT counts, Jira links). Then ask:
 
 "What would you like to do?
-  (1) Update — re-analyze specific Spec Outlines
+  (1) Update — re-analyze specific Epics or Stories
   (2) Regenerate — start from scratch
-  (3) Clear a Spec Outline's spec link (reset Spec: to —)
-  (4) Cancel"
+  (3) Cancel"
 
-- **(1)** Identify targets from `$ARGUMENTS` or user reply. For Spec Outlines with a linked spec (Spec: field is not —), warn: "A spec file is already linked to this Spec Outline. Proceed with the scope update anyway? (yes / no)" — skip if no, include if yes. Proceed to Step 2 for confirmed targets only.
-- **(2)** Proceed to Step 2 for all Spec Outlines.
-- **(3)** Ask which Spec Outline to clear. Confirm with the user, then set `Spec:` to `—`, append a reset row to History, and save.
-- **(4)** Stop.
+- **(1)** Identify targets from `$ARGUMENTS` or user reply. For Epics/Stories with linked Jira issues, warn: "A Jira issue is already linked to this Epic/Story. Proceed with the scope update anyway? (yes / no)" — skip if no, include if yes. Proceed to Step 2 for confirmed targets only.
+- **(2)** Proceed to Step 2 for all Epics and Stories.
+- **(3)** Stop.
 
 ---
 
-### Step 2: Interview & Initial Draft
+### Step 2: Interview & Draft
 
 Read `docs/blueprint/vision.md`. Pay special attention to sprint cadence, team size, core features, and out-of-scope items.
 
@@ -81,12 +93,13 @@ Begin with an introduction:
 
 > **Starting Blueprint Roadmap Interview**
 >
-> This conversation builds a **delivery roadmap** from your vision. We'll define Spec Outlines (think: Jira Epic-sized units of work) and their execution order.
+> This conversation builds a **delivery roadmap** from your vision. We'll define a 3-level hierarchy: **Epics** (delivery goals), **Stories** (feature areas), and **Features** (spec-sized units).
 >
 > **We cover:**
 > - Work not explicitly captured in vision.md
 > - External integrations and foundational requirements
 > - MVP vs. deferrable scope
+> - Execution order and dependencies
 >
 > **Scope for this step:** We define **what** gets built and **in what order** — not **how** (architecture, tech stack, API design). Those details come in `/speckit.specify`.
 >
@@ -101,8 +114,8 @@ Begin with an introduction:
    - API design details, data models, schema definitions
    - Implementation approaches, architectural patterns
    - Phase breakdowns (P1/P2/P3), sprint assignments
-   
-   If detected: "Those details belong in `/speckit.specify`. For now, let's focus on what this Spec Outline delivers from the user's perspective. [Rephrase question focusing on outcomes only]"
+
+   If detected: "Those details belong in `/speckit.specify`. For now, let's focus on what this Story delivers from the user's perspective. [Rephrase question focusing on outcomes only]"
 
 3. **Confirm and get approval** — After each valid answer:
    - Summarize: "**[Topic]**: [1-2 sentence summary]"
@@ -119,17 +132,24 @@ Begin with an introduction:
 - MVP scope — which capabilities are essential for initial release vs. deferrable
 - Anything the user expects to be included that hasn't come up yet
 
-Using vision.md + interview answers, draft an initial set of Spec Outlines. Apply the **Spec Outline Boundary Principles** and **Scope Guide** when deciding scope boundaries and sizing. Do not present the draft yet — proceed to Step 3.
+**Work Breakdown Questions** (after general topics):
+
+1. **Epic decomposition** — What are the major delivery goals? Group related work into Epics.
+2. **Stories per Epic** — For each Epic, what user-facing feature areas (Stories) does it contain?
+3. **Feature list per Story** — For each Story, what are the spec-sized Features? Each Feature should map to one `/speckit.specify` run.
+4. **Execution order** — Which Epics/Stories must come before others? What can be parallelized?
+
+Using vision.md + interview answers, draft the initial hierarchy. Apply the **Epic/Story Boundary Principles** and **Scope Guide** when deciding boundaries and sizing. Do not present the draft yet — proceed to Step 3.
 
 ---
 
 ### Step 3: Validate & Calibrate
 
-Present the full initial draft to the user. Then validate across all three dimensions and include findings in the same response:
+Present the full initial hierarchy to the user. Then validate across all three dimensions and include findings in the same response:
 
 - **Vision alignment** — does any scope contradict core features, out-of-scope items, target users, or NFRs in vision.md? **Strict adherence is mandatory.** If the user wants to introduce goals outside the current vision, they must stop and run `/speckit.blueprint.vision` first to update the core project definition.
-- **Scope sizing** — is any Spec Outline too broad or too narrow? (See Scope Guide)
-- **Scope placement** — is each scope item in the right Spec Outline? Flag anything that would fit better elsewhere or that logically belongs with another Spec Outline.
+- **Scope sizing** — is any Story too broad or too narrow? (See Scope Guide)
+- **Dependency logic** — is the execution order sound? Flag circular dependencies or Stories that require foundational work not yet planned.
 
 If issues are found, propose specific adjustments alongside the draft. Ask: "Does this look correct? Any changes?"
 
@@ -137,87 +157,161 @@ Incorporate feedback and repeat until the user confirms.
 
 ---
 
-### Step 4: Write Output File
+### Step 4: Generate Output Files
 
-Load `templates/roadmap-template.md` to understand the required sections.
+Load the templates to understand required sections:
+- `templates/blueprint-template.md` for `docs/blueprint/blueprint.md`
+- `templates/epic-template.md` for each `docs/blueprint/epic-NN.md`
+- `templates/story-template.md` for the structure of each `docs/blueprint/story-NN.md` (lightweight draft)
 
-Fill each Spec Outline with the confirmed output from Steps 2 and 3, following the **For AI Generation** guidelines at the end of this file.
+Fill each file with the confirmed output from Steps 2 and 3, following the **For AI Generation** guidelines below.
 
-If `docs/blueprint/roadmap.md` does not yet exist, include the initial history entry from the template. If it already exists, preserve all existing history entries and append a new line: `[TIMESTAMP] | [Summary]`.
+#### 4a: blueprint.md
 
-Keep summaries concise (one line) and descriptive of the specific action taken (e.g., "Full regeneration from vision.md", "SO-02 updated to include API requirements", "SO-01 spec link cleared").
+Create or update `docs/blueprint/blueprint.md` with the Epic list.
 
-Save to `docs/blueprint/roadmap.md`.
+If the file did not yet exist, include the initial history entry from the template. If it already existed, preserve all existing history entries and append a new line: `[YYYY-MM-DD HH:MM] | [Summary]`.
+
+Keep summaries concise (one line) and descriptive of the specific action taken (e.g., "Full regeneration from vision.md", "EP-02 updated to include API requirements").
+
+#### 4b: epic.md files
+
+Create or update one `docs/blueprint/epic-[NN].md` per Epic, following `templates/epic-template.md`.
+
+Each Epic file lists its Stories with scope summaries and Jira links.
+
+#### 4c: story.md lightweight drafts
+
+Create or update one `docs/blueprint/story-[NN].md` per Story. This is a **lightweight draft** (not the full technical SoT — that is built incrementally via `/speckit.blueprint.sync-story` after each FT is merged).
+
+Use this format:
+
+```markdown
+# ST-XX — [Story Title]
+
+> Source of Truth. Last updated: [date]
+> Jira: —
+
+## Overview
+[2-3 sentences from interview]
+
+## Scope
+- FT-XX — ... [To Do]
+- FT-XX — ... [To Do]
+
+## Tech Context
+(TBD — filled after FT completion)
+
+## Non-Goals
+(TBD — filled after FT completion)
+
+## NFR
+(TBD — filled after FT completion)
+
+## ADR
+(TBD — filled after FT completion)
+```
+
+Save all files.
 
 ---
 
 ### Step 5: Completion
 
-Confirm the file is saved:
+Confirm all files are saved:
 
-- `docs/blueprint/roadmap.md` ✓
+- `docs/blueprint/blueprint.md` ✓
+- `docs/blueprint/epic-*.md` ([N] files) ✓
+- `docs/blueprint/story-*.md` ([N] files) ✓
 
 Output:
 
 ```text
-Roadmap complete. [N] Spec Outlines defined.
+Roadmap complete. [N] Epics, [M] Stories, [P] Features defined.
 
-Next: /speckit.specify [first Spec Outline with no linked spec — use its ID and goal]
+Hierarchy:
+[EP-01] — [Epic Title]
+  [ST-01] — [Story Title] ([P] FTs)
+  [ST-02] — [Story Title] ([P] FTs)
+[EP-02] — [Epic Title]
+  ...
+
+Next: /speckit.specify [first Feature with no linked spec]
+```
+
+If Step 0 found no `blueprint.yml` and the user chose to proceed anyway, append this reminder:
+
+```text
+⚠️ Note: Jira setup is still pending. Run `/speckit.blueprint.setup` before syncing to Jira.
 ```
 
 ## Output Files
 
 | File | Purpose |
 | --- | --- |
-| `docs/blueprint/roadmap.md` | Delivery plan with Spec Outlines |
+| `docs/blueprint/blueprint.md` | Entry point — Epic list and project overview |
+| `docs/blueprint/epic-*.md` | One per Epic — Story list with scope and Jira links |
+| `docs/blueprint/story-*.md` | One per Story — lightweight draft, evolves into technical SoT via `sync-story` |
 
 ---
 
 ## For AI Generation
 
-When filling `templates/roadmap-template.md`:
+### Field Rules
 
-### Spec Outline Field Rules
+**Epic Summary** — User-facing, one sentence. Bad: "Implement authentication". Good: "Users can register and log in securely."
 
-**Summary** — User-facing, one sentence. Bad: "Implement authentication". Good: "Users can register and log in with email/password."
+**Story Summary** — User-facing, one sentence describing the feature area. Bad: "Build auth API". Good: "Users can authenticate via email and manage their sessions."
 
-**Scope** — Free-form prose. Write what this Spec Outline covers at an abstract level — not how it will be built, not how many phases it will have. Phase breakdown happens during `/speckit.specify`.
+**Story Scope** — Free-form prose. Write what this Story covers at an abstract level — not how it will be built, not how many phases it will have. Phase breakdown happens during `/speckit.specify`.
 
-**Spec** — Write `—` until the spec file exists. Linked automatically by `roadmap-sync` after `/speckit.specify`, or run `/speckit.blueprint.roadmap-sync` directly to sync all unlinked specs at once.
+**Feature List** — Brief bullet per FT. Each FT is a single `/speckit.specify` run. FTs are placeholders at roadmap time; their detailed specs are written later.
 
-### Spec Outline Boundary Principles
+**Jira** — Write `—` until the Jira issue is created. Linked automatically by `jira-sync-hierarchy-hook` after roadmap generation, or via manual Jira sync.
 
-Apply these when deciding where one Spec Outline ends and the next begins:
+### Epic/Story Boundary Principles
 
-- **Vertical slice, not horizontal layer** — one Spec Outline covers a complete capability end-to-end (e.g., "user authentication" including both API and UI), not a technical layer in isolation (e.g., "auth API" and "auth UI" as separate Spec Outlines). Horizontal cuts produce Spec Outlines that cannot be demoed or shipped independently.
-- **One complete user journey** — do not split a single user journey across two Spec Outlines unless one part genuinely blocks the other and is large enough to stand alone. A user who can't complete the flow after this Spec Outline ships gets no value.
-- **Independent demo-ability** — when a Spec Outline is complete, there must be something meaningful to show a stakeholder. If completing it requires another Spec Outline to be useful, reconsider the boundary.
+Apply these when deciding where one Epic/Story ends and the next begins:
+
+- **Vertical slice, not horizontal layer** — one Story covers a complete capability end-to-end (e.g., "user authentication" including both API and UI), not a technical layer in isolation (e.g., "auth API" and "auth UI" as separate Stories). Horizontal cuts produce Stories that cannot be demoed or shipped independently.
+- **One complete user journey** — do not split a single user journey across two Stories unless one part genuinely blocks the other and is large enough to stand alone. A user who can't complete the flow after this Story ships gets no value.
+- **Independent demo-ability** — when a Story is complete, there must be something meaningful to show a stakeholder. If completing it requires another Story to be useful, reconsider the boundary.
 - **Foundational work is the exception** — auth, DB schema, core infrastructure, and CI/CD setup are legitimately separate even if they don't deliver user-visible value alone, because everything downstream depends on them.
 
-### Spec Outline Scope Guide
+### Epic/Story Scope Guide
 
-**Target size: Jira Epic-level** — the standard unit of work that fits in a software development roadmap.
+**Target Epic size: 1–2 months** — a coherent delivery goal that a small team can commit to.
 
-| Dimension | Guideline |
-|-----------|-----------|
-| **Duration** | 1–3 months from start to delivery |
-| **Team** | 1–2 people owning the work |
-| **Decomposition** | Decomposable into 5–15 subtasks |
+**Target Story size: Jira Epic-level** — the standard unit of work that fits in a software development roadmap, decomposable into 3–8 Features.
 
-The goal is ensuring each Spec Outline is scoped appropriately: not too broad to manage in a single `/speckit.specify` run, and not so narrow it doesn't warrant its own spec.
+| Dimension | Epic Guideline | Story Guideline |
+|-----------|----------------|-----------------|
+| **Duration** | 1–2 months | 2–6 weeks |
+| **Team** | 1–3 people | 1–2 people |
+| **Decomposition** | 2–5 Stories | 3–8 Features |
 
-**Too broad — consider splitting if:**
+**Epic too broad — consider splitting if:**
 
-- Estimated duration exceeds 3 months
-- Scope spans unrelated domains (e.g., payment processing + user profiles in one Spec Outline)
-- Scope contains multiple independent user journeys that don't need each other
-- Part of the scope clearly blocks the rest and is substantial enough to stand alone
+- Estimated duration exceeds 2 months
+- Scope spans unrelated domains (e.g., payment processing + user profiles in one Epic)
+- Contains multiple independent delivery goals that don't need each other
 
-**Too narrow — consider merging if:**
+**Epic too narrow — consider merging if:**
 
-- Estimated duration is under 1 month
-- Scope is a trivial capability that doesn't stand alone as a deliverable
-- Completing this Spec Outline requires another one to be useful (and they're not a dependency — they're just incomplete without each other)
+- Estimated duration is under 3 weeks
+- Contains only one Story that doesn't stand alone as a major milestone
+
+**Story too broad — consider splitting if:**
+
+- Estimated duration exceeds 6 weeks
+- Scope spans unrelated user journeys
+- Contains more than 8 Features
+
+**Story too narrow — consider merging if:**
+
+- Estimated duration is under 2 weeks
+- Contains fewer than 3 Features
+- Completing this Story requires another to be useful (and they're not a dependency)
 
 **Context signals to weigh when assessing scope balance:**
 
@@ -225,8 +319,8 @@ Read `vision.md` and interview answers before judging:
 
 | Signal | What it means for scope |
 | --- | --- |
-| Solo developer | Err toward narrower scopes — less parallelism available |
-| First Spec Outline | Keep scope tighter — environment setup adds hidden work |
+| Solo developer | Err toward narrower Epics/Stories — less parallelism available |
+| First Epic/Story | Keep scope tighter — environment setup adds hidden work |
 | External API / third-party integration | Each integration adds uncertainty; factor in when judging breadth |
 | Unfamiliar domain or tech stack | Narrower scope reduces risk of underestimating |
 | Well-understood CRUD / business logic | Broader scope acceptable |
