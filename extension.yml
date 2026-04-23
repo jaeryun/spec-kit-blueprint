@@ -14,17 +14,17 @@ requires:
 
 hooks:
   before_specify:
-    command: "speckit.blueprint.jira-fetch-context-hook"
+    command: "speckit.blueprint.hook-jira-fetch-context"
     optional: false
     description: "Fetch Jira context (Epic/Story hierarchy and current status) before specifying."
 
   before_plan:
-    command: "speckit.blueprint.jira-fetch-context-hook"
+    command: "speckit.blueprint.hook-jira-fetch-context"
     optional: false
     description: "Fetch Jira context before planning begins."
 
   before_tasks:
-    command: "speckit.blueprint.jira-fetch-context-hook"
+    command: "speckit.blueprint.hook-jira-fetch-context"
     optional: false
     description: "Fetch Jira context before task breakdown begins."
 
@@ -46,26 +46,13 @@ provides:
       file: commands/sync-story.md
       description: "Create or update story.md (technical Source of Truth) for a given Story."
 
-    - name: speckit.blueprint.jira-sync-hierarchy-hook
-      file: commands/jira-sync-hierarchy-hook.md
+    - name: speckit.blueprint.hook-jira-sync-hierarchy
+      file: commands/hook-jira-sync-hierarchy.md
       description: "Sync Epic→Story hierarchy to Jira after roadmap generation."
 
-    - name: speckit.blueprint.jira-fetch-context-hook
-      file: commands/jira-fetch-context-hook.md
+    - name: speckit.blueprint.hook-jira-fetch-context
+      file: commands/hook-jira-fetch-context.md
       description: "Fetch Jira context (Epic/Story hierarchy and current status) for hook consumption."
-
-    # v1 backward compatibility — deprecated, remove after migration
-    - name: speckit.blueprint.roadmap
-      file: commands/roadmap.md
-      description: "(v1, deprecated) Decomposes vision into Spec Outlines — use /speckit.blueprint.roadmap"
-
-    - name: speckit.blueprint.roadmap-check
-      file: commands/roadmap-check.md
-      description: "(v1, deprecated) Pre-flight check for Spec Outline alignment — use /speckit.blueprint.jira-fetch-context-hook"
-
-    - name: speckit.blueprint.roadmap-sync
-      file: commands/roadmap-sync.md
-      description: "(v1, deprecated) Sync spec links to roadmap — use /speckit.blueprint.jira-sync-hierarchy-hook"
 
   hooks:
     - event: before_blueprint_setup
