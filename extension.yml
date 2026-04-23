@@ -3,7 +3,7 @@ schema_version: "1.0"
 extension:
   id: blueprint
   name: "Blueprint"
-  version: "2.0.0"
+  version: "2.1.0"
   description: "Vision-first project planning for SpecKit. Decomposes project vision into a 3-level hierarchy: Epic → Story → Feature — each Feature mapping to one /speckit.specify run."
   author: "jaeryun"
   repository: "https://github.com/jaeryun/spec-kit-blueprint"
@@ -14,79 +14,83 @@ requires:
 
 hooks:
   before_specify:
-    command: "speckit.blueprint.epics-check"
+    command: "speckit.blueprint.jira-fetch-context-hook"
     optional: false
-    description: "Validate feature (FT) aligns with a Story in the epics hierarchy before specifying."
+    description: "Fetch Jira context (Epic/Story hierarchy and current status) before specifying."
 
-  after_specify:
-    command: "speckit.blueprint.epics-sync"
+  before_plan:
+    command: "speckit.blueprint.jira-fetch-context-hook"
     optional: false
-    description: "Link generated FT spec to its Story in the epics hierarchy after specify completes."
+    description: "Fetch Jira context before planning begins."
 
-  after_clarify:
-    command: "speckit.blueprint.epics-sync"
-    optional: true
-    description: "Sync FT spec link after clarify. Optional because clarify may not produce a new spec."
+  before_tasks:
+    command: "speckit.blueprint.jira-fetch-context-hook"
+    optional: false
+    description: "Fetch Jira context before task breakdown begins."
 
 provides:
   commands:
+    - name: speckit.blueprint.setup
+      file: commands/setup.md
+      description: "Initialize Blueprint workspace and configuration."
+
     - name: speckit.blueprint.vision
       file: commands/vision.md
       description: "Define project vision through an adaptive interview."
 
-    # TODO(Plan 2): commands/epics.md, commands/story.md, commands/epics-check.md, commands/epics-sync.md
-    # will be created in Plan 2. Until then, v1 commands (roadmap, roadmap-check, roadmap-sync) remain
-    # available for backward compatibility.
-    - name: speckit.blueprint.epics
-      file: commands/epics.md
-      description: "Generate the Epic→Story hierarchy from the confirmed vision."
-
-    - name: speckit.blueprint.story
-      file: commands/story.md
-      description: "Create or update story.md (technical Source of Truth) for a given Story."
-
-    - name: speckit.blueprint.epics-check
-      file: commands/epics-check.md
-      description: "Pre-flight check: validate FT aligns with a Story in the epics hierarchy before specify."
-
-    - name: speckit.blueprint.epics-sync
-      file: commands/epics-sync.md
-      description: "Link generated FT spec to its Story after specify completes."
-
-    # v1 backward compatibility — remove after Plan 2 completes
     - name: speckit.blueprint.roadmap
       file: commands/roadmap.md
-      description: "(v1) Decomposes vision into Spec Outlines — deprecated, use /speckit.blueprint.epics"
+      description: "Generate the Epic→Story hierarchy from the confirmed vision."
+
+    - name: speckit.blueprint.sync-story
+      file: commands/sync-story.md
+      description: "Create or update story.md (technical Source of Truth) for a given Story."
+
+    - name: speckit.blueprint.jira-sync-hierarchy-hook
+      file: commands/jira-sync-hierarchy-hook.md
+      description: "Sync Epic→Story hierarchy to Jira after roadmap generation."
+
+    - name: speckit.blueprint.jira-fetch-context-hook
+      file: commands/jira-fetch-context-hook.md
+      description: "Fetch Jira context (Epic/Story hierarchy and current status) for hook consumption."
+
+    # v1 backward compatibility — deprecated, remove after migration
+    - name: speckit.blueprint.roadmap
+      file: commands/roadmap.md
+      description: "(v1, deprecated) Decomposes vision into Spec Outlines — use /speckit.blueprint.roadmap"
 
     - name: speckit.blueprint.roadmap-check
       file: commands/roadmap-check.md
-      description: "(v1) Pre-flight check for Spec Outline alignment — deprecated, use /speckit.blueprint.epics-check"
+      description: "(v1, deprecated) Pre-flight check for Spec Outline alignment — use /speckit.blueprint.jira-fetch-context-hook"
 
     - name: speckit.blueprint.roadmap-sync
       file: commands/roadmap-sync.md
-      description: "(v1) Sync spec links to roadmap — deprecated, use /speckit.blueprint.epics-sync"
+      description: "(v1, deprecated) Sync spec links to roadmap — use /speckit.blueprint.jira-sync-hierarchy-hook"
 
   hooks:
+    - event: before_blueprint_setup
+      description: "Triggered before Blueprint workspace setup begins."
+
+    - event: after_blueprint_setup
+      description: "Triggered after Blueprint workspace setup completes."
+
     - event: before_blueprint_vision
       description: "Triggered before the vision interview begins."
 
     - event: after_blueprint_vision
       description: "Triggered after vision.md is confirmed and saved."
 
-    - event: before_blueprint_epics
+    - event: before_blueprint_roadmap
       description: "Triggered before Epic→Story hierarchy generation begins."
 
-    - event: after_blueprint_epics
+    - event: after_blueprint_roadmap
       description: "Triggered after the Epic→Story hierarchy is confirmed and saved. Use to create Jira Epics/Stories."
 
-    - event: before_blueprint_story
+    - event: before_blueprint_sync_story
       description: "Triggered before story.md generation begins."
 
-    - event: after_blueprint_story
+    - event: after_blueprint_sync_story
       description: "Triggered after story.md is saved. Use to link Jira Story."
-
-    - event: after_feature_complete
-      description: "Triggered after a Feature (FT) PR is merged and story.md is updated."
 
 tags:
   - planning
