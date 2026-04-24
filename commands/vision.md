@@ -203,7 +203,7 @@ If conflicts are found, output:
 ⚠️ Vision change affects existing roadmap.
 
 [For each conflict:]
-ST-[NN] / FT-[NN] — [title]
+ST-[N].[N] / FT-[N].[N].[N] — [title]
 Issue: [one-line description of the conflict]
 ```
 

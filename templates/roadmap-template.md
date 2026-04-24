@@ -13,8 +13,8 @@ _Last updated: [DATE]_
      entries and append a new row for each update.
 
      Number Epics sequentially: EP-01, EP-02, ...
-     Number Stories sequentially project-wide: ST-01, ST-02, ST-03, ... (unique across all Epics)
-     Number Features sequentially project-wide: FT-01, FT-02, FT-03, ... (unique across all Stories) -->
+      Number Stories under each Epic: ST-1.1, ST-1.2, ST-2.1, ... (Epic number . Story sequence)
+      Number Features under each Story: FT-1.1.1, FT-1.1.2, FT-1.2.1, ... (Epic . Story . Feature sequence) -->
 
 ---
 
@@ -36,21 +36,21 @@ _Last updated: [DATE]_
 
 #### Stories
 
-- **ST-01** — [User-facing outcome]
+- **ST-1.1** — [User-facing outcome]
   - **Scope**: <!-- ACTION REQUIRED: What this Story encompasses — a feature area that may span multiple PRs -->
   - **Key AC**: <!-- ACTION REQUIRED: 1–2 lines of core acceptance criteria.
        This is the business-level "done" definition, not technical implementation details. -->
   - **Jira**: —
   - **Features**:
-    - FT-01 — <!-- ACTION REQUIRED: Summary of the spec-sized unit. Each FT = one /speckit.specify run. -->
-    - FT-02 — [Summary]
+    - FT-1.1.1 — <!-- ACTION REQUIRED: Summary of the spec-sized unit. Each FT = one /speckit.specify run. -->
+    - FT-1.1.2 — [Summary]
 
-- **ST-02** — [User-facing outcome]
+- **ST-1.2** — [User-facing outcome]
   - **Scope**: [What this Story encompasses]
   - **Key AC**: [1–2 lines of core acceptance criteria]
   - **Jira**: —
   - **Features**:
-    - FT-03 — [Summary]
+    - FT-1.2.1 — [Summary]
 
 ### EP-02 — [User-facing outcome]
 
@@ -61,12 +61,12 @@ _Last updated: [DATE]_
 
 #### Stories
 
-- **ST-03** — [User-facing outcome]
+- **ST-2.1** — [User-facing outcome]
   - **Scope**: [What this Story encompasses]
   - **Key AC**: [1–2 lines of core acceptance criteria]
   - **Jira**: —
   - **Features**:
-    - FT-04 — [Summary]
+    - FT-2.1.1 — [Summary]
 
 <!-- Add more Epics as needed. -->
 

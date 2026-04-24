@@ -23,7 +23,7 @@ Check Jira for FT status changes, comments, and blockers before writing specs, p
 
 Determine the active FT from the following sources (in order):
 
-1. **Branch name** — extract `FT-NNN` or numeric ID (e.g., `feature/ft-7-foo` -> `FT-7`)
+1. **Branch name** — extract `FT-N.N.N` or numeric ID (e.g., `feature/ft-1.1.1-foo` -> `FT-1.1.1`)
 2. **Directory** — check `.specify/memory/current-ft.yml` or current working directory for FT markers
 3. **Prompt user** — if no FT can be determined, skip silently
 

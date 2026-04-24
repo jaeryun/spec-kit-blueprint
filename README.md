@@ -13,77 +13,114 @@
 
 </div>
 
-Spec Kit Blueprint is a [Spec Kit](https://github.com/github/spec-kit) extension for teams who want to plan at the right altitude before writing specs. It guides you through defining a project vision and decomposing it into a delivery hierarchy — Epics, Stories, and Features — so every spec you write is anchored to a shared purpose and appropriately scoped.
+Spec Kit Blueprint is a [Spec Kit](https://github.com/github/spec-kit) extension for teams who want to plan at the appropriate level before writing specs. It guides you through defining a project vision and breaking it down into a hierarchy — Epics, Stories, and Features — so every spec you write stays anchored to a shared purpose and is appropriately scoped.
 
 ## Motivation
 
-If you've used `/speckit.specify`, you've likely experienced specs that are too broad or too narrow, or struggled to define appropriate work boundaries between specs. This happens when projects start without a shared vision and strategic roadmap, causing each spec to be written in isolation. Blueprint addresses this through its "Big Picture First" workflow, which helps appropriately scope and calibrate Stories:
+If you've used `/speckit.specify`, you've likely encountered specs that are too broad or too narrow, or struggled to define clear boundaries between pieces of work. This happens when projects start without a shared vision and strategic roadmap, causing each spec to be written in isolation. Blueprint addresses this through its "Big Picture First" workflow, which helps you scope Stories appropriately:
 
 ```mermaid
 flowchart TD
-    A["/speckit.constitution\nProject setup & conventions"] --> B
+    A["/speckit.constitution<br/>Project setup & conventions"] --> B["/speckit.blueprint.vision"]
 
-    subgraph bp ["Blueprint — Strategy & Alignment"]
-        B["/speckit.blueprint.vision"]
-        B --> C["vision.md"]
-        C --> D["/speckit.blueprint.roadmap"]
-        D --> BP["blueprint.md"]
-        BP --> EP1["EP-01\nAuth & Account"]
-        EP1 --> ST1["ST-01\nUser login"]
-        EP1 --> ST2["ST-02\nProfile mgmt"]
-        BP --> EP2["EP-02\nAdmin Dashboard"]
-        EP2 --> ST3["ST-01\nAnalytics"]
+    subgraph BP ["Blueprint - Strategy & Alignment"]
+        direction TB
+        B --> V["vision.md<br/>Problem / Users / Goals / Constraints"]
+        V --> C["/speckit.blueprint.roadmap<br/>(requires vision.md)"]
+        C --> R["blueprint.md<br/>Epic / Story / Feature Draft"]
     end
 
-    ST1 --> F
-    ST2 --> G
-    ST3 --> H
-
-    subgraph impl ["Implementation — Tactical Execution"]
-        F["/speckit.specify FT-01"] --> spec1["specs/001-login/spec.md"]
-        G["/speckit.specify FT-02"] --> spec2["specs/002-profile/spec.md"]
-        H["/speckit.specify FT-03"] --> spec3["specs/003-analytics/spec.md"]
-        spec1 --> NEXT1["/speckit.plan\n/speckit.tasks\n/speckit.implement\n(+ any extensions)"]
-        spec2 --> NEXT2["/speckit.plan\n/speckit.tasks\n/speckit.implement\n(+ any extensions)"]
-        spec3 --> NEXT3["/speckit.plan\n/speckit.tasks\n/speckit.implement\n(+ any extensions)"]
+    subgraph DEV1 ["Person A picks FT-1.1.1"]
+        direction LR
+        S1a["/speckit.specify FT-1.1.1"] --> N1a["/speckit.plan -> tasks -> implement"]
     end
 
-    style bp fill:#e8edf5,stroke:#1e40af,stroke-width:1.5px,color:#1e3a5f
-    style impl fill:#e6f2ee,stroke:#0f766e,stroke-width:1.5px,color:#134e4a
+    subgraph DEV2 ["Person B picks FT-1.1.2"]
+        direction LR
+        S1b["/speckit.specify FT-1.1.2"] --> N1b["/speckit.plan -> tasks -> implement"]
+    end
+
+    subgraph DEV3 ["Person A picks FT-1.2.1"]
+        direction LR
+        S2["/speckit.specify FT-1.2.1"] --> N2["/speckit.plan -> tasks -> implement"]
+    end
+
+    subgraph DEV4 ["Person C picks FT-2.1.1"]
+        direction LR
+        S3a["/speckit.specify FT-2.1.1"] --> N3a["/speckit.plan -> tasks -> implement"]
+    end
+
+    subgraph DEV5 ["Person B picks FT-2.1.2"]
+        direction LR
+        S3b["/speckit.specify FT-2.1.2"] --> N3b["/speckit.plan -> tasks -> implement"]
+    end
+
+    R -.-> EP1["EP-01 - Real-time 1:1 Messaging"]
+    EP1 -.-> ST1["ST-1.1 - 1:1 Text"]
+    ST1 -.-> FT1a["FT-1.1.1 WebSocket routing"]
+    ST1 -.-> FT1b["FT-1.1.2 Message persistence"]
+    EP1 -.-> ST2["ST-1.2 - Rich Media"]
+    ST2 -.-> FT2["FT-1.2.1 Media upload"]
+
+    R -.-> EP2["EP-02 - Group Chats"]
+    EP2 -.-> ST3["ST-2.1 - Group Mgmt"]
+    ST3 -.-> FT3a["FT-2.1.1 Group creation"]
+    ST3 -.-> FT3b["FT-2.1.2 Admin roles"]
+
+    FT1a -.-> S1a
+    FT1b -.-> S1b
+    FT2 -.-> S2
+    FT3a -.-> S3a
+    FT3b -.-> S3b
+
+    style BP fill:#e8edf5,stroke:#1e40af,stroke-width:2px,color:#1e3a5f
+    style DEV1 fill:#e6f2ee,stroke:#0f766e,stroke-width:2px,color:#134e4a
+    style DEV2 fill:#e6f2ee,stroke:#0f766e,stroke-width:2px,color:#134e4a
+    style DEV3 fill:#e6f2ee,stroke:#0f766e,stroke-width:2px,color:#134e4a
+    style DEV4 fill:#e6f2ee,stroke:#0f766e,stroke-width:2px,color:#134e4a
+    style DEV5 fill:#e6f2ee,stroke:#0f766e,stroke-width:2px,color:#134e4a
     style A fill:#1e293b,stroke:#1e293b,color:#f8fafc
     style B fill:#1e40af,stroke:#1e40af,color:#f8fafc
-    style C fill:#ffffff,stroke:#93c5fd,color:#1e3a5f
-    style D fill:#1e40af,stroke:#1e40af,color:#f8fafc
-    style BP fill:#ffffff,stroke:#93c5fd,color:#1e3a5f
+    style C fill:#1e40af,stroke:#1e40af,color:#f8fafc
+    style V fill:#ffffff,stroke:#93c5fd,color:#1e3a5f
+    style R fill:#ffffff,stroke:#93c5fd,color:#1e3a5f
     style EP1 fill:#dbeafe,stroke:#3b82f6,color:#1e3a5f
     style EP2 fill:#dbeafe,stroke:#3b82f6,color:#1e3a5f
     style ST1 fill:#eff6ff,stroke:#93c5fd,color:#1e3a5f
     style ST2 fill:#eff6ff,stroke:#93c5fd,color:#1e3a5f
     style ST3 fill:#eff6ff,stroke:#93c5fd,color:#1e3a5f
-    style F fill:#0f766e,stroke:#0f766e,color:#f0fdf4
-    style G fill:#0f766e,stroke:#0f766e,color:#f0fdf4
-    style H fill:#0f766e,stroke:#0f766e,color:#f0fdf4
-    style spec1 fill:#ffffff,stroke:#6ee7b7,color:#134e4a
-    style spec2 fill:#ffffff,stroke:#6ee7b7,color:#134e4a
-    style spec3 fill:#ffffff,stroke:#6ee7b7,color:#134e4a
-    style NEXT1 fill:#134e4a,stroke:#134e4a,color:#f0fdf4
-    style NEXT2 fill:#134e4a,stroke:#134e4a,color:#f0fdf4
-    style NEXT3 fill:#134e4a,stroke:#134e4a,color:#f0fdf4
+    style FT1a fill:#f8fafc,stroke:#cbd5e1,color:#334155
+    style FT1b fill:#f8fafc,stroke:#cbd5e1,color:#334155
+    style FT2 fill:#f8fafc,stroke:#cbd5e1,color:#334155
+    style FT3a fill:#f8fafc,stroke:#cbd5e1,color:#334155
+    style FT3b fill:#f8fafc,stroke:#cbd5e1,color:#334155
+    style S1a fill:#0f766e,stroke:#0f766e,color:#f0fdf4
+    style S1b fill:#0f766e,stroke:#0f766e,color:#f0fdf4
+    style S2 fill:#0f766e,stroke:#0f766e,color:#f0fdf4
+    style S3a fill:#0f766e,stroke:#0f766e,color:#f0fdf4
+    style S3b fill:#0f766e,stroke:#0f766e,color:#f0fdf4
+    style N1a fill:#134e4a,stroke:#134e4a,color:#f0fdf4
+    style N1b fill:#134e4a,stroke:#134e4a,color:#f0fdf4
+    style N2 fill:#134e4a,stroke:#134e4a,color:#f0fdf4
+    style N3a fill:#134e4a,stroke:#134e4a,color:#f0fdf4
+    style N3b fill:#134e4a,stroke:#134e4a,color:#f0fdf4
 ```
 
 ## Goals
 
-- **Vision-First**: Interviews you to define the problem, target users, and core value — ensuring you know *why* you're building before you decide *what*.
-- **Strategic Decomposition**: Translates that vision into a delivery hierarchy — decomposing scope into Epics, Stories, and Features — so every spec maps to a single Story.
+- **Vision-First**: Walks you through defining the problem, target users, and core value — ensuring you know *why* you're building before you decide *what*.
+- **Strategic Decomposition**: Breaks the vision down into Epics, Stories, and Features — so every spec maps to exactly one Story.
 - **Contextual Integrity**: Automatically checks every spec you write against the hierarchy, ensuring your implementation never loses sight of the original vision.
 
 ## Quick Start
 
-> Blueprint runs before SpecKit's core `specify → plan → tasks → implement` workflow. See [Installation](#installation) to add it first.
+> Blueprint runs **before** SpecKit's core `specify → plan → tasks → implement` workflow. See [Installation](#installation) to add it first.
+
+**The workflow consists of 4 manual steps.** Hooks handle the Jira sync automatically.
 
 ```text
-# 1. Set up project conventions (one-time)
-/speckit.constitution
+# 1. Initialize (one-time per project)
+/speckit.blueprint.setup
 
 # 2. Define your vision
 /speckit.blueprint.vision
@@ -91,16 +128,14 @@ flowchart TD
 # 3. Build the Epic → Story hierarchy
 /speckit.blueprint.roadmap
 
-# 4. Archive completed FTs into Story SoT
-/speckit.blueprint.archive ST-01
+# 4. Pick a Feature and specify it
+/speckit.specify FT-1.1.1              # by Feature ID
+/speckit.specify "user authentication"   # or by keyword — automatically mapped to the matching Story
 
-# 5. For each Feature (independent ones can run concurrently in separate worktrees):
-/speckit.specify FT-01                 # by Feature ID
-/speckit.specify "user authentication"   # or by keyword — auto-mapped to the matching Story
-
-# 6. Continue with the standard SpecKit workflow:
-# /speckit.plan → /speckit.tasks → /speckit.implement ...
+# Then continue with standard SpecKit: /speckit.plan → /speckit.tasks → /speckit.implement ...
 ```
+
+That's it. Jira context is pulled automatically before every `specify`, `plan`, and `tasks` command.
 
 ## Output Examples
 
@@ -122,7 +157,7 @@ docs/blueprint/
             └── story.md
 ```
 
-**vision.md** — structured sections covering problem, users, goals, constraints, and out of scope:
+**vision.md** — structured sections for the problem, users, goals, constraints, and out-of-scope items:
 
 ```markdown
 # Vision: Simple SaaS App
@@ -155,60 +190,70 @@ Teams lack a unified entry point for user management, forcing manual aggregation
 
 > See [`examples/vision.md`](examples/vision.md) for a complete worked example.
 
-**blueprint.md** — The single master document containing the full Epic → Story → Feature hierarchy. It serves as the draft for Jira Epic/Story creation:
+**blueprint.md** — The master document with the complete Epic → Story → Feature hierarchy. Used as a draft for Jira Epic/Story creation:
 
 ```markdown
-# Blueprint: Simple SaaS App
+# Blueprint: Simple Messenger
 
-_Last updated: 2026-04-24_
+_Last updated: 2026-04-25_
 
 ---
 
 ## Epics
 
-### EP-01 — Users can register, log in, and manage their account securely
+### EP-01 — Users can send and receive real-time 1:1 messages reliably
 
-- **Scope**: Authentication core, user profile management, and account lifecycle.
-- **Out of Scope**: OAuth/social login, multi-factor authentication, billing integration.
-- **Success Criteria**: Users can complete sign-up and log in with <5% error rate. Session management handles 500 concurrent users without degradation.
+- **Scope**: Core 1:1 messaging infrastructure, message delivery guarantees, conversation history, and presence indicators.
+- **Out of Scope**: End-to-end encryption (Phase 2), message editing, disappearing messages.
+- **Success Criteria**: 99.9% message delivery success rate. Delivery latency < 500ms for 95th percentile.
 - **Jira**: —
 
 #### Stories
 
-- **ST-01** — Users can register and log in with email/password.
-  - **Scope**: Sign-up flow, login/logout, password reset, session management.
-  - **Key AC**: Given a valid email and password, user can register and receive a verification email. Given valid credentials, user receives a session token valid for 30 minutes.
+- **ST-1.1** — Users can exchange text messages in real-time with delivery status.
+  - **Scope**: Send/receive text via WebSocket, persistent conversation threads, delivery/read receipt tracking.
+  - **Key AC**: Given an open conversation, a sent message appears in the recipient's client within 1 second. Given a sent message, sender sees "delivered" when the server acknowledges, and "read" when recipient opens the conversation.
   - **Jira**: —
   - **Features**:
-    - FT-01 — Email/password sign-up with verification
-    - FT-02 — Session management and logout
-    - FT-03 — Password reset flow
+    - FT-1.1.1 — WebSocket connection management and message routing
+    - FT-1.1.2 — Message persistence and conversation history API
+    - FT-1.1.3 — Delivery and read receipt state machine
 
-- **ST-02** — Users can manage their profile and account settings.
-  - **Scope**: Profile page (name, avatar upload), notification preferences, account deletion.
-  - **Key AC**: User can update profile info and upload avatar up to 2MB. User can permanently delete their account and all associated data.
+- **ST-1.2** — Users can share rich media and voice messages in 1:1 chats.
+  - **Scope**: Image/video upload with compression, file attachments, voice message recording and playback.
+  - **Key AC**: User can upload an image up to 10MB, which is compressed to < 2MB for preview. User can record a voice message up to 5 minutes and playback with seek support.
   - **Jira**: —
   - **Features**:
-    - FT-04 — Profile view and edit (name, avatar)
-    - FT-05 — Notification preferences
-    - FT-06 — Account deletion
+    - FT-1.2.1 — Media upload pipeline (compression, thumbnail generation, S3 storage)
+    - FT-1.2.2 — File attachment with type-based preview (PDF, DOCX)
+    - FT-1.2.3 — Voice message recording, upload, and progressive playback
 
-### EP-02 — Admins can monitor platform usage and manage users
+### EP-02 — Users can create and collaborate in group conversations
 
-- **Scope**: Admin-facing analytics and user management capabilities.
-- **Out of Scope**: Real-time analytics, data export, custom report builder.
-- **Success Criteria**: Admin dashboard loads in under 2 seconds. Key metrics update within 5 minutes of data changes.
+- **Scope**: Group lifecycle management, member roles, advanced messaging features within groups.
+- **Out of Scope**: Public channels, broadcast lists, threaded replies in 1:1 chats.
+- **Success Criteria**: Groups support up to 500 members with < 2s load time for last 50 messages. Admin actions apply within 1 second.
 - **Jira**: —
 
 #### Stories
 
-- **ST-03** — Admins can view analytics dashboard.
-  - **Scope**: Admin dashboard showing user count, activity summary, and key usage metrics.
-  - **Key AC**: Given admin role, user can view total user count, daily active users, and sign-up trend over last 30 days.
+- **ST-2.1** — Users can create groups and manage membership with roles.
+  - **Scope**: Group creation flow, member invitation (link / direct add), admin/member role distinction, group metadata management.
+  - **Key AC**: A user can create a group with up to 256 initial members. Group creators are auto-assigned admin role and can promote/demote others. Members can leave or be removed by admins.
   - **Jira**: —
   - **Features**:
-    - FT-07 — Analytics data aggregation API
-    - FT-08 — Admin dashboard UI
+    - FT-2.1.1 — Group creation and member invitation flow
+    - FT-2.1.2 — Role-based permission model (admin vs member)
+    - FT-2.1.3 — Group profile metadata (name, avatar, description, rules)
+
+- **ST-2.2** — Group members can use advanced collaboration features.
+  - **Scope**: Message reactions, pin/announcement messages, @mentions with notification routing.
+  - **Key AC**: Any member can react with emoji to a message. Admins can pin up to 3 messages visible at the top. @mentions trigger push notifications to offline members.
+  - **Jira**: —
+  - **Features**:
+    - FT-2.2.1 — Emoji reactions aggregation and display
+    - FT-2.2.2 — Pin messages and admin announcements banner
+    - FT-2.2.3 — @mention parsing and targeted push notification routing
 
 ---
 
@@ -216,22 +261,22 @@ _Last updated: 2026-04-24_
 
 | Timestamp | Subject | Note |
 | --- | --- | --- |
-| 2026-04-24 00:00 | blueprint.md | Created from vision.md |
+| 2026-04-25 00:00 | blueprint.md | Created from vision.md |
 ```
 
 > See [`examples/blueprint.md`](examples/blueprint.md) for a complete worked example.
 
 ## Installation
 
-Requires Spec Kit >= 0.4.0.
+Requires Spec Kit 0.4.0 or later.
 
-### From GitHub Release
+### From GitHub Releases
 
 ```bash
 specify extension add blueprint --from https://github.com/jaeryun/spec-kit-blueprint/archive/refs/tags/v2.1.0.zip
 ```
 
-### From Local Path (For Development)
+### From a Local Path (Development)
 
 ```bash
 specify extension add --dev /path/to/spec-kit-blueprint
@@ -245,18 +290,24 @@ specify extension list
 
 ## Commands
 
-**Manual commands** — run explicitly by you:
+### Manual Commands
 
 | Command | Description | Requires |
 |---------|-------------|---------|
 | `/speckit.blueprint.setup` | Initialize Blueprint workspace and Jira/GitLab configuration | — |
-| `/speckit.blueprint.vision` | Interviews you to define problem, users, and core value — outputs `vision.md` | — |
-| `/speckit.blueprint.roadmap` | Decomposes vision into an Epic → Story → Feature hierarchy — outputs `blueprint.md` and lightweight `story.md` drafts | `vision.md` |
+| `/speckit.blueprint.vision` | Walks you through defining the problem, users, and core value — outputs `vision.md` | — |
+| `/speckit.blueprint.roadmap` | Breaks the vision down into an Epic → Story → Feature hierarchy — outputs `blueprint.md` and lightweight `story.md` drafts | `vision.md` |
 | `/speckit.blueprint.archive` | Archives completed FTs into the Story's technical Source of Truth | `blueprint.md` |
 | `/speckit.blueprint.jira-push` | Push Epic → Story hierarchy to Jira (create/update issues) | `setup` |
-| `/speckit.blueprint.jira-pull` | Pull Jira FT context into the current session (auto-triggered) | `setup` |
 
-Each command accepts an optional free-text argument that pre-seeds the interview or narrows its focus.
+Each command accepts an optional free-text argument that pre-populates the interview or narrows its focus.
+
+**`/speckit.blueprint.setup`**
+
+```text
+# Initialize workspace and Jira/GitLab integration
+/speckit.blueprint.setup
+```
 
 **`/speckit.blueprint.vision`**
 
@@ -264,7 +315,7 @@ Each command accepts an optional free-text argument that pre-seeds the interview
 # Start the interview from scratch
 /speckit.blueprint.vision
 
-# Provide an initial description — skips the opening prompt and starts the follow-up interview directly
+# Provide an initial description — skips the opening prompt and jumps straight to the follow-up interview
 /speckit.blueprint.vision We're building a SaaS analytics dashboard for small e-commerce teams
 ```
 
@@ -274,7 +325,7 @@ Each command accepts an optional free-text argument that pre-seeds the interview
 # Run the roadmap interview and generate the hierarchy
 /speckit.blueprint.roadmap
 
-# Re-plan from a specific concern
+# Re-plan around a specific concern
 /speckit.blueprint.roadmap focus on the backend Epics
 ```
 
@@ -282,7 +333,7 @@ Each command accepts an optional free-text argument that pre-seeds the interview
 
 ```text
 # Archive completed FTs into a Story's SoT
-/speckit.blueprint.archive ST-01
+/speckit.blueprint.archive ST-1.1
 ```
 
 **`/speckit.blueprint.jira-push`**
@@ -292,19 +343,19 @@ Each command accepts an optional free-text argument that pre-seeds the interview
 /speckit.blueprint.jira-push
 ```
 
-## Hooks
+---
 
-Hooks fire automatically at SpecKit lifecycle events.
+### Automatic Commands (Hooks)
 
-**Registered hooks** — Blueprint subscribes to these SpecKit events:
+Triggered automatically during SpecKit lifecycle events. No manual input required.
 
-| Hook | Trigger | Command | Purpose |
-|------|---------|---------|---------|
-| `before_specify` | Before specify runs | `jira-pull` | Pull Jira FT context (status, comments) into the session |
-| `before_plan` | Before plan runs | `jira-pull` | Pull Jira FT context into the session |
-| `before_tasks` | Before tasks runs | `jira-pull` | Pull Jira FT context into the session |
+| Hook | Trigger | What it does |
+|------|---------|--------------|
+| `before_specify` | Before `/speckit.specify` runs | Pull Jira FT context (status, comments) into the session |
+| `before_plan` | Before `/speckit.plan` runs | Pull Jira FT context into the session |
+| `before_tasks` | Before `/speckit.tasks` runs | Pull Jira FT context into the session |
 
-**Emitted hook events** — available for other extensions to subscribe to:
+**Events emitted** for other extensions:
 
 | Event | Fired when |
 |-------|-----------|
@@ -313,14 +364,14 @@ Hooks fire automatically at SpecKit lifecycle events.
 | `before_blueprint_vision` | Before the vision interview begins |
 | `after_blueprint_vision` | After `vision.md` is confirmed and saved |
 | `before_blueprint_roadmap` | Before Epic → Story hierarchy generation begins |
-| `after_blueprint_roadmap` | After the hierarchy is confirmed and saved. Use to push to Jira |
+| `after_blueprint_roadmap` | After the hierarchy is saved. Use this to push to Jira |
 | `before_blueprint_archive` | Before `story.md` archiving begins |
 | `after_blueprint_archive` | After `story.md` is archived. Use to link Jira Story |
 
 ## Non-Goals
 
-- **Not a spec writer**: Blueprint produces the Epic → Story hierarchy as input to `/speckit.specify` — it does not write specs or replace any step in SpecKit's core workflow.
-- **No orchestration or tracking**: Scheduling, execution coordination, and progress tracking are out of scope and belong to your team or other extensions.
+- **Not a spec writer**: Blueprint produces the Epic → Story hierarchy as input to `/speckit.specify` — it does not write specs nor replace any step in SpecKit's core workflow.
+- **No orchestration or tracking**: Scheduling, execution coordination, and progress tracking are out of scope — use your team's tools or other extensions for these.
 
 ## Upgrading
 

@@ -18,18 +18,18 @@ This command addresses that by building the full 3-level hierarchy before any Fe
 | Level | ID Pattern | What It Represents |
 | --- | --- | --- |
 | **Epic (EP)** | EP-01, EP-02, ... | A coherent delivery goal, typically 1–2 months of work |
-| **Story (ST)** | ST-01, ST-02, ... | A user-facing feature area that may span multiple PRs |
-| **Feature (FT)** | FT-01, FT-02, ... | One unit of work = one `/speckit.specify` run |
+| **Story (ST)** | ST-1.1, ST-1.2, ... | A user-facing feature area that may span multiple PRs |
+| **Feature (FT)** | FT-1.1.1, FT-1.1.2, ... | One unit of work = one `/speckit.specify` run |
 
 The output is a hierarchy of right-sized Epics and Stories in execution order — each Story the input to future `/speckit.specify` runs (via `/speckit.blueprint.archive`).
 
 ```
 EP-01 — Foundation
-  ├─ ST-01 — Authentication core
-  │     ├─ FT-01 — Email/password sign-up
-  │     └─ FT-02 — Session management
-  └─ ST-02 — API scaffolding
-        └─ FT-03 — Core API endpoints
+  ├─ ST-1.1 — Authentication core
+  │     ├─ FT-1.1.1 — Email/password sign-up
+  │     └─ FT-1.1.2 — Session management
+  └─ ST-1.2 — API scaffolding
+        └─ FT-1.2.1 — Core API endpoints
 ```
 
 Key implications for generation:
@@ -184,7 +184,7 @@ This is **not** the full technical SoT — that is built incrementally via `/spe
 Use this format (matches `templates/story-template.md`):
 
 ```markdown
-# ST-XX — [Story Title]
+# ST-X.X — [Story Title]
 
 > Source of Truth. Last updated: [date]
 > Jira: —
@@ -226,8 +226,8 @@ Roadmap complete. [N] Epics, [M] Stories, [P] Features defined.
 
 Hierarchy:
 [EP-01] — [Epic Title]
-  [ST-01] — [Story Title] ([P] FTs)
-  [ST-02] — [Story Title] ([P] FTs)
+  [ST-1.1] — [Story Title] ([P] FTs)
+  [ST-1.2] — [Story Title] ([P] FTs)
 [EP-02] — [Epic Title]
   ...
 

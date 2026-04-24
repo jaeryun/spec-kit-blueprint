@@ -1,4 +1,4 @@
-# ST-XX — [Story Title]
+# ST-X.X — [Story Title]
 
 > Source of Truth. Last updated: [date]
 > Jira: —
@@ -46,5 +46,5 @@
 <!-- ACTION REQUIRED: Architecture Decision Records made during this Story.
      | Decision | Reason | FT |
      | --- | --- | --- |
-     | ... | ... | FT-01 | -->
+      | ... | ... | FT-X.X.X | -->
 (TBD)

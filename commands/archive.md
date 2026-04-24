@@ -25,9 +25,9 @@ Update a Story's technical Source of Truth after its linked FTs are complete. Th
 
 `$ARGUMENTS`
 
-Story ID, e.g., `"ST-01"`.
+Story ID, e.g., `"ST-1.1"`.
 
-If `$ARGUMENTS` is not provided, ask: "Which Story should I archive? (e.g., ST-01)"
+If `$ARGUMENTS` is not provided, ask: "Which Story should I archive? (e.g., ST-1.1)"
 
 ## Hooks
 
@@ -39,8 +39,8 @@ After completing all steps, check `.specify/extensions.yml` for any handlers reg
 
 ### Step 1: Parse Input
 
-1. Extract the Story ID from `$ARGUMENTS` (e.g., `ST-01`).
-2. Validate the Story ID format: expected pattern is `ST-[NN]`.
+1. Extract the Story ID from `$ARGUMENTS` (e.g., `ST-1.1`).
+2. Validate the Story ID format: expected pattern is `ST-[N].[N]`.
 3. Find the Story directory: `docs/blueprint/epics/[epic-slug]/[story-slug]/`. Search under each `epics/*/` directory to match the Story ID in the `story.md` title.
 4. Verify `story.md` exists in that directory. If not, warn the user and stop.
 
