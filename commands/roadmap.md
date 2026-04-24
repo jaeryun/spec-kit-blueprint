@@ -21,7 +21,7 @@ This command addresses that by building the full 3-level hierarchy before any Fe
 | **Story (ST)** | ST-01, ST-02, ... | A user-facing feature area that may span multiple PRs |
 | **Feature (FT)** | FT-01, FT-02, ... | One unit of work = one `/speckit.specify` run |
 
-The output is a hierarchy of right-sized Epics and Stories in execution order — each Story the input to future `/speckit.specify` runs (via `/speckit.blueprint.sync-story`).
+The output is a hierarchy of right-sized Epics and Stories in execution order — each Story the input to future `/speckit.specify` runs (via `/speckit.blueprint.archive`).
 
 ```
 EP-01 — Foundation
@@ -160,31 +160,28 @@ Incorporate feedback and repeat until the user confirms.
 ### Step 4: Generate Output Files
 
 Load the templates to understand required sections:
-- `templates/blueprint-template.md` for `docs/blueprint/blueprint.md`
-- `templates/epic-template.md` for each `docs/blueprint/epic-NN.md`
-- `templates/story-template.md` for the structure of each `docs/blueprint/story-NN.md` (lightweight draft)
+- `templates/roadmap-template.md` for `docs/blueprint/blueprint.md`
+- `templates/story-template.md` for the structure of each Story's `story.md`
 
 Fill each file with the confirmed output from Steps 2 and 3, following the **For AI Generation** guidelines below.
 
 #### 4a: blueprint.md
 
-Create or update `docs/blueprint/blueprint.md` with the Epic list.
+Create or update `docs/blueprint/blueprint.md` with the full Epic → Story → Feature hierarchy.
+
+This is the **single master document** for the delivery roadmap. It replaces the old per-Epic files and serves as the draft for Jira Epic/Story creation.
 
 If the file did not yet exist, include the initial history entry from the template. If it already existed, preserve all existing history entries and append a new line: `[YYYY-MM-DD HH:MM] | [Summary]`.
 
 Keep summaries concise (one line) and descriptive of the specific action taken (e.g., "Full regeneration from vision.md", "EP-02 updated to include API requirements").
 
-#### 4b: epic.md files
+#### 4b: story.md lightweight drafts
 
-Create or update one `docs/blueprint/epic-[NN].md` per Epic, following `templates/epic-template.md`.
+For each Story, create a directory at `docs/blueprint/epics/[epic-slug]/[story-slug]/` and place a lightweight `story.md` inside it.
 
-Each Epic file lists its Stories with scope summaries and Jira links.
+This is **not** the full technical SoT — that is built incrementally via `/speckit.blueprint.archive` after each FT is merged. Additional artifacts (data-model.md, contracts/, etc.) can be added to the same directory as the Story evolves.
 
-#### 4c: story.md lightweight drafts
-
-Create or update one `docs/blueprint/story-[NN].md` per Story. This is a **lightweight draft** (not the full technical SoT — that is built incrementally via `/speckit.blueprint.sync-story` after each FT is merged).
-
-Use this format:
+Use this format (matches `templates/story-template.md`):
 
 ```markdown
 # ST-XX — [Story Title]
@@ -195,21 +192,20 @@ Use this format:
 ## Overview
 [2-3 sentences from interview]
 
-## Scope
-- FT-XX — ... [To Do]
-- FT-XX — ... [To Do]
+## Current State
+(TBD — filled incrementally after each FT is specified and merged)
 
 ## Tech Context
-(TBD — filled after FT completion)
+(TBD)
 
 ## Non-Goals
-(TBD — filled after FT completion)
+(TBD)
 
 ## NFR
-(TBD — filled after FT completion)
+(TBD)
 
 ## ADR
-(TBD — filled after FT completion)
+(TBD)
 ```
 
 Save all files.
@@ -221,8 +217,7 @@ Save all files.
 Confirm all files are saved:
 
 - `docs/blueprint/blueprint.md` ✓
-- `docs/blueprint/epic-*.md` ([N] files) ✓
-- `docs/blueprint/story-*.md` ([N] files) ✓
+- `docs/blueprint/epics/[epic-slug]/[story-slug]/story.md` ([N] files) ✓
 
 Output:
 
@@ -247,11 +242,10 @@ If Step 0 found no `blueprint.yml` and the user chose to proceed anyway, append 
 
 ## Output Files
 
-| File | Purpose |
+| File / Directory | Purpose |
 | --- | --- |
-| `docs/blueprint/blueprint.md` | Entry point — Epic list and project overview |
-| `docs/blueprint/epic-*.md` | One per Epic — Story list with scope and Jira links |
-| `docs/blueprint/story-*.md` | One per Story — lightweight draft, evolves into technical SoT via `sync-story` |
+| `docs/blueprint/blueprint.md` | **Master roadmap** — full Epic → Story → Feature hierarchy in one document. Serves as the Jira draft. |
+| `docs/blueprint/epics/[epic-slug]/[story-slug]/` | One Story directory per Epic — contains `story.md` (lightweight draft → evolves into technical SoT via `archive`) and any related artifacts. |
 
 ---
 
@@ -267,7 +261,7 @@ If Step 0 found no `blueprint.yml` and the user chose to proceed anyway, append 
 
 **Feature List** — Brief bullet per FT. Each FT is a single `/speckit.specify` run. FTs are placeholders at roadmap time; their detailed specs are written later.
 
-**Jira** — Write `—` until the Jira issue is created. Linked automatically by `jira-sync-hierarchy-hook` after roadmap generation, or via manual Jira sync.
+**Jira** — Write `—` until the Jira issue is created. Linked automatically by `jira-push` after roadmap generation, or via manual Jira sync.
 
 ### Epic/Story Boundary Principles
 

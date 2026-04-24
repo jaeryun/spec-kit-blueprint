@@ -1,38 +1,79 @@
-> **Deprecated (v1):** This template uses the old Spec Outline (SO) format.
-> Use `templates/blueprint-template.md`, `epic-template.md`, and `story-template.md` instead.
+# Blueprint: [PROJECT NAME]
 
-# Roadmap: [PROJECT NAME]
+_Last updated: [DATE]_
 
-## Spec Outlines
+<!-- Blueprint is the single master document for your project's delivery hierarchy.
+     It contains all Epics, their Stories, and each Story's Features in one place.
+     Use this as the Jira Epic/Story/Task creation draft.
 
-<!-- ACTION REQUIRED: One Spec Outline per /speckit.specify run.
-     Number sequentially: SO-01, SO-02, SO-03, ...
+     Story directories are organized under their parent Epic:
+       docs/blueprint/epics/<epic-slug>/<story-slug>/story.md
 
-     Summary: one sentence, user-facing. Bad: "Implement auth". Good: "Users can sign up and log in."
-     Scope: free-form description of what this Spec Outline encompasses. Keep abstract — phase
-       breakdown (P1/P2/P3) is determined later during /speckit.specify through a requirements interview.
-     Spec: spec file path once specified, or — until then. (Linked automatically by roadmap-sync after /speckit.specify.) -->
+     This file is designed to be re-run when scope changes. Preserve existing History
+     entries and append a new row for each update.
 
-- **SO-01** — [User-facing goal]
-  - Scope: [What this Spec Outline encompasses, written at an abstract level. e.g. "Sign-up flow, login/logout, password reset, and session management."]
-  - Spec: —
-
-- **SO-02** — [User-facing goal]
-  - Scope: [What this Spec Outline encompasses, written at an abstract level. e.g. "User profile page, avatar upload, notification preferences, and account deletion."]
-  - Spec: —
-
-<!-- Add more Spec Outlines as needed. -->
+     Number Epics sequentially: EP-01, EP-02, ...
+     Number Stories sequentially project-wide: ST-01, ST-02, ST-03, ... (unique across all Epics)
+     Number Features sequentially project-wide: FT-01, FT-02, FT-03, ... (unique across all Stories) -->
 
 ---
 
-## Untracked Specs
+## Epics
 
-<!-- Spec files intentionally not linked to any Spec Outline.
-     roadmap-sync skips these automatically.
-     Entries are added here when you choose "Add to Untracked" during roadmap-sync. -->
+### EP-01 — [User-facing outcome]
+
+<!-- ACTION REQUIRED: One sentence describing the user-facing outcome of this Epic.
+     Bad: "Implement authentication"
+     Good: "Users can register and log in securely" -->
+
+- **Scope**: <!-- ACTION REQUIRED: What this Epic encompasses at an abstract level.
+     Keep it high-level — detailed specs come later in /speckit.specify. -->
+- **Out of Scope**: <!-- ACTION REQUIRED: What is explicitly NOT included in this Epic?
+     Be specific. "No OAuth" is useful. "Nice-to-haves" is not. -->
+- **Success Criteria**: <!-- ACTION REQUIRED: How do we know this Epic is done?
+     Prefer measurable outcomes: "X% of users can do Y in under Z minutes". -->
+- **Jira**: —
+
+#### Stories
+
+- **ST-01** — [User-facing outcome]
+  - **Scope**: <!-- ACTION REQUIRED: What this Story encompasses — a feature area that may span multiple PRs -->
+  - **Key AC**: <!-- ACTION REQUIRED: 1–2 lines of core acceptance criteria.
+       This is the business-level "done" definition, not technical implementation details. -->
+  - **Jira**: —
+  - **Features**:
+    - FT-01 — <!-- ACTION REQUIRED: Summary of the spec-sized unit. Each FT = one /speckit.specify run. -->
+    - FT-02 — [Summary]
+
+- **ST-02** — [User-facing outcome]
+  - **Scope**: [What this Story encompasses]
+  - **Key AC**: [1–2 lines of core acceptance criteria]
+  - **Jira**: —
+  - **Features**:
+    - FT-03 — [Summary]
+
+### EP-02 — [User-facing outcome]
+
+- **Scope**: [What this Epic encompasses at an abstract level]
+- **Out of Scope**: [What is explicitly NOT included]
+- **Success Criteria**: [How we know this Epic is done]
+- **Jira**: —
+
+#### Stories
+
+- **ST-03** — [User-facing outcome]
+  - **Scope**: [What this Story encompasses]
+  - **Key AC**: [1–2 lines of core acceptance criteria]
+  - **Jira**: —
+  - **Features**:
+    - FT-04 — [Summary]
+
+<!-- Add more Epics as needed. -->
 
 ---
 
 ## History
 
-[YYYY-MM-DD HH:MM] | Initial roadmap created from vision.md
+| Timestamp | Subject | Note |
+| --- | --- | --- |
+| [YYYY-MM-DD HH:MM] | blueprint.md | Created from vision.md |

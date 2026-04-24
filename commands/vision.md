@@ -22,7 +22,7 @@ The output feeds into `/speckit.blueprint.roadmap`.
 
 **Belongs here:** problem statement, target users, core features, non-functional requirements, out-of-scope items, success criteria, team/timeline context, existing stack and integrations.
 
-**Does NOT belong here:** delivery stages or phases, Spec Outline breakdowns, sprint assignments, specific technology choices, implementation approaches, API or data model design. If any of these appear in your draft, move them to roadmap or remove them.
+**Does NOT belong here:** delivery stages or phases, Story/Feature breakdowns, sprint assignments, specific technology choices, implementation approaches, API or data model design. If any of these appear in your draft, move them to roadmap or remove them.
 
 ## User Input
 
@@ -165,7 +165,7 @@ Before confirming completion, review the saved `docs/blueprint/vision.md` agains
 Flag any content that does not belong at the vision level:
 
 - Delivery stages, phases, or timelines broken into milestones → belongs in roadmap
-- Spec Outline or feature breakdowns → belongs in roadmap
+- Story/Feature breakdowns → belongs in blueprint.md
 - Specific technology or architecture decisions → belongs in roadmap or spec
 - Sprint assignments or task lists → belongs in roadmap or spec
 
@@ -173,7 +173,7 @@ For each violation found, output:
 
 ```text
 ⚠️ Scope issue in vision.md: "[excerpt]"
-This level of detail belongs in [roadmap / spec]. Remove it from vision.md or move it to the appropriate file (`roadmap.md` or `spec.md`).
+This level of detail belongs in [roadmap / spec]. Remove it from vision.md or move it to the appropriate file (`blueprint.md` or `spec.md`).
 ```
 
 Ask the user: "Found [N] scope issue(s) above. Fix before proceeding? (yes / no / skip)"
@@ -189,11 +189,11 @@ If no violations found → output: "✅ Scope check passed."
 
 > This step only applies when vision is being **updated** and a roadmap already exists. On first run, skip this step.
 
-Check if `docs/blueprint/roadmap.md` exists. If it does not exist, skip this step.
+Check if `docs/blueprint/blueprint.md` exists. If it does not exist, skip this step.
 
-Read `docs/blueprint/roadmap.md`. Check at a high level whether the existing Spec Outlines are still consistent with the updated vision:
+Read `docs/blueprint/blueprint.md`. Check at a high level whether the existing Stories and Features are still consistent with the updated vision:
 
-- Do any Spec Outline goals contradict the updated Problem Statement or Core Features?
+- Do any Story or Feature goals contradict the updated Problem Statement or Core Features?
 - Does the roadmap include work that vision now explicitly marks as Out of Scope?
 - Does the roadmap omit any Core Feature that vision now considers essential?
 
@@ -203,7 +203,7 @@ If conflicts are found, output:
 ⚠️ Vision change affects existing roadmap.
 
 [For each conflict:]
-SO-[NN] — [goal]
+ST-[NN] / FT-[NN] — [title]
 Issue: [one-line description of the conflict]
 ```
 
@@ -211,9 +211,9 @@ Then output:
 
 ```text
 The roadmap needs to be re-run to reflect the updated vision.
-Run `/speckit.blueprint.roadmap` to regenerate or update affected Spec Outlines.
+Run `/speckit.blueprint.roadmap` to regenerate or update affected Stories and Features.
 
-Note: if any conflicting Spec Outline has already been specified or implemented,
+Note: if any conflicting Story or Feature has already been specified or implemented,
 those downstream steps (specify, plan, tasks, implement) may also need to be re-run
 depending on the extent of the vision change.
 ```
@@ -255,7 +255,7 @@ If any of the following appear in the draft, move or remove them before saving:
 
 | Found in draft | Where it belongs instead |
 | --- | --- |
-| Delivery phases, stages, or milestones | `roadmap.md` |
-| Spec Outline breakdowns or feature priority lists | `roadmap.md` |
-| Specific technology or architecture choices | `roadmap.md` or `spec.md` |
-| Sprint assignments, task lists, implementation steps | `roadmap.md` or `spec.md` |
+| Delivery phases, stages, or milestones | `blueprint.md` |
+| Feature breakdowns or priority lists | `blueprint.md` |
+| Specific technology or architecture choices | `blueprint.md` or `spec.md` |
+| Sprint assignments, task lists, implementation steps | `blueprint.md` or `spec.md` |

@@ -5,7 +5,7 @@ tools:
   - mcp-jira/get_issue
 ---
 
-# Jira Fetch Context Hook
+# Blueprint Jira Pull
 
 Fetch Jira FT (Feature/Task) comments and status for context injection.
 
@@ -29,7 +29,7 @@ Determine the active FT from the following sources (in order):
 
 If no FT is found, log:
 
-> `[jira-fetch-context-hook] No active FT found. Skipping context fetch.`
+> `[jira-pull] No active FT found. Skipping context fetch.`
 
 Stop. Do not error.
 
@@ -43,7 +43,7 @@ Read `.specify/memory/blueprint.yml` for:
 
 If `blueprint.yml` is missing or `project_key` is not set, log:
 
-> `[jira-fetch-context-hook] Skipped: blueprint.yml not configured. Run /speckit.blueprint.setup.`
+> `[jira-pull] Skipped: blueprint.yml not configured. Run /speckit.blueprint.setup.`
 
 Stop.
 
@@ -64,13 +64,13 @@ Extract:
 
 If no Jira FT is found, log:
 
-> `[jira-fetch-context-hook] No Jira issue found for FT-[ID]. Skipping context injection.`
+> `[jira-pull] No Jira issue found for FT-[ID]. Skipping context injection.`
 
 Stop. Do not error.
 
 On any tool error, log:
 
-> `[jira-fetch-context-hook] Failed to fetch Jira FT-[ID]: [error message]. Skipping context injection.`
+> `[jira-pull] Failed to fetch Jira FT-[ID]: [error message]. Skipping context injection.`
 
 Stop. Do not block the calling command.
 
@@ -97,4 +97,4 @@ Replace `[spec/plan/tasks]` with the appropriate hook context (e.g., `spec` for 
 
 Log:
 
-> `[jira-fetch-context-hook] Injected Jira context for FT-[ID] ([STATUS]).`
+> `[jira-pull] Injected Jira context for FT-[ID] ([STATUS]).`

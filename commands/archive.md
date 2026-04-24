@@ -1,5 +1,5 @@
 ---
-description: "Sync story.md with Jira FT statuses, create MR, and update Jira Story."
+description: "Archive completed FTs into story.md, optionally create MR, and update Jira Story."
 tools:
   - mcp-jira/search
   - mcp-jira/get_issue
@@ -8,9 +8,9 @@ tools:
   - mcp-gitlab/create_merge_request
 ---
 
-# Blueprint Sync Story
+# Blueprint Archive
 
-Sync `story.md` with Jira Feature Ticket (FT) statuses, create a GitLab Merge Request, and update the Jira Story description.
+Archive completed FTs into the Story's technical Source of Truth (`story.md`). Optionally create a GitLab Merge Request and update the Jira Story description.
 
 ## Purpose
 
@@ -27,13 +27,13 @@ Update a Story's technical Source of Truth after its linked FTs are complete. Th
 
 Story ID, e.g., `"ST-01"`.
 
-If `$ARGUMENTS` is not provided, ask: "Which Story should I sync? (e.g., ST-01)"
+If `$ARGUMENTS` is not provided, ask: "Which Story should I archive? (e.g., ST-01)"
 
 ## Hooks
 
-Before starting, check `.specify/extensions.yml` for any handlers registered under `before_blueprint_sync_story` and execute them in order.
+Before starting, check `.specify/extensions.yml` for any handlers registered under `before_blueprint_archive` and execute them in order.
 
-After completing all steps, check `.specify/extensions.yml` for any handlers registered under `after_blueprint_sync_story` and execute them in order.
+After completing all steps, check `.specify/extensions.yml` for any handlers registered under `after_blueprint_archive` and execute them in order.
 
 ## Instructions
 
@@ -41,17 +41,17 @@ After completing all steps, check `.specify/extensions.yml` for any handlers reg
 
 1. Extract the Story ID from `$ARGUMENTS` (e.g., `ST-01`).
 2. Validate the Story ID format: expected pattern is `ST-[NN]`.
-3. Find the Story directory: `docs/blueprint/stories/[ST-ID]/`.
+3. Find the Story directory: `docs/blueprint/epics/[epic-slug]/[story-slug]/`. Search under each `epics/*/` directory to match the Story ID in the `story.md` title.
 4. Verify `story.md` exists in that directory. If not, warn the user and stop.
 
 ---
 
-### Step 2: Fetch Jira FT Statuses
+### Step 2: Identify Completed FTs
 
-1. Read `blueprint.yml` in the Story directory to identify linked FTs.
-2. Search Jira for all FTs linked to this Story using `mcp-jira/search`:
+1. Read `docs/blueprint/blueprint.md` and find the Story's **Features** list under its Epic.
+2. For each FT, check if a completed spec exists (look for `specs/[ft-slug]/spec.md` or similar).
+3. Optionally, search Jira for FTs linked to this Story using `mcp-jira/search`:
    - Query: `parent = [ST-ID] AND issuetype = FT`
-3. For each FT, fetch its status using `mcp-jira/get_issue`.
 4. Build a status summary table:
 
    | FT ID | Title | Status | Done? |
@@ -74,7 +74,7 @@ After completing all steps, check `.specify/extensions.yml` for any handlers reg
 
    > "Apply these changes to story.md? (yes / no)"
 
-   - If **yes**: write the updated `story.md`, update the `_Last updated: [date]_` line, and append a History entry: `[YYYY-MM-DD HH:MM] | story.md | Synced FT statuses`.
+    - If **yes**: write the updated `story.md`, update the `_Last updated: [date]_` line, and append a History entry: `[YYYY-MM-DD HH:MM] | story.md | Archived completed FTs`.
    - If **no**: stop here and report that no changes were made.
 
 ---
@@ -82,7 +82,7 @@ After completing all steps, check `.specify/extensions.yml` for any handlers reg
 ### Step 4: Git Commit & Push
 
 1. Stage the updated `story.md`.
-2. Propose a commit message: `docs(blueprint): sync [ST-ID] story.md with completed FTs`
+2. Propose a commit message: `docs(blueprint): archive [ST-ID] story.md with completed FTs`
 3. Ask the user:
 
    > "Commit and push the updated story.md? (yes / no)"
@@ -95,7 +95,7 @@ After completing all steps, check `.specify/extensions.yml` for any handlers reg
 ### Step 5: Create GitLab MR
 
 1. Prepare MR details:
-   - **Title**: `docs(blueprint): sync [ST-ID] story.md with completed FTs`
+    - **Title**: `docs(blueprint): archive [ST-ID] story.md with completed FTs`
    - **Description**: summarize which FTs were merged and link to the Story directory.
 2. Ask the user:
 
@@ -156,4 +156,4 @@ Provide next steps based on what was done:
 
 | File | Purpose |
 | --- | --- |
-| `docs/blueprint/stories/[ST-ID]/story.md` | Updated Story technical Source of Truth with merged FT content |
+| `docs/blueprint/epics/[epic-slug]/[story-slug]/story.md` | Updated Story technical Source of Truth with merged FT content |

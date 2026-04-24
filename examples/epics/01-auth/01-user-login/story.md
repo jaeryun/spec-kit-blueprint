@@ -1,7 +1,12 @@
 # ST-01 — Users can register and log in with email/password
 
-> Source of Truth. Last updated by: FT-02 (2026-04-23)
+> Source of Truth. Last updated: 2026-04-23
 > Jira: —
+
+<!-- Related artifacts in this directory:
+     - data-model.md
+     - contracts/auth-api.md
+-->
 
 ---
 
@@ -11,7 +16,9 @@ Users can create an account with their email and password, log in to access the 
 
 ## Current State
 
-Users submit email + password to register. On success, an email verification link is sent. After verifying, users can log in and receive a session token valid for 30 minutes (sliding). Password reset sends a time-limited link to the registered email. Logout invalidates the session immediately.
+- **FT-01 (Done)**: Email/password registration with email verification implemented.
+- **FT-02 (Done)**: Server-side session management (Redis) and logout implemented.
+- **FT-03 (To Do)**: Password reset flow pending.
 
 ## Tech Context
 

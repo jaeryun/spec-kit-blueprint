@@ -14,19 +14,19 @@ requires:
 
 hooks:
   before_specify:
-    command: "speckit.blueprint.hook-jira-fetch-context"
+    command: "speckit.blueprint.jira-pull"
     optional: false
-    description: "Fetch Jira context (Epic/Story hierarchy and current status) before specifying."
+    description: "Pull Jira context (FT comments and status) before specifying."
 
   before_plan:
-    command: "speckit.blueprint.hook-jira-fetch-context"
+    command: "speckit.blueprint.jira-pull"
     optional: false
-    description: "Fetch Jira context before planning begins."
+    description: "Pull Jira context before planning begins."
 
   before_tasks:
-    command: "speckit.blueprint.hook-jira-fetch-context"
+    command: "speckit.blueprint.jira-pull"
     optional: false
-    description: "Fetch Jira context before task breakdown begins."
+    description: "Pull Jira context before task breakdown begins."
 
 provides:
   commands:
@@ -42,17 +42,17 @@ provides:
       file: commands/roadmap.md
       description: "Generate the Epic→Story hierarchy from the confirmed vision."
 
-    - name: speckit.blueprint.sync-story
-      file: commands/sync-story.md
-      description: "Create or update story.md (technical Source of Truth) for a given Story."
+    - name: speckit.blueprint.archive
+      file: commands/archive.md
+      description: "Archive completed FTs into the Story's technical Source of Truth."
 
-    - name: speckit.blueprint.hook-jira-sync-hierarchy
-      file: commands/hook-jira-sync-hierarchy.md
-      description: "Sync Epic→Story hierarchy to Jira after roadmap generation."
+    - name: speckit.blueprint.jira-push
+      file: commands/jira-push.md
+      description: "Push Epic→Story hierarchy to Jira after roadmap generation."
 
-    - name: speckit.blueprint.hook-jira-fetch-context
-      file: commands/hook-jira-fetch-context.md
-      description: "Fetch Jira context (Epic/Story hierarchy and current status) for hook consumption."
+    - name: speckit.blueprint.jira-pull
+      file: commands/jira-pull.md
+      description: "Pull Jira context (FT status, comments) for session injection."
 
   hooks:
     - event: before_blueprint_setup
@@ -71,13 +71,13 @@ provides:
       description: "Triggered before Epic→Story hierarchy generation begins."
 
     - event: after_blueprint_roadmap
-      description: "Triggered after the Epic→Story hierarchy is confirmed and saved. Use to create Jira Epics/Stories."
+      description: "Triggered after the Epic→Story hierarchy is confirmed and saved. Use to push to Jira."
 
-    - event: before_blueprint_sync_story
-      description: "Triggered before story.md generation begins."
+    - event: before_blueprint_archive
+      description: "Triggered before story.md archiving begins."
 
-    - event: after_blueprint_sync_story
-      description: "Triggered after story.md is saved. Use to link Jira Story."
+    - event: after_blueprint_archive
+      description: "Triggered after story.md is archived. Use to link Jira Story."
 
 tags:
   - planning
