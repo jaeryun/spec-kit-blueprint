@@ -21,51 +21,51 @@ If you've used `/speckit.specify`, you've likely encountered specs that are too 
 
 ```mermaid
 flowchart TD
-    A["/speckit.constitution<br/>Project setup & conventions"] --> B["/speckit.blueprint.vision"]
+    A["/speckit.constitution<br/>Project setup & conventions"] --> B["/speckit.blueprint.vision<br/>Define problem, users, goals"]
 
     subgraph BP ["Blueprint - Strategy & Alignment"]
         direction TB
         B --> V["vision.md<br/>Problem / Users / Goals / Constraints"]
-        V --> C["/speckit.blueprint.roadmap<br/>(requires vision.md)"]
+        V --> C["/speckit.blueprint.roadmap<br/>Build EP / ST / FT hierarchy"]
         C --> R["blueprint.md<br/>Epic / Story / Feature Draft"]
     end
 
-    subgraph DEV1 ["Person A picks FT-1.1.1"]
+    subgraph DEV1 ["Person A picks FT-2.1.1"]
         direction LR
-        S1a["/speckit.specify FT-1.1.1"] --> N1a["/speckit.plan -> tasks -> implement"]
+        S1a["/speckit.specify FT-2.1.1<br/>Write feature spec"] --> N1a["/speckit.plan<br/>/speckit.tasks<br/>/speckit.implement"]
     end
 
-    subgraph DEV2 ["Person B picks FT-1.1.2"]
+    subgraph DEV2 ["Person B picks FT-2.1.2"]
         direction LR
-        S1b["/speckit.specify FT-1.1.2"] --> N1b["/speckit.plan -> tasks -> implement"]
+        S1b["/speckit.specify FT-2.1.2<br/>Write feature spec"] --> N1b["/speckit.plan<br/>/speckit.tasks<br/>/speckit.implement"]
     end
 
-    subgraph DEV3 ["Person A picks FT-1.2.1"]
+    subgraph DEV3 ["Person A picks FT-2.2.1"]
         direction LR
-        S2["/speckit.specify FT-1.2.1"] --> N2["/speckit.plan -> tasks -> implement"]
+        S2["/speckit.specify FT-2.2.1<br/>Write feature spec"] --> N2["/speckit.plan<br/>/speckit.tasks<br/>/speckit.implement"]
     end
 
-    subgraph DEV4 ["Person C picks FT-2.1.1"]
+    subgraph DEV4 ["Person C picks FT-1.1.1"]
         direction LR
-        S3a["/speckit.specify FT-2.1.1"] --> N3a["/speckit.plan -> tasks -> implement"]
+        S3a["/speckit.specify FT-1.1.1<br/>Write feature spec"] --> N3a["/speckit.plan<br/>/speckit.tasks<br/>/speckit.implement"]
     end
 
-    subgraph DEV5 ["Person B picks FT-2.1.2"]
+    subgraph DEV5 ["Person B picks FT-1.1.2"]
         direction LR
-        S3b["/speckit.specify FT-2.1.2"] --> N3b["/speckit.plan -> tasks -> implement"]
+        S3b["/speckit.specify FT-1.1.2<br/>Write feature spec"] --> N3b["/speckit.plan<br/>/speckit.tasks<br/>/speckit.implement"]
     end
 
-    R -.-> EP1["EP-01 - Real-time 1:1 Messaging"]
-    EP1 -.-> ST1["ST-1.1 - 1:1 Text"]
-    ST1 -.-> FT1a["FT-1.1.1 WebSocket routing"]
-    ST1 -.-> FT1b["FT-1.1.2 Message persistence"]
-    EP1 -.-> ST2["ST-1.2 - Rich Media"]
-    ST2 -.-> FT2["FT-1.2.1 Media upload"]
+    R -.-> EP2["EP-01 — Real-time 1:1 Messaging"]
+    EP2 -.-> ST3["ST-1.1 — Text messaging with delivery status"]
+    ST3 -.-> FT3a["FT-1.1.1 WebSocket connection management and message routing"]
+    ST3 -.-> FT3b["FT-1.1.2 Message persistence and conversation history API"]
 
-    R -.-> EP2["EP-02 - Group Chats"]
-    EP2 -.-> ST3["ST-2.1 - Group Mgmt"]
-    ST3 -.-> FT3a["FT-2.1.1 Group creation"]
-    ST3 -.-> FT3b["FT-2.1.2 Admin roles"]
+    R -.-> EP1["EP-02 — Group Conversations"]
+    EP1 -.-> ST1["ST-2.1 — Group creation and management"]
+    ST1 -.-> FT1a["FT-2.1.1 Group creation and member invitation flow"]
+    ST1 -.-> FT1b["FT-2.1.2 Role-based permission model (admin vs member)"]
+    EP1 -.-> ST2["ST-2.2 — Advanced collaboration features"]
+    ST2 -.-> FT2["FT-2.2.1 Emoji reactions aggregation and display"]
 
     FT1a -.-> S1a
     FT1b -.-> S1b
@@ -160,32 +160,32 @@ docs/blueprint/
 **vision.md** — structured sections for the problem, users, goals, constraints, and out-of-scope items:
 
 ```markdown
-# Vision: Simple SaaS App
+# Vision: Simple Messenger
 
 ## Problem Statement
-<!-- The core pain point this project solves. -->
-Teams lack a unified entry point for user management, forcing manual aggregation.
+Existing messaging apps are either too bloated with unnecessary features or lack reliable media sharing and group collaboration tools for everyday communication.
 
 ## Target Users
-<!-- Who uses the product and in what role. -->
-- **End users**: Team members who sign up and manage their own accounts.
-- **Administrators**: Team leaders who monitor overall user activity.
+- **Individual users**: People who want fast, reliable 1:1 and group messaging.
+- **Team leads**: Users who need organized group chats with announcements and pinned content.
 
 ## Core Features
-<!-- Numbered list of key capabilities. -->
-1. Email/password sign-up, login, logout, and password reset.
+1. Real-time 1:1 text messaging with read receipts and typing indicators.
+2. Rich media sharing (images, videos, files, voice messages) with preview and compression.
+3. Group chat creation and management (invitation, admin roles, announcements).
+4. Contact discovery via username, phone number, and address book sync.
 
 ## Constraints
-<!-- Team size, timeline, and integration limits. -->
-- 1–2 developers. MVP within 3 months. No third-party integrations.
+- Team size: 3–4 developers. MVP within 4 months. iOS, Android, and Web from day one.
 
 ## Out of Scope
-<!-- What is explicitly excluded. -->
-- Social login, billing, mobile app.
+- Video/voice calling (Phase 2).
+- Stories / ephemeral content.
+- In-app payments or stickers marketplace.
 
 ## Success Criteria
-<!-- Measurable outcomes that define done. -->
-- New users can complete sign-up in under 5 minutes.
+- Users can send a message and receive a delivery confirmation within 1 second.
+- Group chats support up to 500 members without performance degradation.
 ```
 
 > See [`examples/vision.md`](examples/vision.md) for a complete worked example.
