@@ -45,29 +45,29 @@ flowchart TD
         end
     end
 
-    subgraph DEV1 ["Person A picks FT-2.1.1"]
-        direction LR
-        S1a["/speckit.specify FT-2.1.1<br/>Write feature spec"] --> N1a["/speckit.plan<br/>/speckit.tasks<br/>/speckit.implement"]
-    end
-
-    subgraph DEV2 ["Person B picks FT-2.1.2"]
-        direction LR
-        S1b["/speckit.specify FT-2.1.2<br/>Write feature spec"] --> N1b["/speckit.plan<br/>/speckit.tasks<br/>/speckit.implement"]
-    end
-
-    subgraph DEV3 ["Person A picks FT-2.2.1"]
-        direction LR
-        S2["/speckit.specify FT-2.2.1<br/>Write feature spec"] --> N2["/speckit.plan<br/>/speckit.tasks<br/>/speckit.implement"]
-    end
-
-    subgraph DEV4 ["Person C picks FT-1.1.1"]
+    subgraph DEV1 ["Person C picks FT-1.1.1"]
         direction LR
         S3a["/speckit.specify FT-1.1.1<br/>Write feature spec"] --> N3a["/speckit.plan<br/>/speckit.tasks<br/>/speckit.implement"]
     end
 
-    subgraph DEV5 ["Person B picks FT-1.1.2"]
+    subgraph DEV2 ["Person B picks FT-1.1.2"]
         direction LR
         S3b["/speckit.specify FT-1.1.2<br/>Write feature spec"] --> N3b["/speckit.plan<br/>/speckit.tasks<br/>/speckit.implement"]
+    end
+
+    subgraph DEV3 ["Person A picks FT-2.1.1"]
+        direction LR
+        S1a["/speckit.specify FT-2.1.1<br/>Write feature spec"] --> N1a["/speckit.plan<br/>/speckit.tasks<br/>/speckit.implement"]
+    end
+
+    subgraph DEV4 ["Person B picks FT-2.1.2"]
+        direction LR
+        S1b["/speckit.specify FT-2.1.2<br/>Write feature spec"] --> N1b["/speckit.plan<br/>/speckit.tasks<br/>/speckit.implement"]
+    end
+
+    subgraph DEV5 ["Person A picks FT-2.2.1"]
+        direction LR
+        S2["/speckit.specify FT-2.2.1<br/>Write feature spec"] --> N2["/speckit.plan<br/>/speckit.tasks<br/>/speckit.implement"]
     end
 
     FT1a -.-> S3a
