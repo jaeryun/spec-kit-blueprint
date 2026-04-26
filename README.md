@@ -287,7 +287,7 @@ specify extension list
 |---------|-------------|---------|
 | `/speckit.blueprint.vision` | Walks you through defining the problem, users, and core value — outputs `vision.md` | — |
 | `/speckit.blueprint.design` | Breaks the vision down into an Epic → Story → Feature hierarchy — outputs `blueprint.md` and lightweight `story.md` drafts | `vision.md` |
-| `/speckit.blueprint.archive` | Archives completed FTs into the Story's technical Source of Truth | `blueprint.md` |
+| `/speckit.blueprint.archive` | Archives a completed FT into its parent Story's technical Source of Truth | `blueprint.md` + spec |
 
 Each command accepts an optional free-text argument that pre-populates the interview or narrows its focus.
 
@@ -314,8 +314,8 @@ Each command accepts an optional free-text argument that pre-populates the inter
 **`/speckit.blueprint.archive`**
 
 ```text
-# Archive completed FTs into a Story's SoT
-/speckit.blueprint.archive ST-1.1
+# Archive a completed FT into its parent Story's SoT
+/speckit.blueprint.archive FT-1.1.1
 ```
 
 ---

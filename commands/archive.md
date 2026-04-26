@@ -1,22 +1,22 @@
 ---
-description: "Archive completed FTs into story.md."
+description: "Archive a completed FT into its parent Story's story.md."
 ---
 
 # Blueprint Archive
 
-Archive completed FTs into the Story's technical Source of Truth (`story.md`).
+Archive a completed Feature (FT) into its parent Story's technical Source of Truth (`story.md`).
 
 ## Purpose
 
-Update a Story's technical Source of Truth after its linked FTs are complete. This command merges completed FT content into `story.md` so the Story-level documentation stays current as Features are delivered.
+When a Feature is fully specified and implemented, its technical decisions, ADRs, and context should be merged into the Story-level `story.md` so the Story's Source of Truth stays current. This command handles that merge one FT at a time.
 
 ## User Input
 
 `$ARGUMENTS`
 
-Story ID, e.g., `"ST-1.1"`.
+Feature ID, e.g., `"FT-1.1.1"`.
 
-If `$ARGUMENTS` is not provided, ask: "Which Story should I archive? (e.g., ST-1.1)"
+If `$ARGUMENTS` is not provided, ask: "Which Feature should I archive? (e.g., FT-1.1.1)"
 
 ## Hooks
 
@@ -28,45 +28,54 @@ After completing all steps, check `.specify/extensions.yml` for any handlers reg
 
 ### Step 1: Parse Input
 
-1. Extract the Story ID from `$ARGUMENTS` (e.g., `ST-1.1`).
-2. Validate the Story ID format: expected pattern is `ST-[N].[N]`.
+1. Extract the Feature ID from `$ARGUMENTS` (e.g., `FT-1.1.1`).
+2. Validate the Feature ID format: expected pattern is `FT-[N].[N].[N]`.
+3. If invalid or missing, warn the user and stop.
+
+---
+
+### Step 2: Locate FT Spec
+
+1. Find the spec directory for this FT. Search under `specs/` for a directory whose name contains the FT ID (e.g., `specs/ft-1.1.1-*/` or `specs/FT-1.1.1-*/`).
+2. Verify `spec.md` exists in that directory. If not found, warn:
+   > "No spec found for [FT-ID]. Run `/speckit.specify [FT-ID]` first."
+   > Stop.
+3. Read `spec.md` and extract:
+   - **Tech Context** section
+   - **ADR** section (if any)
+   - Any linked artifacts (data-model.md, contracts/, etc.) — list their paths only
+
+---
+
+### Step 3: Identify Parent Story
+
+1. Read `docs/blueprint/blueprint.md` and locate the FT in the Epic → Story → Feature hierarchy.
+2. Extract the parent Story ID (e.g., `ST-1.1`) and Story title.
 3. Find the Story directory: `docs/blueprint/epics/[epic-slug]/[story-slug]/`. Search under each `epics/*/` directory to match the Story ID in the `story.md` title.
-4. Verify `story.md` exists in that directory. If not, warn the user and stop.
+4. Verify `story.md` exists in that directory. If not found, warn the user and stop.
 
 ---
 
-### Step 2: Identify Completed FTs
+### Step 4: Update story.md
 
-1. Read `docs/blueprint/blueprint.md` and find the Story's **Features** list under its Epic.
-2. For each FT, check if a completed spec exists (look for `specs/[ft-slug]/spec.md` or similar).
-3. Build a status summary table:
-
-   | FT ID | Title | Status | Done? |
-   | --- | --- | --- | --- |
-   | FT-XX | ... | Done | [x] |
-   | FT-YY | ... | In Progress | [ ] |
-
-4. Identify FTs with status **Done** (or equivalent terminal state).
-
----
-
-### Step 3: Update story.md
-
-1. For each completed FT, merge its technical content into `story.md`:
-   - Append or update the **Tech Context** section
-   - Append or update the **ADR** section
+1. Read the current `story.md`.
+2. Merge the FT's technical content into `story.md`:
+   - Append or update the **Tech Context** section with content from `spec.md`
+   - Append or update the **ADR** section with ADRs from `spec.md`
    - Preserve existing structure and ordering
-2. Show a diff of the proposed changes to `story.md`.
-3. Ask the user:
+   - Avoid duplicate entries if this FT was previously archived
+3. Update the Story's **Current State** section to mark this FT as completed.
+4. Show a diff of the proposed changes to `story.md`.
+5. Ask the user:
 
    > "Apply these changes to story.md? (yes / no)"
 
-    - If **yes**: write the updated `story.md`, update the `_Last updated: [date]_` line, and append a History entry: `[YYYY-MM-DD HH:MM] | story.md | Archived completed FTs`.
+   - If **yes**: write the updated `story.md`, update the `_Last updated: [date]_` line, and append a History entry: `[YYYY-MM-DD HH:MM] | story.md | Archived FT-[ID]`.
    - If **no**: stop here and report that no changes were made.
 
 ---
 
-### Step 4: Completion
+### Step 5: Completion
 
 Confirm completion status:
 
@@ -76,7 +85,7 @@ Confirm completion status:
 
 Provide next steps:
 
-> Story SoT updated. Next: pick another FT to specify, or archive the next Story.
+> FT-[ID] archived into [ST-ID]. Next: pick another FT to specify, or archive the next completed FT.
 
 ## Output Files
 

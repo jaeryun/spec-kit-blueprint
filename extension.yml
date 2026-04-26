@@ -24,7 +24,7 @@ provides:
 
     - name: speckit.blueprint.archive
       file: commands/archive.md
-      description: "Archive completed FTs into the Story's technical Source of Truth."
+      description: "Archive a completed FT into its parent Story's technical Source of Truth."
 
   hooks:
     - event: before_blueprint_vision
