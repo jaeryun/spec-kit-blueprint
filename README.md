@@ -28,6 +28,21 @@ flowchart TD
         B --> V["vision.md<br/>Problem / Users / Goals / Constraints"]
         V --> C["/speckit.blueprint.roadmap<br/>Build EP / ST / FT hierarchy"]
         C --> R["blueprint.md<br/>Epic / Story / Feature Draft"]
+
+        subgraph HIER ["blueprint.md"]
+            direction TB
+            R -.-> EP1["EP-01 — Real-time 1:1 Messaging"]
+            EP1 -.-> ST1["ST-1.1 — Text messaging with delivery status"]
+            ST1 -.-> FT1a["FT-1.1.1 WebSocket connection management and message routing"]
+            ST1 -.-> FT1b["FT-1.1.2 Message persistence and conversation history API"]
+
+            R -.-> EP2["EP-02 — Group Conversations"]
+            EP2 -.-> ST2["ST-2.1 — Group creation and management"]
+            ST2 -.-> FT2a["FT-2.1.1 Group creation and member invitation flow"]
+            ST2 -.-> FT2b["FT-2.1.2 Role-based permission model (admin vs member)"]
+            EP2 -.-> ST3["ST-2.2 — Advanced collaboration features"]
+            ST3 -.-> FT2c["FT-2.2.1 Emoji reactions aggregation and display"]
+        end
     end
 
     subgraph DEV1 ["Person A picks FT-2.1.1"]
@@ -55,25 +70,14 @@ flowchart TD
         S3b["/speckit.specify FT-1.1.2<br/>Write feature spec"] --> N3b["/speckit.plan<br/>/speckit.tasks<br/>/speckit.implement"]
     end
 
-    R -.-> EP2["EP-01 — Real-time 1:1 Messaging"]
-    EP2 -.-> ST3["ST-1.1 — Text messaging with delivery status"]
-    ST3 -.-> FT3a["FT-1.1.1 WebSocket connection management and message routing"]
-    ST3 -.-> FT3b["FT-1.1.2 Message persistence and conversation history API"]
-
-    R -.-> EP1["EP-02 — Group Conversations"]
-    EP1 -.-> ST1["ST-2.1 — Group creation and management"]
-    ST1 -.-> FT1a["FT-2.1.1 Group creation and member invitation flow"]
-    ST1 -.-> FT1b["FT-2.1.2 Role-based permission model (admin vs member)"]
-    EP1 -.-> ST2["ST-2.2 — Advanced collaboration features"]
-    ST2 -.-> FT2["FT-2.2.1 Emoji reactions aggregation and display"]
-
-    FT1a -.-> S1a
-    FT1b -.-> S1b
-    FT2 -.-> S2
-    FT3a -.-> S3a
-    FT3b -.-> S3b
+    FT1a -.-> S3a
+    FT1b -.-> S3b
+    FT2a -.-> S1a
+    FT2b -.-> S1b
+    FT2c -.-> S2
 
     style BP fill:#e8edf5,stroke:#1e40af,stroke-width:2px,color:#1e3a5f
+    style HIER fill:#ffffff,stroke:#93c5fd,stroke-dasharray: 5 5,color:#1e3a5f
     style DEV1 fill:#e6f2ee,stroke:#0f766e,stroke-width:2px,color:#134e4a
     style DEV2 fill:#e6f2ee,stroke:#0f766e,stroke-width:2px,color:#134e4a
     style DEV3 fill:#e6f2ee,stroke:#0f766e,stroke-width:2px,color:#134e4a
@@ -91,9 +95,9 @@ flowchart TD
     style ST3 fill:#eff6ff,stroke:#93c5fd,color:#1e3a5f
     style FT1a fill:#f8fafc,stroke:#cbd5e1,color:#334155
     style FT1b fill:#f8fafc,stroke:#cbd5e1,color:#334155
-    style FT2 fill:#f8fafc,stroke:#cbd5e1,color:#334155
-    style FT3a fill:#f8fafc,stroke:#cbd5e1,color:#334155
-    style FT3b fill:#f8fafc,stroke:#cbd5e1,color:#334155
+    style FT2a fill:#f8fafc,stroke:#cbd5e1,color:#334155
+    style FT2b fill:#f8fafc,stroke:#cbd5e1,color:#334155
+    style FT2c fill:#f8fafc,stroke:#cbd5e1,color:#334155
     style S1a fill:#0f766e,stroke:#0f766e,color:#f0fdf4
     style S1b fill:#0f766e,stroke:#0f766e,color:#f0fdf4
     style S2 fill:#0f766e,stroke:#0f766e,color:#f0fdf4
