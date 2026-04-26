@@ -94,7 +94,7 @@ Then conduct the conversational interview covering the areas below. Ask **one qu
 
 **Interview Rules (Strict):**
 
-1. **ONE question at a time** — Never ask multiple questions in one turn. After each user response, provide feedback before asking the next question.
+1. **ONE to THREE questions at a time** — Adapt based on question length and complexity. A single broad question warrants one at a time. A set of tightly related, short follow-ups (e.g., "What sprint cadence? 2 or 3 weeks?") can be grouped up to three. Preferably do not exceed three. After each user response (or group of responses), provide feedback before asking the next question.
 
 2. **Immediate scope guard** — After receiving each answer, check for content that belongs elsewhere:
    - Technology choices ("We'll use React", "PostgreSQL"), implementation methods, architecture decisions → belongs in blueprint.md/spec.md

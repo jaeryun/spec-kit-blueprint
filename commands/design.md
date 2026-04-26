@@ -83,6 +83,8 @@ Begin with an introduction:
 >
 > This conversation builds a **delivery blueprint** from your vision. We'll define a 3-level hierarchy: **Epics** (delivery goals), **Stories** (feature areas), and **Features** (spec-sized units).
 >
+> **Important:** You don't need to get everything perfect on the first pass. This is an initial design — you can re-run `/speckit.blueprint.design` anytime to add, remove, or reorder Epics and Stories as your understanding evolves.
+>
 > **We cover:**
 > - Work not explicitly captured in vision.md
 > - External integrations and foundational requirements
@@ -95,7 +97,7 @@ Begin with an introduction:
 
 **Interview Rules (Strict):**
 
-1. **ONE question at a time** — Never ask multiple questions in one turn.
+1. **ONE to THREE questions at a time** — Adapt based on question length and complexity. A single broad question warrants one at a time. A set of tightly related, short follow-ups (e.g., "What sprint cadence? 2 or 3 weeks?") can be grouped up to three. Preferably do not exceed three.
 
 2. **Immediate scope guard** — After each answer, check for content that belongs in `/speckit.specify`:
    - Specific technology choices, frameworks, libraries
@@ -220,6 +222,8 @@ Hierarchy:
   ...
 
 Next: /speckit.specify [first Feature with no linked spec]
+
+> This is your initial blueprint. Re-run `/speckit.blueprint.design` anytime your plans change — add new Epics, split Stories, or reorder Features.
 ```
 
 
