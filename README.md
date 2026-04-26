@@ -111,6 +111,9 @@ flowchart TD
 **The workflow consists of 3 manual steps.** Run them in order, and re-run any step whenever your plan changes.
 
 ```text
+# 0. Install the extension
+specify extension add blueprint --from https://github.com/jaeryun/spec-kit-blueprint/archive/refs/tags/v1.1.0.zip
+
 # 1. Define your vision
 /speckit.blueprint.vision
 
