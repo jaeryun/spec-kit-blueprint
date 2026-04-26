@@ -74,7 +74,6 @@ flowchart TD
     style DEV1 fill:#e6f2ee,stroke:#0f766e,stroke-width:2px,color:#134e4a
     style DEV2 fill:#e6f2ee,stroke:#0f766e,stroke-width:2px,color:#134e4a
     style DEV3 fill:#e6f2ee,stroke:#0f766e,stroke-width:2px,color:#134e4a
-    style DEV4 fill:#e6f2ee,stroke:#0f766e,stroke-width:2px,color:#134e4a
     style DEV5 fill:#e6f2ee,stroke:#0f766e,stroke-width:2px,color:#134e4a
     style A fill:#1e293b,stroke:#1e293b,color:#f8fafc
     style B fill:#1e40af,stroke:#1e40af,color:#f8fafc
