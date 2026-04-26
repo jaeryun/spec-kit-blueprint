@@ -1,25 +1,14 @@
 ---
-description: "Archive completed FTs into story.md, optionally create MR, and update Jira Story."
-tools:
-  - mcp-jira/search
-  - mcp-jira/get_issue
-  - mcp-jira/update_issue
-  - mcp-gitlab/merge_requests
-  - mcp-gitlab/create_merge_request
+description: "Archive completed FTs into story.md."
 ---
 
 # Blueprint Archive
 
-Archive completed FTs into the Story's technical Source of Truth (`story.md`). Optionally create a GitLab Merge Request and update the Jira Story description.
+Archive completed FTs into the Story's technical Source of Truth (`story.md`).
 
 ## Purpose
 
-Update a Story's technical Source of Truth after its linked FTs are complete. This command:
-
-- Merges completed FT content into `story.md`
-- Commits and pushes the updated `story.md`
-- Creates a GitLab MR for review
-- Updates the Jira Story description with completion status
+Update a Story's technical Source of Truth after its linked FTs are complete. This command merges completed FT content into `story.md` so the Story-level documentation stays current as Features are delivered.
 
 ## User Input
 
@@ -50,16 +39,14 @@ After completing all steps, check `.specify/extensions.yml` for any handlers reg
 
 1. Read `docs/blueprint/blueprint.md` and find the Story's **Features** list under its Epic.
 2. For each FT, check if a completed spec exists (look for `specs/[ft-slug]/spec.md` or similar).
-3. Optionally, search Jira for FTs linked to this Story using `mcp-jira/search`:
-   - Query: `parent = [ST-ID] AND issuetype = FT`
-4. Build a status summary table:
+3. Build a status summary table:
 
    | FT ID | Title | Status | Done? |
    | --- | --- | --- | --- |
    | FT-XX | ... | Done | [x] |
    | FT-YY | ... | In Progress | [ ] |
 
-5. Identify FTs with status **Done** (or equivalent terminal state).
+4. Identify FTs with status **Done** (or equivalent terminal state).
 
 ---
 
@@ -79,78 +66,17 @@ After completing all steps, check `.specify/extensions.yml` for any handlers reg
 
 ---
 
-### Step 4: Git Commit & Push
-
-1. Stage the updated `story.md`.
-2. Propose a commit message: `docs(blueprint): archive [ST-ID] story.md with completed FTs`
-3. Ask the user:
-
-   > "Commit and push the updated story.md? (yes / no)"
-
-   - If **yes**: commit and push to the current branch.
-   - If **no**: skip to Step 5 without committing. Note that the MR in Step 5 will include uncommitted changes if any.
-
----
-
-### Step 5: Create GitLab MR
-
-1. Prepare MR details:
-    - **Title**: `docs(blueprint): archive [ST-ID] story.md with completed FTs`
-   - **Description**: summarize which FTs were merged and link to the Story directory.
-2. Ask the user:
-
-   > "Create a GitLab Merge Request? (yes / no)"
-
-   - If **yes**: create the MR using `mcp-gitlab/create_merge_request`.
-   - If **no**: skip this step.
-
----
-
-### Step 6: Update Jira Story Description
-
-1. Build the updated Story description in this format:
-
-   ```markdown
-   📌 Blueprint Story: [ST-ID] — [Title]
-
-   🔗 Blueprint: [link to story.md]
-
-   ## Completed Features
-   - [x] FT-XX — ...
-   - [ ] FT-XX — ...
-
-   ## Tech Context
-   [merged from story.md]
-
-   ## ADR
-   [merged from story.md]
-   ```
-
-2. Ask the user:
-
-   > "Update the Jira Story description? (yes / no)"
-
-   - If **yes**: update the Story issue using `mcp-jira/update_issue` with the new description.
-   - If **no**: skip this step.
-
----
-
-### Step 7: Completion
+### Step 4: Completion
 
 Confirm completion status:
 
 | Step | Status |
 | --- | --- |
 | story.md updated | [yes / no / skipped] |
-| Git commit & push | [yes / no / skipped] |
-| GitLab MR created | [yes / no / skipped] |
-| Jira Story updated | [yes / no / skipped] |
 
-Provide next steps based on what was done:
+Provide next steps:
 
-- If MR was created: "MR is ready for review. Once merged, the Story's Source of Truth is finalized."
-- If no MR was created: "story.md has been updated locally. Commit and push manually when ready."
-- If Jira Story was not updated: "Remember to update the Jira Story description manually to reflect FT completion status."
+> Story SoT updated. Next: pick another FT to specify, or archive the next Story.
 
 ## Output Files
 

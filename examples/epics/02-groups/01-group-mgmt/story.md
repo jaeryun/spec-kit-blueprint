@@ -1,7 +1,7 @@
 # ST-2.1 — Users can create groups and manage membership with roles
 
 > Source of Truth. Last updated: 2026-04-25
-> Jira: —
+> External: —
 
 ---
 

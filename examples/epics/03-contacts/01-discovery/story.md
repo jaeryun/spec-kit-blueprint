@@ -1,7 +1,7 @@
 # ST-3.1 — Users can find other users and manage connection requests
 
 > Source of Truth. Last updated: 2026-04-25
-> Jira: —
+> External: —
 
 ---
 

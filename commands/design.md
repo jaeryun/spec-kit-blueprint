@@ -1,17 +1,14 @@
 ---
 description: "Generate the Epic→Story hierarchy and story.md drafts from the confirmed vision."
-tools:
-  - mcp-jira/create_issue
-  - mcp-jira/update_issue
 ---
 
-# Blueprint Roadmap
+# Blueprint
 
 Generate the Epic→Story hierarchy and story.md drafts from the confirmed vision.
 
 ## Purpose
 
-Defining specs one at a time — without a shared view of the whole project — leads to specs that are too large or too small. There's no basis for calibrating scope when each spec is written in isolation.
+Defining specs(result of /speckit.specify command) one at a time — without a shared view of the whole project — leads to specs that are too large or too small. There's no basis for calibrating scope when each spec is written in isolation.
 
 This command addresses that by building the full 3-level hierarchy before any Feature spec is written. Through a user interview, it decomposes the vision into:
 
@@ -34,7 +31,7 @@ EP-01 — Foundation
 
 Key implications for generation:
 - Each **Feature (FT)** = one `/speckit.specify` run.
-- **Story scope is calibrated as a set** — sizes are adjusted relative to each other across the whole roadmap, factoring in priority and team capacity.
+- **Story scope is calibrated as a set** — sizes are adjusted relative to each other across the whole blueprint, factoring in priority and team capacity.
 - **Story scope is intentionally abstract** — the exact phase breakdown (P1/P2/P3) is determined during `/speckit.specify` through a detailed requirements interview.
 
 ## User Input
@@ -45,9 +42,9 @@ If provided, interpret `$ARGUMENTS` as user intent and apply it during generatio
 
 ## Hooks
 
-Before starting, check `.specify/extensions.yml` for any handlers registered under `before_blueprint_roadmap` and execute them in order.
+Before starting, check `.specify/extensions.yml` for any handlers registered under `before_blueprint_design` and execute them in order.
 
-After saving all output files, check `.specify/extensions.yml` for any handlers registered under `after_blueprint_roadmap` and execute them in order.
+After saving all output files, check `.specify/extensions.yml` for any handlers registered under `after_blueprint_design` and execute them in order.
 
 ## Instructions
 
@@ -57,29 +54,20 @@ Check that `docs/blueprint/vision.md` exists.
 
 If missing, stop and output: "Run `/speckit.blueprint.vision` first."
 
-Also check if `.specify/memory/blueprint.yml` exists. If missing, warn:
-
-> "⚠️ Blueprint setup not found. Jira integration will not be available during this session.
-> Run `/speckit.blueprint.setup` to enable Jira sync.
-> Proceed without Jira integration? (yes / no)"
-
-- If **no**: stop here.
-- If **yes**: continue, and note at the end that Jira setup is pending.
-
 ---
 
-### Step 1: Check Existing Roadmap
+### Step 1: Check Existing Blueprint
 
 If `docs/blueprint/blueprint.md` does not exist, proceed to Step 2.
 
-If it exists, read it and summarize (Epic count, IDs, Stories with FT counts, Jira links). Then ask:
+If it exists, read it and summarize (Epic count, IDs, Stories with FT counts). Then ask:
 
 "What would you like to do?
   (1) Update — re-analyze specific Epics or Stories
   (2) Regenerate — start from scratch
   (3) Cancel"
 
-- **(1)** Identify targets from `$ARGUMENTS` or user reply. For Epics/Stories with linked Jira issues, warn: "A Jira issue is already linked to this Epic/Story. Proceed with the scope update anyway? (yes / no)" — skip if no, include if yes. Proceed to Step 2 for confirmed targets only.
+- **(1)** Identify targets from `$ARGUMENTS` or user reply. Proceed to Step 2 for confirmed targets only.
 - **(2)** Proceed to Step 2 for all Epics and Stories.
 - **(3)** Stop.
 
@@ -91,9 +79,9 @@ Read `docs/blueprint/vision.md`. Pay special attention to sprint cadence, team s
 
 Begin with an introduction:
 
-> **Starting Blueprint Roadmap Interview**
+> **Starting Blueprint Interview**
 >
-> This conversation builds a **delivery roadmap** from your vision. We'll define a 3-level hierarchy: **Epics** (delivery goals), **Stories** (feature areas), and **Features** (spec-sized units).
+> This conversation builds a **delivery blueprint** from your vision. We'll define a 3-level hierarchy: **Epics** (delivery goals), **Stories** (feature areas), and **Features** (spec-sized units).
 >
 > **We cover:**
 > - Work not explicitly captured in vision.md
@@ -160,7 +148,7 @@ Incorporate feedback and repeat until the user confirms.
 ### Step 4: Generate Output Files
 
 Load the templates to understand required sections:
-- `templates/roadmap-template.md` for `docs/blueprint/blueprint.md`
+- `templates/blueprint-template.md` for `docs/blueprint/blueprint.md`
 - `templates/story-template.md` for the structure of each Story's `story.md`
 
 Fill each file with the confirmed output from Steps 2 and 3, following the **For AI Generation** guidelines below.
@@ -169,7 +157,7 @@ Fill each file with the confirmed output from Steps 2 and 3, following the **For
 
 Create or update `docs/blueprint/blueprint.md` with the full Epic → Story → Feature hierarchy.
 
-This is the **single master document** for the delivery roadmap. It replaces the old per-Epic files and serves as the draft for Jira Epic/Story creation.
+This is the **single master document** for the delivery blueprint. It replaces the old per-Epic files.
 
 If the file did not yet exist, include the initial history entry from the template. If it already existed, preserve all existing history entries and append a new line: `[YYYY-MM-DD HH:MM] | [Summary]`.
 
@@ -187,7 +175,7 @@ Use this format (matches `templates/story-template.md`):
 # ST-X.X — [Story Title]
 
 > Source of Truth. Last updated: [date]
-> Jira: —
+> External: —
 
 ## Overview
 [2-3 sentences from interview]
@@ -222,7 +210,7 @@ Confirm all files are saved:
 Output:
 
 ```text
-Roadmap complete. [N] Epics, [M] Stories, [P] Features defined.
+Blueprint complete. [N] Epics, [M] Stories, [P] Features defined.
 
 Hierarchy:
 [EP-01] — [Epic Title]
@@ -234,17 +222,13 @@ Hierarchy:
 Next: /speckit.specify [first Feature with no linked spec]
 ```
 
-If Step 0 found no `blueprint.yml` and the user chose to proceed anyway, append this reminder:
 
-```text
-⚠️ Note: Jira setup is still pending. Run `/speckit.blueprint.setup` before syncing to Jira.
-```
 
 ## Output Files
 
 | File / Directory | Purpose |
 | --- | --- |
-| `docs/blueprint/blueprint.md` | **Master roadmap** — full Epic → Story → Feature hierarchy in one document. Serves as the Jira draft. |
+| `docs/blueprint/blueprint.md` | **Master blueprint** — full Epic → Story → Feature hierarchy in one document. |
 | `docs/blueprint/epics/[epic-slug]/[story-slug]/` | One Story directory per Epic — contains `story.md` (lightweight draft → evolves into technical SoT via `archive`) and any related artifacts. |
 
 ---
@@ -259,9 +243,9 @@ If Step 0 found no `blueprint.yml` and the user chose to proceed anyway, append 
 
 **Story Scope** — Free-form prose. Write what this Story covers at an abstract level — not how it will be built, not how many phases it will have. Phase breakdown happens during `/speckit.specify`.
 
-**Feature List** — Brief bullet per FT. Each FT is a single `/speckit.specify` run. FTs are placeholders at roadmap time; their detailed specs are written later.
+**Feature List** — Brief bullet per FT. Each FT is a single `/speckit.specify` run. FTs are placeholders at this stage; their detailed specs are written later.
 
-**Jira** — Write `—` until the Jira issue is created. Linked automatically by `jira-push` after roadmap generation, or via manual Jira sync.
+**External** — Write `—` until an external tracking issue is linked. This can be updated by an integration extension or manually.
 
 ### Epic/Story Boundary Principles
 
@@ -276,7 +260,7 @@ Apply these when deciding where one Epic/Story ends and the next begins:
 
 **Target Epic size: 1–2 months** — a coherent delivery goal that a small team can commit to.
 
-**Target Story size: Jira Epic-level** — the standard unit of work that fits in a software development roadmap, decomposable into 3–8 Features.
+**Target Story size: blueprint-level unit** — the standard unit of work that fits in a software development blueprint, decomposable into 3–8 Features.
 
 | Dimension | Epic Guideline | Story Guideline |
 |-----------|----------------|-----------------|

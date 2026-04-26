@@ -14,7 +14,7 @@ Establish the foundation before writing any spec:
 - **Who** it's for
 - **What's in scope** and explicitly what's not
 
-The output feeds into `/speckit.blueprint.roadmap`.
+The output feeds into `/speckit.blueprint.design`.
 
 ## Scope Boundary
 
@@ -22,7 +22,7 @@ The output feeds into `/speckit.blueprint.roadmap`.
 
 **Belongs here:** problem statement, target users, core features, non-functional requirements, out-of-scope items, success criteria, team/timeline context, existing stack and integrations.
 
-**Does NOT belong here:** delivery stages or phases, Story/Feature breakdowns, sprint assignments, specific technology choices, implementation approaches, API or data model design. If any of these appear in your draft, move them to roadmap or remove them.
+**Does NOT belong here:** delivery stages or phases, Story/Feature breakdowns, sprint assignments, specific technology choices, implementation approaches, API or data model design. If any of these appear in your draft, move them to blueprint.md or remove them.
 
 ## User Input
 
@@ -38,24 +38,7 @@ After saving `docs/blueprint/vision.md`, check `.specify/extensions.yml` for any
 
 ## Instructions
 
-### Step 0: Constitution Check
-
-Check if `.specify/memory/constitution.md` exists.
-
-**If it does not exist**, warn the user:
-
-> "⚠️ No constitution found. SpecKit's `constitution` defines your project's coding standards and conventions — it should be set up before planning begins.
->
-> Run `/speckit.constitution` first, then come back to Blueprint.
->
-> Proceed anyway without a constitution? (yes / no)"
-
-- If **no**: stop here.
-- If **yes**: continue, and note at the end that constitution setup is still pending.
-
----
-
-### Step 1: Check Existing Vision
+### Step 0: Check Existing Vision
 
 Check if `docs/blueprint/vision.md` exists.
 
@@ -67,14 +50,14 @@ Check if `docs/blueprint/vision.md` exists.
    - (2) Start over
    - (3) Cancel"
 3. Proceed based on user choice. For option (1), ask which sections to update. For each section, accept the user's freeform input describing the desired change, apply it to the draft, and show the revised section for confirmation before saving.
-4. If vision changes, ask: "Your vision has changed. Should I update the roadmap to reflect this?" If yes, suggest running `/speckit.blueprint.roadmap`.
+4. If vision changes, ask: "Your vision has changed. Should I update the blueprint to reflect this?" If yes, suggest running `/speckit.blueprint.design`.
 
 **If it does not exist:**
-Proceed to Step 2.
+Proceed to Step 1.
 
 ---
 
-### Step 2: Adaptive Interview
+### Step 1: Adaptive Interview
 
 Begin the interview with an introduction that explains what will happen:
 
@@ -114,11 +97,11 @@ Then conduct the conversational interview covering the areas below. Ask **one qu
 1. **ONE question at a time** — Never ask multiple questions in one turn. After each user response, provide feedback before asking the next question.
 
 2. **Immediate scope guard** — After receiving each answer, check for content that belongs elsewhere:
-   - Technology choices ("We'll use React", "PostgreSQL"), implementation methods, architecture decisions → belongs in roadmap/spec
-   - Delivery phases, milestones, sprint plans → belongs in roadmap
+   - Technology choices ("We'll use React", "PostgreSQL"), implementation methods, architecture decisions → belongs in blueprint.md/spec.md
+   - Delivery phases, milestones, sprint plans → belongs in blueprint.md
    - Detailed API design, data models, UI mockups → belongs in spec
 
-   If detected: "That detail belongs in [roadmap/spec]. We'll cover How & When later. For now, let's focus on What & Why — [rephrase original question focusing on essence only]"
+   If detected: "That detail belongs in [blueprint.md/spec.md]. We'll cover How & When later. For now, let's focus on What & Why — [rephrase original question focusing on essence only]"
 
 3. **Confirm and get approval** — After each valid answer:
    - Summarize what was understood: "**[Area]**: [1-2 sentence summary]"
@@ -139,7 +122,7 @@ Then conduct the conversational interview covering the areas below. Ask **one qu
 
 ---
 
-### Step 3: Generate vision.md Draft
+### Step 2: Generate vision.md Draft
 
 Load `templates/vision-template.md` to understand the required sections.
 
@@ -158,22 +141,22 @@ Save to `docs/blueprint/vision.md`.
 
 ---
 
-### Step 4: Scope Check
+### Step 3: Scope Check
 
 Before confirming completion, review the saved `docs/blueprint/vision.md` against the Scope Boundary defined above.
 
 Flag any content that does not belong at the vision level:
 
-- Delivery stages, phases, or timelines broken into milestones → belongs in roadmap
+- Delivery stages, phases, or timelines broken into milestones → belongs in blueprint.md
 - Story/Feature breakdowns → belongs in blueprint.md
-- Specific technology or architecture decisions → belongs in roadmap or spec
-- Sprint assignments or task lists → belongs in roadmap or spec
+- Specific technology or architecture decisions → belongs in blueprint.md or spec
+- Sprint assignments or task lists → belongs in blueprint.md or spec
 
 For each violation found, output:
 
 ```text
 ⚠️ Scope issue in vision.md: "[excerpt]"
-This level of detail belongs in [roadmap / spec]. Remove it from vision.md or move it to the appropriate file (`blueprint.md` or `spec.md`).
+This level of detail belongs in [blueprint.md / spec.md]. Remove it from vision.md or move it to the appropriate file (`blueprint.md` or `spec.md`).
 ```
 
 Ask the user: "Found [N] scope issue(s) above. Fix before proceeding? (yes / no / skip)"
@@ -185,22 +168,22 @@ If no violations found → output: "✅ Scope check passed."
 
 ---
 
-### Step 5: Roadmap Alignment Check (re-run only)
+### Step 4: Blueprint Alignment Check (re-run only)
 
-> This step only applies when vision is being **updated** and a roadmap already exists. On first run, skip this step.
+> This step only applies when vision is being **updated** and a blueprint already exists. On first run, skip this step.
 
 Check if `docs/blueprint/blueprint.md` exists. If it does not exist, skip this step.
 
 Read `docs/blueprint/blueprint.md`. Check at a high level whether the existing Stories and Features are still consistent with the updated vision:
 
 - Do any Story or Feature goals contradict the updated Problem Statement or Core Features?
-- Does the roadmap include work that vision now explicitly marks as Out of Scope?
-- Does the roadmap omit any Core Feature that vision now considers essential?
+- Does the blueprint include work that vision now explicitly marks as Out of Scope?
+- Does the blueprint omit any Core Feature that vision now considers essential?
 
 If conflicts are found, output:
 
 ```text
-⚠️ Vision change affects existing roadmap.
+⚠️ Vision change affects existing blueprint.
 
 [For each conflict:]
 ST-[N].[N] / FT-[N].[N].[N] — [title]
@@ -210,32 +193,26 @@ Issue: [one-line description of the conflict]
 Then output:
 
 ```text
-The roadmap needs to be re-run to reflect the updated vision.
-Run `/speckit.blueprint.roadmap` to regenerate or update affected Stories and Features.
+The blueprint needs to be re-generated to reflect the updated vision.
+Run `/speckit.blueprint.design` to regenerate or update affected Stories and Features.
 
 Note: if any conflicting Story or Feature has already been specified or implemented,
 those downstream steps (specify, plan, tasks, implement) may also need to be re-run
 depending on the extent of the vision change.
 ```
 
-If no conflicts found → output: "✅ Roadmap is consistent with updated vision."
+If no conflicts found → output: "✅ Blueprint is consistent with updated vision."
 
 ---
 
-### Step 6: Completion
+### Step 5: Completion
 
 Confirm the file is saved:
 
 - `docs/blueprint/vision.md` ✓
 
 Tell the user:
-"Vision defined. Next step: run `/speckit.blueprint.roadmap` to create a delivery roadmap."
-
-If Step 0 found no constitution and the user chose to proceed anyway, append this reminder:
-
-```text
-⚠️ Note: constitution setup is still pending. Run `/speckit.constitution` before writing specs to ensure coding standards are applied.
-```
+"Vision defined. Next step: run `/speckit.blueprint.design` to create a delivery blueprint."
 
 ## Output Files
 

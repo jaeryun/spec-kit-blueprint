@@ -1,7 +1,7 @@
 # ST-1.2 — Users can share rich media and voice messages in 1:1 chats
 
 > Source of Truth. Last updated: 2026-04-25
-> Jira: —
+> External: —
 
 ---
 

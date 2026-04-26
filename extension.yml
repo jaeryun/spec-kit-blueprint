@@ -3,7 +3,7 @@ schema_version: "1.0"
 extension:
   id: blueprint
   name: "Blueprint"
-  version: "2.1.0"
+  version: "1.1.0"
   description: "Vision-first project planning for SpecKit. Decomposes project vision into a 3-level hierarchy: Epic → Story → Feature — each Feature mapping to one /speckit.specify run."
   author: "jaeryun"
   repository: "https://github.com/jaeryun/spec-kit-blueprint"
@@ -12,76 +12,42 @@ extension:
 requires:
   speckit_version: ">=0.4.0"
 
-hooks:
-  before_specify:
-    command: "speckit.blueprint.jira-pull"
-    optional: false
-    description: "Pull Jira context (FT comments and status) before specifying."
-
-  before_plan:
-    command: "speckit.blueprint.jira-pull"
-    optional: false
-    description: "Pull Jira context before planning begins."
-
-  before_tasks:
-    command: "speckit.blueprint.jira-pull"
-    optional: false
-    description: "Pull Jira context before task breakdown begins."
-
 provides:
   commands:
-    - name: speckit.blueprint.setup
-      file: commands/setup.md
-      description: "Initialize Blueprint workspace and configuration."
-
     - name: speckit.blueprint.vision
       file: commands/vision.md
       description: "Define project vision through an adaptive interview."
 
-    - name: speckit.blueprint.roadmap
-      file: commands/roadmap.md
+    - name: speckit.blueprint.design
+      file: commands/design.md
       description: "Generate the Epic→Story hierarchy from the confirmed vision."
 
     - name: speckit.blueprint.archive
       file: commands/archive.md
       description: "Archive completed FTs into the Story's technical Source of Truth."
 
-    - name: speckit.blueprint.jira-push
-      file: commands/jira-push.md
-      description: "Push Epic→Story hierarchy to Jira after roadmap generation."
-
-    - name: speckit.blueprint.jira-pull
-      file: commands/jira-pull.md
-      description: "Pull Jira context (FT status, comments) for session injection."
-
   hooks:
-    - event: before_blueprint_setup
-      description: "Triggered before Blueprint workspace setup begins."
-
-    - event: after_blueprint_setup
-      description: "Triggered after Blueprint workspace setup completes."
-
     - event: before_blueprint_vision
       description: "Triggered before the vision interview begins."
 
     - event: after_blueprint_vision
       description: "Triggered after vision.md is confirmed and saved."
 
-    - event: before_blueprint_roadmap
+    - event: before_blueprint_design
       description: "Triggered before Epic→Story hierarchy generation begins."
 
-    - event: after_blueprint_roadmap
-      description: "Triggered after the Epic→Story hierarchy is confirmed and saved. Use to push to Jira."
+    - event: after_blueprint_design
+      description: "Triggered after the Epic→Story hierarchy is confirmed and saved."
 
     - event: before_blueprint_archive
       description: "Triggered before story.md archiving begins."
 
     - event: after_blueprint_archive
-      description: "Triggered after story.md is archived. Use to link Jira Story."
+      description: "Triggered after story.md is archived."
 
 tags:
   - planning
   - vision
-  - roadmap
+  - blueprint
   - epics
   - project-management

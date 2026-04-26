@@ -1,7 +1,7 @@
 # ST-1.1 — Users can exchange text messages in real-time with delivery status
 
 > Source of Truth. Last updated: 2026-04-25
-> Jira: —
+> External: —
 
 <!-- This file lives at docs/blueprint/epics/<epic-slug>/<story-slug>/story.md
      You can add related artifacts (data-model.md, contracts/, etc.)

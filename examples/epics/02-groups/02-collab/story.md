@@ -1,7 +1,7 @@
 # ST-2.2 — Group members can use advanced collaboration features
 
 > Source of Truth. Last updated: 2026-04-25
-> Jira: —
+> External: —
 
 ---
 

@@ -1,7 +1,7 @@
 # ST-3.2 — Users can sync and organize their address book contacts
 
 > Source of Truth. Last updated: 2026-04-25
-> Jira: —
+> External: —
 
 ---
 
