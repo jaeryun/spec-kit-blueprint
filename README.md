@@ -149,6 +149,22 @@ docs/blueprint/
             └── story.md
 ```
 
+## Why Archive?
+
+SpecKit's `/speckit.specify` produces a detailed feature spec for each FT — data models, API contracts, implementation steps, edge cases, and more. These specs are essential for development, but they are also **verbose and tightly scoped to a single Feature**.
+
+Over time, three problems emerge:
+
+1. **Specs go stale** — As the codebase evolves, the details in an old `spec.md` drift from reality. A developer reading `specs/FT-1.1.1/spec.md` three months later cannot trust it as the current source of truth.
+
+2. **Knowledge is scattered** — Each Story spans 3–8 Features. The full technical picture of "how authentication works" is split across `specs/FT-1.1.1/`, `specs/FT-1.1.2/`, `specs/FT-1.1.3/`, etc. No single document tells the whole Story.
+
+3. **Too much noise** — A `spec.md` includes planning artifacts (sprint estimates, task breakdowns, temporary decisions) that are irrelevant once the Feature is shipped.
+
+**Archive solves this** by merging only the durable technical decisions from each completed FT into its parent Story's `story.md`. The result is a **living, Story-level Source of Truth** — concise enough to read in one sitting, accurate because it is updated after every FT, and organized by capability rather than by delivery batch.
+
+Run `/speckit.blueprint.archive FT-1.1.1` after a Feature is merged. The Story's `story.md` grows incrementally into the definitive technical reference for that capability.
+
 **vision.md** — structured sections for the problem, users, goals, constraints, and out-of-scope items:
 
 ```markdown
