@@ -59,7 +59,7 @@ flowchart TD
         S_2_1_1["/speckit.specify FT-2.1.1<br/>Write feature spec"] --> N_2_1_1["/speckit.plan<br/>/speckit.tasks<br/>/speckit.implement"]
     end
 
-    subgraph DEV5 ["Person A picks FT-2.2.1"]
+    subgraph DEV4 ["Person A picks FT-2.2.1"]
         direction LR
         S_2_2_1["/speckit.specify FT-2.2.1<br/>Write feature spec"] --> N_2_2_1["/speckit.plan<br/>/speckit.tasks<br/>/speckit.implement"]
     end
@@ -74,7 +74,7 @@ flowchart TD
     style DEV1 fill:#e6f2ee,stroke:#0f766e,stroke-width:2px,color:#134e4a
     style DEV2 fill:#e6f2ee,stroke:#0f766e,stroke-width:2px,color:#134e4a
     style DEV3 fill:#e6f2ee,stroke:#0f766e,stroke-width:2px,color:#134e4a
-    style DEV5 fill:#e6f2ee,stroke:#0f766e,stroke-width:2px,color:#134e4a
+    style DEV4 fill:#e6f2ee,stroke:#0f766e,stroke-width:2px,color:#134e4a
     style A fill:#1e293b,stroke:#1e293b,color:#f8fafc
     style B fill:#1e40af,stroke:#1e40af,color:#f8fafc
     style C fill:#1e40af,stroke:#1e40af,color:#f8fafc
