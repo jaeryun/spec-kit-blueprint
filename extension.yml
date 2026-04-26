@@ -3,8 +3,8 @@ schema_version: "1.0"
 extension:
   id: blueprint
   name: "Blueprint"
-  version: "1.0.0"
-  description: "Vision-first project planning that decomposes ideas into right-sized Spec Outlines for SpecKit."
+  version: "1.1.0"
+  description: "Vision-first project planning for SpecKit. Decomposes project vision into a 3-level hierarchy: Epic → Story → Feature — each Feature mapping to one /speckit.specify run."
   author: "jaeryun"
   repository: "https://github.com/jaeryun/spec-kit-blueprint"
   license: MIT
@@ -12,39 +12,19 @@ extension:
 requires:
   speckit_version: ">=0.4.0"
 
-hooks:
-  before_specify:
-    command: "speckit.blueprint.roadmap-check"
-    optional: false
-    description: "Validate feature aligns with Spec Outlines in roadmap.md before specifying."
-
-  after_specify:
-    command: "speckit.blueprint.roadmap-sync"
-    optional: false
-    description: "Scan specs/ for unlinked spec files and link each one to its matching Spec Outline in roadmap.md."
-
-  after_clarify:
-    command: "speckit.blueprint.roadmap-sync"
-    optional: true
-    description: "Scan specs/ for unlinked spec files and link each one to its matching Spec Outline in roadmap.md. Optional because clarify may not produce a new spec file."
-
 provides:
   commands:
     - name: speckit.blueprint.vision
       file: commands/vision.md
       description: "Define project vision through an adaptive interview."
 
-    - name: speckit.blueprint.roadmap
-      file: commands/roadmap.md
-      description: "Generate a delivery roadmap of Spec Outlines from the confirmed vision."
+    - name: speckit.blueprint.design
+      file: commands/design.md
+      description: "Generate the Epic→Story hierarchy from the confirmed vision."
 
-    - name: speckit.blueprint.roadmap-check
-      file: commands/roadmap-check.md
-      description: "Pre-flight check: validate feature aligns with a Spec Outline in roadmap.md before specify."
-
-    - name: speckit.blueprint.roadmap-sync
-      file: commands/roadmap-sync.md
-      description: "Link generated spec file to Spec Outline in roadmap.md after a spec is completed."
+    - name: speckit.blueprint.archive
+      file: commands/archive.md
+      description: "Archive a completed FT into its parent Story's technical Source of Truth."
 
   hooks:
     - event: before_blueprint_vision
@@ -53,15 +33,21 @@ provides:
     - event: after_blueprint_vision
       description: "Triggered after vision.md is confirmed and saved."
 
-    - event: before_blueprint_roadmap
-      description: "Triggered before roadmap generation begins."
+    - event: before_blueprint_design
+      description: "Triggered before Epic→Story hierarchy generation begins."
 
-    - event: after_blueprint_roadmap
-      description: "Triggered after roadmap.md is confirmed and saved."
+    - event: after_blueprint_design
+      description: "Triggered after the Epic→Story hierarchy is confirmed and saved."
 
+    - event: before_blueprint_archive
+      description: "Triggered before story.md archiving begins."
+
+    - event: after_blueprint_archive
+      description: "Triggered after story.md is archived."
 
 tags:
   - planning
   - vision
-  - roadmap
+  - blueprint
+  - epics
   - project-management
