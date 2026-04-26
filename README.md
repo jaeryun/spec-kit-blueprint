@@ -39,7 +39,6 @@ flowchart TD
             R -.-> EP2["EP-02 — Group Conversations"]
             EP2 -.-> ST2["ST-2.1 — Group creation and management"]
             ST2 -.-> FT_2_1_1["FT-2.1.1 Group creation and member invitation flow"]
-            ST2 -.-> FT_2_1_2["FT-2.1.2 Role-based permission model (admin vs member)"]
             EP2 -.-> ST3["ST-2.2 — Advanced collaboration features"]
             ST3 -.-> FT_2_2_1["FT-2.2.1 Emoji reactions aggregation and display"]
         end
@@ -60,11 +59,6 @@ flowchart TD
         S_2_1_1["/speckit.specify FT-2.1.1<br/>Write feature spec"] --> N_2_1_1["/speckit.plan<br/>/speckit.tasks<br/>/speckit.implement"]
     end
 
-    subgraph DEV4 ["Person B picks FT-2.1.2"]
-        direction LR
-        S_2_1_2["/speckit.specify FT-2.1.2<br/>Write feature spec"] --> N_2_1_2["/speckit.plan<br/>/speckit.tasks<br/>/speckit.implement"]
-    end
-
     subgraph DEV5 ["Person A picks FT-2.2.1"]
         direction LR
         S_2_2_1["/speckit.specify FT-2.2.1<br/>Write feature spec"] --> N_2_2_1["/speckit.plan<br/>/speckit.tasks<br/>/speckit.implement"]
@@ -73,7 +67,6 @@ flowchart TD
     FT_1_1_1 -.-> S_1_1_1
     FT_1_1_2 -.-> S_1_1_2
     FT_2_1_1 -.-> S_2_1_1
-    FT_2_1_2 -.-> S_2_1_2
     FT_2_2_1 -.-> S_2_2_1
 
     style BP fill:#e8edf5,stroke:#1e40af,stroke-width:2px,color:#1e3a5f
@@ -96,17 +89,14 @@ flowchart TD
     style FT_1_1_1 fill:#f8fafc,stroke:#cbd5e1,color:#334155
     style FT_1_1_2 fill:#f8fafc,stroke:#cbd5e1,color:#334155
     style FT_2_1_1 fill:#f8fafc,stroke:#cbd5e1,color:#334155
-    style FT_2_1_2 fill:#f8fafc,stroke:#cbd5e1,color:#334155
     style FT_2_2_1 fill:#f8fafc,stroke:#cbd5e1,color:#334155
     style S_1_1_1 fill:#0f766e,stroke:#0f766e,color:#f0fdf4
     style S_1_1_2 fill:#0f766e,stroke:#0f766e,color:#f0fdf4
     style S_2_1_1 fill:#0f766e,stroke:#0f766e,color:#f0fdf4
-    style S_2_1_2 fill:#0f766e,stroke:#0f766e,color:#f0fdf4
     style S_2_2_1 fill:#0f766e,stroke:#0f766e,color:#f0fdf4
     style N_1_1_1 fill:#134e4a,stroke:#134e4a,color:#f0fdf4
     style N_1_1_2 fill:#134e4a,stroke:#134e4a,color:#f0fdf4
     style N_2_1_1 fill:#134e4a,stroke:#134e4a,color:#f0fdf4
-    style N_2_1_2 fill:#134e4a,stroke:#134e4a,color:#f0fdf4
     style N_2_2_1 fill:#134e4a,stroke:#134e4a,color:#f0fdf4
 ```
 
@@ -247,8 +237,7 @@ _Last updated: 2026-04-25_
   - **Jira**: —
   - **Features**:
     - FT-2.1.1 — Group creation and member invitation flow
-    - FT-2.1.2 — Role-based permission model (admin vs member)
-    - FT-2.1.3 — Group profile metadata (name, avatar, description, rules)
+    - FT-2.1.2 — Group profile metadata (name, avatar, description, rules)
 
 - **ST-2.2** — Group members can use advanced collaboration features.
   - **Scope**: Message reactions, pin/announcement messages, @mentions with notification routing.
