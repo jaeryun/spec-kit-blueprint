@@ -114,14 +114,17 @@ flowchart TD
 # 1. Define your vision
 /speckit.blueprint.vision
 
-# 2. Build the Epic → Story hierarchy
+# 2. Design the Epic → Story → Feature hierarchy
 /speckit.blueprint.design
 
 # 3. Pick a Feature and specify it
-/speckit.specify FT-1.1.1              # by Feature ID
-/speckit.specify "user authentication"   # or by keyword — automatically mapped to the matching Story
+/speckit.specify FT-1.1.1
+#    → /speckit.plan → /speckit.tasks → /speckit.implement
 
-# Then continue with standard SpecKit: /speckit.plan → /speckit.tasks → /speckit.implement ...
+# 4. Archive the completed Feature into the Story's SoT
+/speckit.blueprint.archive FT-1.1.1
+
+# Repeat 3-4 for each Feature
 ```
 
 **Re-running commands:**
