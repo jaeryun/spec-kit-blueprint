@@ -33,48 +33,48 @@ flowchart TD
             direction TB
             R -.-> EP1["EP-01 — Real-time 1:1 Messaging"]
             EP1 -.-> ST1["ST-1.1 — Text messaging with delivery status"]
-            ST1 -.-> FT1a["FT-1.1.1 WebSocket connection management and message routing"]
-            ST1 -.-> FT1b["FT-1.1.2 Message persistence and conversation history API"]
+            ST1 -.-> FT_1_1_1["FT-1.1.1 WebSocket connection management and message routing"]
+            ST1 -.-> FT_1_1_2["FT-1.1.2 Message persistence and conversation history API"]
 
             R -.-> EP2["EP-02 — Group Conversations"]
             EP2 -.-> ST2["ST-2.1 — Group creation and management"]
-            ST2 -.-> FT2a["FT-2.1.1 Group creation and member invitation flow"]
-            ST2 -.-> FT2b["FT-2.1.2 Role-based permission model (admin vs member)"]
+            ST2 -.-> FT_2_1_1["FT-2.1.1 Group creation and member invitation flow"]
+            ST2 -.-> FT_2_1_2["FT-2.1.2 Role-based permission model (admin vs member)"]
             EP2 -.-> ST3["ST-2.2 — Advanced collaboration features"]
-            ST3 -.-> FT2c["FT-2.2.1 Emoji reactions aggregation and display"]
+            ST3 -.-> FT_2_2_1["FT-2.2.1 Emoji reactions aggregation and display"]
         end
     end
 
-    subgraph DEV1 ["Person C picks FT-1.1.1"]
+    subgraph DEV1 ["Person A picks FT-1.1.1"]
         direction LR
-        S3a["/speckit.specify FT-1.1.1<br/>Write feature spec"] --> N3a["/speckit.plan<br/>/speckit.tasks<br/>/speckit.implement"]
+        S_1_1_1["/speckit.specify FT-1.1.1<br/>Write feature spec"] --> N_1_1_1["/speckit.plan<br/>/speckit.tasks<br/>/speckit.implement"]
     end
 
     subgraph DEV2 ["Person B picks FT-1.1.2"]
         direction LR
-        S3b["/speckit.specify FT-1.1.2<br/>Write feature spec"] --> N3b["/speckit.plan<br/>/speckit.tasks<br/>/speckit.implement"]
+        S_1_1_2["/speckit.specify FT-1.1.2<br/>Write feature spec"] --> N_1_1_2["/speckit.plan<br/>/speckit.tasks<br/>/speckit.implement"]
     end
 
     subgraph DEV3 ["Person A picks FT-2.1.1"]
         direction LR
-        S1a["/speckit.specify FT-2.1.1<br/>Write feature spec"] --> N1a["/speckit.plan<br/>/speckit.tasks<br/>/speckit.implement"]
+        S_2_1_1["/speckit.specify FT-2.1.1<br/>Write feature spec"] --> N_2_1_1["/speckit.plan<br/>/speckit.tasks<br/>/speckit.implement"]
     end
 
     subgraph DEV4 ["Person B picks FT-2.1.2"]
         direction LR
-        S1b["/speckit.specify FT-2.1.2<br/>Write feature spec"] --> N1b["/speckit.plan<br/>/speckit.tasks<br/>/speckit.implement"]
+        S_2_1_2["/speckit.specify FT-2.1.2<br/>Write feature spec"] --> N_2_1_2["/speckit.plan<br/>/speckit.tasks<br/>/speckit.implement"]
     end
 
     subgraph DEV5 ["Person A picks FT-2.2.1"]
         direction LR
-        S2["/speckit.specify FT-2.2.1<br/>Write feature spec"] --> N2["/speckit.plan<br/>/speckit.tasks<br/>/speckit.implement"]
+        S_2_2_1["/speckit.specify FT-2.2.1<br/>Write feature spec"] --> N_2_2_1["/speckit.plan<br/>/speckit.tasks<br/>/speckit.implement"]
     end
 
-    FT1a -.-> S3a
-    FT1b -.-> S3b
-    FT2a -.-> S1a
-    FT2b -.-> S1b
-    FT2c -.-> S2
+    FT_1_1_1 -.-> S_1_1_1
+    FT_1_1_2 -.-> S_1_1_2
+    FT_2_1_1 -.-> S_2_1_1
+    FT_2_1_2 -.-> S_2_1_2
+    FT_2_2_1 -.-> S_2_2_1
 
     style BP fill:#e8edf5,stroke:#1e40af,stroke-width:2px,color:#1e3a5f
     style HIER fill:#ffffff,stroke:#93c5fd,stroke-dasharray: 5 5,color:#1e3a5f
@@ -93,21 +93,21 @@ flowchart TD
     style ST1 fill:#eff6ff,stroke:#93c5fd,color:#1e3a5f
     style ST2 fill:#eff6ff,stroke:#93c5fd,color:#1e3a5f
     style ST3 fill:#eff6ff,stroke:#93c5fd,color:#1e3a5f
-    style FT1a fill:#f8fafc,stroke:#cbd5e1,color:#334155
-    style FT1b fill:#f8fafc,stroke:#cbd5e1,color:#334155
-    style FT2a fill:#f8fafc,stroke:#cbd5e1,color:#334155
-    style FT2b fill:#f8fafc,stroke:#cbd5e1,color:#334155
-    style FT2c fill:#f8fafc,stroke:#cbd5e1,color:#334155
-    style S1a fill:#0f766e,stroke:#0f766e,color:#f0fdf4
-    style S1b fill:#0f766e,stroke:#0f766e,color:#f0fdf4
-    style S2 fill:#0f766e,stroke:#0f766e,color:#f0fdf4
-    style S3a fill:#0f766e,stroke:#0f766e,color:#f0fdf4
-    style S3b fill:#0f766e,stroke:#0f766e,color:#f0fdf4
-    style N1a fill:#134e4a,stroke:#134e4a,color:#f0fdf4
-    style N1b fill:#134e4a,stroke:#134e4a,color:#f0fdf4
-    style N2 fill:#134e4a,stroke:#134e4a,color:#f0fdf4
-    style N3a fill:#134e4a,stroke:#134e4a,color:#f0fdf4
-    style N3b fill:#134e4a,stroke:#134e4a,color:#f0fdf4
+    style FT_1_1_1 fill:#f8fafc,stroke:#cbd5e1,color:#334155
+    style FT_1_1_2 fill:#f8fafc,stroke:#cbd5e1,color:#334155
+    style FT_2_1_1 fill:#f8fafc,stroke:#cbd5e1,color:#334155
+    style FT_2_1_2 fill:#f8fafc,stroke:#cbd5e1,color:#334155
+    style FT_2_2_1 fill:#f8fafc,stroke:#cbd5e1,color:#334155
+    style S_1_1_1 fill:#0f766e,stroke:#0f766e,color:#f0fdf4
+    style S_1_1_2 fill:#0f766e,stroke:#0f766e,color:#f0fdf4
+    style S_2_1_1 fill:#0f766e,stroke:#0f766e,color:#f0fdf4
+    style S_2_1_2 fill:#0f766e,stroke:#0f766e,color:#f0fdf4
+    style S_2_2_1 fill:#0f766e,stroke:#0f766e,color:#f0fdf4
+    style N_1_1_1 fill:#134e4a,stroke:#134e4a,color:#f0fdf4
+    style N_1_1_2 fill:#134e4a,stroke:#134e4a,color:#f0fdf4
+    style N_2_1_1 fill:#134e4a,stroke:#134e4a,color:#f0fdf4
+    style N_2_1_2 fill:#134e4a,stroke:#134e4a,color:#f0fdf4
+    style N_2_2_1 fill:#134e4a,stroke:#134e4a,color:#f0fdf4
 ```
 
 ## Goals
