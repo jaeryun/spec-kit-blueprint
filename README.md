@@ -26,7 +26,7 @@ flowchart TD
     subgraph BP ["Blueprint - Strategy & Alignment"]
         direction TB
         B --> V["vision.md<br/>Problem / Users / Goals / Constraints"]
-        V --> C["/speckit.blueprint.design<br/>Build EP / ST / FT hierarchy"]
+        V --> C["/speckit.blueprint.design<br/>Design draft: Epic → Story → Feature"]
         C --> R["blueprint.md<br/>Epic / Story / Feature Draft"]
 
         subgraph HIER ["blueprint.md"]
