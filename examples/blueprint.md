@@ -6,7 +6,7 @@ _Last updated: 2026-04-25_
 
 ## Epics
 
-### EP-01 — Users can send and receive real-time 1:1 messages reliably
+### EP-1 — Users can send and receive real-time 1:1 messages reliably
 
 - **Scope**: Core 1:1 messaging infrastructure, message delivery guarantees, conversation history, and presence indicators.
 - **Out of Scope**: End-to-end encryption (Phase 2), message editing, disappearing messages.
@@ -33,7 +33,7 @@ _Last updated: 2026-04-25_
     - FT-1.2.2 — File attachment with type-based preview (PDF, DOCX)
     - FT-1.2.3 — Voice message recording, upload, and progressive playback
 
-### EP-02 — Users can create and collaborate in group conversations
+### EP-2 — Users can create and collaborate in group conversations
 
 - **Scope**: Group lifecycle management, member roles, advanced messaging features within groups.
 - **Out of Scope**: Public channels, broadcast lists, threaded replies in 1:1 chats.
@@ -60,7 +60,7 @@ _Last updated: 2026-04-25_
     - FT-2.2.2 — Pin messages and admin announcements banner
     - FT-2.2.3 — @mention parsing and targeted push notification routing
 
-### EP-03 — Users can discover contacts and manage their social graph
+### EP-3 — Users can discover contacts and manage their social graph
 
 - **Scope**: Contact discovery, friend connection lifecycle, blocking, and address book sync.
 - **Out of Scope**: Public user directories, "people you may know" recommendations.

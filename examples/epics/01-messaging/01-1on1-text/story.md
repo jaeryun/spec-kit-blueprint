@@ -26,7 +26,7 @@ Core real-time 1:1 messaging capability. Users send and receive text messages wi
 
 ## Non-Goals
 
-- Group messaging (covered in EP-02)
+- Group messaging (covered in EP-2)
 - End-to-end encryption (Phase 2)
 - Message editing or deletion after send
 

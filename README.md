@@ -31,12 +31,12 @@ flowchart TD
 
         subgraph HIER ["blueprint.md"]
             direction TB
-            R -.-> EP1["EP-01 — Real-time 1:1 Messaging"]
+            R -.-> EP1["EP-1 — Real-time 1:1 Messaging"]
             EP1 -.-> ST1["ST-1.1 — Text messaging with delivery status"]
             ST1 -.-> FT_1_1_1["FT-1.1.1 WebSocket connection management and message routing"]
             ST1 -.-> FT_1_1_2["FT-1.1.2 Message persistence and conversation history API"]
 
-            R -.-> EP2["EP-02 — Group Conversations"]
+            R -.-> EP2["EP-2 — Group Conversations"]
             EP2 -.-> ST2["ST-2.1 — Group creation and management"]
             ST2 -.-> FT_2_1_1["FT-2.1.1 Group creation and member invitation flow"]
             EP2 -.-> ST3["ST-2.2 — Advanced collaboration features"]
@@ -215,7 +215,7 @@ _Last updated: 2026-04-25_
 
 ## Epics
 
-### EP-01 — Users can send and receive real-time 1:1 messages reliably
+### EP-1 — Users can send and receive real-time 1:1 messages reliably
 
 - **Scope**: Core 1:1 messaging infrastructure, message delivery guarantees, conversation history, and presence indicators.
 - **Out of Scope**: End-to-end encryption (Phase 2), message editing, disappearing messages.
@@ -242,7 +242,7 @@ _Last updated: 2026-04-25_
     - FT-1.2.2 — File attachment with type-based preview (PDF, DOCX)
     - FT-1.2.3 — Voice message recording, upload, and progressive playback
 
-### EP-02 — Users can create and collaborate in group conversations
+### EP-2 — Users can create and collaborate in group conversations
 
 - **Scope**: Group lifecycle management, member roles, advanced messaging features within groups.
 - **Out of Scope**: Public channels, broadcast lists, threaded replies in 1:1 chats.

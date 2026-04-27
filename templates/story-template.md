@@ -1,6 +1,6 @@
 # ST-X.X — [Story Title]
 
-> Source of Truth. Last updated: [date]
+> Source of Truth.
 > External: — <!-- Reserved for future tracker integration. Leave as — unless manually linking to an external ticket. -->
 
 <!-- This file lives at docs/blueprint/epics/<epic-slug>/<story-slug>/story.md

@@ -21,7 +21,7 @@ Rich media sharing within 1:1 conversations, including images, videos, files, an
 
 - Media editing or filters
 - Live streaming
-- Group media sharing (covered in EP-02)
+- Group media sharing (covered in EP-2)
 
 ## NFR
 
