@@ -69,45 +69,81 @@ After completing all steps, check `.specify/extensions.yml` for any handlers reg
 2. Scan `docs/` for any existing `.md` files and subdirectories that might serve as a topic-based knowledge base.
 3. **Topic Convention**: Use short lowercase English words with hyphens (e.g., `auth`, `api-contracts`, `user-profile`). Prefer concise, recognizable names.
 
-#### Directory Structure Guide Reference
+#### Directory Structure Configuration
 
-The 5 directory structure options are defined in **`docs/archive-directory-guide.md`**. Do not inline them in this command.
+The KB directory structure is managed in **`.specify/config-bp.yml`**. This file is created automatically on first archive and updated when the user changes the structure.
 
-**First-time setup (if `docs/archive-directory-guide.md` does not exist):**
-1. Inform the user: "This appears to be the first archive for this project. A directory structure guide has been created at `docs/archive-directory-guide.md`."
-2. Ask: "Which structure would you like to use?"
-   - Option A: Category-Based
-   - Option B: Domain-Driven
-   - Option C: Feature-Foundation Split
-   - Option D: Layer-Based
-   - Option E: Topic-Centric Flat
-3. After the user selects, create `docs/archive-directory-guide.md` (if not already created by another means) and record the chosen pattern.
+**Config file format (`.specify/config-bp.yml`):**
+```yaml
+# SpecKit Blueprint Extension Configuration
+kb_structure: "A"  # A, B, C, D, E, or custom
+# A = Category-Based (domains/, systems/, cross-cutting/, decisions/)
+# B = Domain-Driven (identity/, communication/, commerce/, decisions/)
+# C = Feature-Foundation Split (features/, foundations/, operations/, decisions/)
+# D = Layer-Based (frontend/, backend/, infrastructure/, decisions/)
+# E = Topic-Centric Flat (topics/, decisions/, runbooks/)
+# custom = User-defined structure
+custom_paths: {}   # Only used when kb_structure is "custom"
+last_updated: "YYYY-MM-DD"
+```
 
-**Normal operation (guide exists):**
-1. Read the chosen pattern from `docs/archive-directory-guide.md` or infer it from the existing `docs/` subdirectory structure.
-2. Propose the KB location **within the existing pattern**.
-3. Do not show the full guide unless the user explicitly asks to change the structure.
+**First-time setup (if `.specify/config-bp.yml` does not exist):**
+1. Inform the user: "This appears to be the first archive for this project. Let's set up your Knowledge Base directory structure."
+2. Present the options:
+   > **Choose a directory structure for your Knowledge Base:**
+   >
+   > **A. Category-Based** — domains/ (business) + systems/ (tech) + cross-cutting/ + decisions/
+   > **B. Domain-Driven** — identity/, communication/, commerce/ (DDD bounded contexts) + decisions/
+   > **C. Feature-Foundation Split** — features/ (user-facing) + foundations/ (tech) + operations/ + decisions/
+   > **D. Layer-Based** — frontend/ + backend/ + infrastructure/ + decisions/
+   > **E. Topic-Centric Flat** — topics/ + decisions/ + runbooks/ (minimal depth)
+   > **Custom** — Define your own structure
+   >
+   > You can always change this later by saying "restructure" during any archive.
+3. If the user chooses **A~E**: write `.specify/config-bp.yml` with `kb_structure: "X"`.
+4. If the user chooses **Custom**:
+   - Ask: "Describe your custom directory structure (e.g., 'docs/modules/, docs/shared/, docs/adrs/')"
+   - Store the user's description in `.specify/config-bp.yml`:
+     ```yaml
+     kb_structure: "custom"
+     custom_description: "docs/modules/, docs/shared/, docs/adrs/"
+     ```
 
-**Structure change request:**
-If the user says "change structure", "reorganize", "different pattern", or similar:
-1. Read `docs/archive-directory-guide.md`.
-2. Present the 5 options to the user.
-3. After selection, update the guide file to reflect the new chosen pattern (append a note: "Structure changed to [Option X] on [date]").
-4. Continue archiving with the new structure.
-
-6. Present the proposal to the user:
-
+**Normal operation (config exists):**
+1. Read `.specify/config-bp.yml`.
+2. Propose the KB location **within the configured structure**.
+3. Always present the proposal with a visible "restructure" hint:
    > This FT covers topics: **[topic1, topic2, ...]**.
    >
    > **Proposed KB location(s):**
-   > 1. `docs/[category]/[proposed-file].md` (recommended — fits your existing `[structure]` pattern)
+   > 1. `docs/[category]/[proposed-file].md` (recommended — fits your current structure)
    > 2. `docs/[alternative-category]/[alternative].md`
    > 3. Enter a custom path
-   > 4. Change directory structure (see options A~E above)
+   >
+   > _Not happy with the structure? Say **"restructure"** to change your KB layout, or **"custom"** to use a one-off path._
    >
    > Confirm or specify your preferred path.
 
-7. If the user provides a custom path, use it. If the user replies with phrases like "you decide", "anywhere is fine", or gives an unclear answer, ask explicitly: "Where should I archive this FT's knowledge? (path under docs/)"
+**Structure change request:**
+If the user says "restructure", "change structure", "reorganize", "different pattern", or similar:
+1. Read the current structure from `.specify/config-bp.yml`.
+2. Present the 5 options (A~E) + Custom again.
+3. After selection, update `.specify/config-bp.yml`:
+   - Update `kb_structure`
+   - Update `last_updated`
+   - If custom, update `custom_description`
+4. Inform the user: "Structure updated. Future archives will use this new layout."
+5. Continue archiving with the new structure.
+
+**One-off custom path:**
+If the user says "custom" or provides a path outside the configured structure:
+- Accept the path as a one-off exception.
+- Do NOT update `.specify/config-bp.yml`.
+- Archive the FT to the specified path.
+- Note: "This is a one-off path. Your default structure remains unchanged."
+
+**Ambiguous response:**
+If the user replies with phrases like "you decide", "anywhere is fine", or gives an unclear answer, ask explicitly: "Where should I archive this FT's knowledge? (path under docs/, or say 'restructure' to change layout)"
 
 ---
 
