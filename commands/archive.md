@@ -66,24 +66,123 @@ After completing all steps, check `.specify/extensions.yml` for any handlers reg
 ### Step 4: Propose Knowledge Base Location
 
 1. Analyze the extracted content to identify the **topics** covered by this FT (e.g., `auth`, `database`, `messaging`, `api-contract`).
-2. Scan `docs/` for any existing `.md` files that might serve as a topic-based knowledge base.
+2. Scan `docs/` for any existing `.md` files and subdirectories that might serve as a topic-based knowledge base.
 3. **Topic Convention**: Use short lowercase English words with hyphens (e.g., `auth`, `api-contracts`, `user-profile`). Prefer concise, recognizable names.
-4. **Propose a location** using one of these strategies:
-   - If a clear topic match exists in `docs/` (e.g., `docs/auth.md`), propose that file.
-   - If no clear match exists, propose a new file name based on the dominant topic (e.g., `docs/messaging.md`).
+
+#### Directory Structure Options
+
+If this is the **first archive** for the project, or if the user asks to reconsider the structure, present these **5 proven directory structure patterns**. Each supports subdirectories and scales beyond 50+ topics:
+
+**Option A: Categorized Subdirectories** ⭐⭐⭐⭐⭐
+```
+docs/
+├── domains/           # Business capabilities
+│   ├── auth.md
+│   ├── messaging.md
+│   └── payments.md
+├── systems/           # Technical infrastructure
+│   ├── database.md
+│   ├── websocket.md
+│   └── caching.md
+├── cross-cutting/     # Shared concerns
+│   ├── observability.md
+│   └── security.md
+└── adrs/              # Architecture Decision Records
+    ├── 001-websocket-protocol.md
+    └── 002-database-selection.md
+```
+- **Best for**: Most teams (5~50 people). Separates business domain, tech stack, and cross-cutting concerns.
+
+**Option B: Domain-Oriented (DDD)** ⭐⭐⭐⭐
+```
+docs/
+├── identity/
+│   ├── auth.md
+│   └── user-profile.md
+├── communication/
+│   ├── messaging.md
+│   └── notifications.md
+├── commerce/
+│   ├── payments.md
+│   └── catalog.md
+└── adrs/
+    └── ...
+```
+- **Best for**: DDD-practicing teams, MSA/modular monoliths, domain experts actively involved.
+
+**Option C: Concern-Based (Functional vs Technical)** ⭐⭐⭐⭐
+```
+docs/
+├── features/          # User-facing capabilities
+│   ├── messaging.md
+│   ├── media-sharing.md
+│   └── group-management.md
+├── foundations/       # Underlying tech
+│   ├── auth.md
+│   ├── database.md
+│   └── websocket.md
+├── operations/        # DevOps/observability
+│   ├── monitoring.md
+│   └── deployment.md
+└── adrs/
+    └── ...
+```
+- **Best for**: Product-centric teams. Intuitive separation between "what users see" and "what powers it".
+
+**Option D: Layer-Based** ⭐⭐⭐
+```
+docs/
+├── frontend/
+│   ├── ui-components.md
+│   └── state-management.md
+├── backend/
+│   ├── api-contracts.md
+│   ├── auth-logic.md
+│   └── database-schema.md
+├── infrastructure/
+│   ├── messaging-pipeline.md
+│   └── observability.md
+└── adrs/
+    └── ...
+```
+- **Best for**: Teams with clear role separation (frontend/backend/infra), multi-platform projects (web + mobile + infra).
+
+**Option E: Hybrid Shallow Tree** ⭐⭐⭐⭐⭐
+```
+docs/
+├── topics/            # All topic knowledge
+│   ├── auth.md
+│   ├── messaging.md
+│   ├── database.md
+│   └── payments.md
+├── adrs/              # Architecture decisions
+│   ├── 001-websocket-protocol.md
+│   └── 002-database-selection.md
+└── runbooks/          # Operational guides (optional)
+    └── incident-response.md
+```
+- **Best for**: Teams wanting minimal depth (max 2 levels) with clear separation between topics, ADRs, and runbooks.
+
+#### Proposing to the User
+
+5. Based on the FT's content and the **existing structure** in `docs/`, determine which option (or variation) fits best:
+   - If `docs/` already has a structure, respect it and propose within that pattern.
+   - If `docs/` is empty or the user wants to change, present the **top 2 most relevant options** with brief justification.
    - If the content spans multiple unrelated topics, propose splitting across multiple files.
-5. Present the proposal to the user, including the list of existing KB topics found in `docs/`:
+
+6. Present the proposal to the user:
 
    > This FT covers topics: **[topic1, topic2, ...]**.
    >
    > **Proposed KB location(s):**
-   > 1. `docs/[proposed-file].md` (recommended)
-   > 2. `docs/[alternative].md`
+   > 1. `docs/[category]/[proposed-file].md` (recommended — fits your existing `[structure]` pattern)
+   > 2. `docs/[alternative-category]/[alternative].md`
    > 3. Enter a custom path
+   > 4. Change directory structure (see options A~E above)
    >
    > Confirm or specify your preferred path.
 
-6. If the user provides a custom path, use it. If the user replies with phrases like "you decide", "anywhere is fine", or gives an unclear answer, ask explicitly: "Where should I archive this FT's knowledge? (path under docs/)"
+7. If the user provides a custom path, use it. If the user replies with phrases like "you decide", "anywhere is fine", or gives an unclear answer, ask explicitly: "Where should I archive this FT's knowledge? (path under docs/)"
 
 ---
 
