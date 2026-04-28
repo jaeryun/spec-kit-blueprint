@@ -1,18 +1,12 @@
 # Blueprint: [PROJECT NAME]
 
-_Last updated: [DATE]_
+_Last updated: [YYYY-MM-DD]_
 
 <!-- Blueprint is the single master document for your project's delivery hierarchy.
-     It contains all Epics, their Stories, and each Story's Features in one place.
+      It contains all Epics, their Stories, and each Story's Features in one place.
       Use this as the draft for external tracking tool integration.
 
-     Story directories are organized under their parent Epic:
-       docs/blueprint/epics/<epic-slug>/<story-slug>/story.md
-
-     This file is designed to be re-run when scope changes. Preserve existing History
-     entries and append a new row for each update.
-
-     Number Epics sequentially: EP-01, EP-02, ...
+      Number Epics sequentially: EP-1, EP-2, ...
       Number Stories under each Epic: ST-1.1, ST-1.2, ST-2.1, ... (Epic number . Story sequence)
       Number Features under each Story: FT-1.1.1, FT-1.1.2, FT-1.2.1, ... (Epic . Story . Feature sequence) -->
 
@@ -20,7 +14,7 @@ _Last updated: [DATE]_
 
 ## Epics
 
-### EP-01 — [User-facing outcome]
+### EP-1 — [User-facing outcome]
 
 <!-- ACTION REQUIRED: One sentence describing the user-facing outcome of this Epic.
      Bad: "Implement authentication"
@@ -43,7 +37,13 @@ _Last updated: [DATE]_
   - **External**: — <!-- Reserved for future tracker integration (Jira, Linear, etc.). Leave as — unless manually linking to an external ticket. -->
   - **Features**:
     - FT-1.1.1 — <!-- ACTION REQUIRED: Summary of the spec-sized unit. Each FT = one /speckit.specify run. -->
+      - **Spec Path**: <!-- Populated by /speckit.blueprint.link-spec after /speckit.specify. Leave blank until then. -->
+      - **External**: — <!-- Reserved for future tracker integration (Jira, Linear, etc.). Leave as — unless manually linking to an external ticket. -->
+      - **Status**: ToDo <!-- ToDo → InProgress → Done. Updated by /speckit.blueprint.link-spec and /speckit.blueprint.archive. -->
     - FT-1.1.2 — [Summary]
+      - **Spec Path**: <!-- Populated by /speckit.blueprint.link-spec after /speckit.specify. Leave blank until then. -->
+      - **External**: —
+      - **Status**: ToDo
 
 - **ST-1.2** — [User-facing outcome]
   - **Scope**: [What this Story encompasses]
@@ -51,8 +51,10 @@ _Last updated: [DATE]_
   - **External**: — <!-- Reserved for future tracker integration (Jira, Linear, etc.). Leave as — unless manually linking to an external ticket. -->
   - **Features**:
     - FT-1.2.1 — [Summary]
+      - **Spec Path**: <!-- Populated by /speckit.blueprint.link-spec after /speckit.specify. Leave blank until then. -->
+      - **External**: —
 
-### EP-02 — [User-facing outcome]
+### EP-2 — [User-facing outcome]
 
 - **Scope**: [What this Epic encompasses at an abstract level]
 - **Out of Scope**: [What is explicitly NOT included]
@@ -67,6 +69,8 @@ _Last updated: [DATE]_
   - **External**: — <!-- Reserved for future tracker integration (Jira, Linear, etc.). Leave as — unless manually linking to an external ticket. -->
   - **Features**:
     - FT-2.1.1 — [Summary]
+      - **Spec Path**: <!-- Populated by /speckit.blueprint.link-spec after /speckit.specify. Leave blank until then. -->
+      - **External**: —
 
 <!-- Add more Epics as needed. -->
 

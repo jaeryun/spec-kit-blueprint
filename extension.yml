@@ -3,7 +3,7 @@ schema_version: "1.0"
 extension:
   id: blueprint
   name: "Blueprint"
-  version: "1.1.0"
+  version: "1.2.0"
   description: "Vision-first project planning for SpecKit. Decomposes project vision into a 3-level hierarchy: Epic → Story → Feature — each Feature mapping to one /speckit.specify run."
   author: "jaeryun"
   repository: "https://github.com/jaeryun/spec-kit-blueprint"
@@ -20,11 +20,15 @@ provides:
 
     - name: speckit.blueprint.design
       file: commands/design.md
-      description: "Generate the Epic→Story hierarchy from the confirmed vision."
+      description: "Generate the Epic→Story→Feature hierarchy from the confirmed vision."
 
     - name: speckit.blueprint.archive
       file: commands/archive.md
-      description: "Archive a completed FT into its parent Story's technical Source of Truth."
+      description: "Archive a completed FT into the project's Knowledge Base under docs/."  
+
+    - name: speckit.blueprint.link-spec
+      file: commands/link-spec.md
+      description: "Link a Feature to its spec directory in blueprint.md after /speckit.specify."
 
   hooks:
     - event: before_blueprint_vision
@@ -40,10 +44,22 @@ provides:
       description: "Triggered after the Epic→Story hierarchy is confirmed and saved."
 
     - event: before_blueprint_archive
-      description: "Triggered before story.md archiving begins."
+      description: "Triggered before FT knowledge archiving begins."
 
     - event: after_blueprint_archive
-      description: "Triggered after story.md is archived."
+      description: "Triggered after FT knowledge is archived to the configured docs base path."
+
+    - event: before_blueprint_link_spec
+      description: "Triggered before linking a FT to its spec directory in blueprint.md."
+
+    - event: after_blueprint_link_spec
+      description: "Triggered after a FT is linked to its spec directory in blueprint.md."
+
+  config:
+    - name: ".specify/config-bp.yml"
+      template: "templates/config-bp.template.yml"
+      required: false
+      description: "Blueprint extension configuration."
 
 tags:
   - planning

@@ -6,7 +6,7 @@ _Last updated: 2026-04-25_
 
 ## Epics
 
-### EP-01 — Users can send and receive real-time 1:1 messages reliably
+### EP-1 — Users can send and receive real-time 1:1 messages reliably
 
 - **Scope**: Core 1:1 messaging infrastructure, message delivery guarantees, conversation history, and presence indicators.
 - **Out of Scope**: End-to-end encryption (Phase 2), message editing, disappearing messages.
@@ -21,8 +21,17 @@ _Last updated: 2026-04-25_
   - **External**: —
   - **Features**:
     - FT-1.1.1 — WebSocket connection management and message routing
+      - **Spec Path**: specs/ft-1.1.1-websocket-routing
+      - **External**: —
+      - **Status**: InProgress
     - FT-1.1.2 — Message persistence and conversation history API
+      - **Spec Path**: <!-- Populated by /speckit.blueprint.link-spec -->
+      - **External**: —
+      - **Status**: ToDo
     - FT-1.1.3 — Delivery and read receipt state machine
+      - **Spec Path**: <!-- Populated by /speckit.blueprint.link-spec -->
+      - **External**: —
+      - **Status**: ToDo
 
 - **ST-1.2** — Users can share rich media and voice messages in 1:1 chats.
   - **Scope**: Image/video upload with compression, file attachments, voice message recording and playback.
@@ -30,10 +39,19 @@ _Last updated: 2026-04-25_
   - **External**: —
   - **Features**:
     - FT-1.2.1 — Media upload pipeline (compression, thumbnail generation, S3 storage)
+      - **Spec Path**: <!-- Populated by /speckit.blueprint.link-spec -->
+      - **External**: —
+      - **Status**: ToDo
     - FT-1.2.2 — File attachment with type-based preview (PDF, DOCX)
+      - **Spec Path**: <!-- Populated by /speckit.blueprint.link-spec -->
+      - **External**: —
+      - **Status**: ToDo
     - FT-1.2.3 — Voice message recording, upload, and progressive playback
+      - **Spec Path**: <!-- Populated by /speckit.blueprint.link-spec -->
+      - **External**: —
+      - **Status**: ToDo
 
-### EP-02 — Users can create and collaborate in group conversations
+### EP-2 — Users can create and collaborate in group conversations
 
 - **Scope**: Group lifecycle management, member roles, advanced messaging features within groups.
 - **Out of Scope**: Public channels, broadcast lists, threaded replies in 1:1 chats.
@@ -48,8 +66,17 @@ _Last updated: 2026-04-25_
   - **External**: —
   - **Features**:
     - FT-2.1.1 — Group creation and member invitation flow
+      - **Spec Path**: <!-- Populated by /speckit.blueprint.link-spec -->
+      - **External**: —
+      - **Status**: ToDo
     - FT-2.1.2 — Role-based permission model (admin vs member)
+      - **Spec Path**: <!-- Populated by /speckit.blueprint.link-spec -->
+      - **External**: —
+      - **Status**: ToDo
     - FT-2.1.3 — Group profile metadata (name, avatar, description, rules)
+      - **Spec Path**: <!-- Populated by /speckit.blueprint.link-spec -->
+      - **External**: —
+      - **Status**: ToDo
 
 - **ST-2.2** — Group members can use advanced collaboration features.
   - **Scope**: Message reactions, pin/announcement messages, @mentions with notification routing.
@@ -57,10 +84,19 @@ _Last updated: 2026-04-25_
   - **External**: —
   - **Features**:
     - FT-2.2.1 — Emoji reactions aggregation and display
+      - **Spec Path**: <!-- Populated by /speckit.blueprint.link-spec -->
+      - **External**: —
+      - **Status**: ToDo
     - FT-2.2.2 — Pin messages and admin announcements banner
+      - **Spec Path**: <!-- Populated by /speckit.blueprint.link-spec -->
+      - **External**: —
+      - **Status**: ToDo
     - FT-2.2.3 — @mention parsing and targeted push notification routing
+      - **Spec Path**: <!-- Populated by /speckit.blueprint.link-spec -->
+      - **External**: —
+      - **Status**: ToDo
 
-### EP-03 — Users can discover contacts and manage their social graph
+### EP-3 — Users can discover contacts and manage their social graph
 
 - **Scope**: Contact discovery, friend connection lifecycle, blocking, and address book sync.
 - **Out of Scope**: Public user directories, "people you may know" recommendations.
@@ -75,8 +111,17 @@ _Last updated: 2026-04-25_
   - **External**: —
   - **Features**:
     - FT-3.1.1 — User search by username and phone number
+      - **Spec Path**: <!-- Populated by /speckit.blueprint.link-spec -->
+      - **External**: —
+      - **Status**: ToDo
     - FT-3.1.2 — Friend request state machine (pending, accepted, declined)
+      - **Spec Path**: <!-- Populated by /speckit.blueprint.link-spec -->
+      - **External**: —
+      - **Status**: ToDo
     - FT-3.1.3 — Block list and privacy-enforced access control
+      - **Spec Path**: <!-- Populated by /speckit.blueprint.link-spec -->
+      - **External**: —
+      - **Status**: ToDo
 
 - **ST-3.2** — Users can sync and organize their address book contacts.
   - **Scope**: Phone contact upload and matching, auto-suggest existing users, contact labeling (favorites).
@@ -84,8 +129,17 @@ _Last updated: 2026-04-25_
   - **External**: —
   - **Features**:
     - FT-3.2.1 — Privacy-preserving contact matching (hashed phone numbers)
+      - **Spec Path**: <!-- Populated by /speckit.blueprint.link-spec -->
+      - **External**: —
+      - **Status**: ToDo
     - FT-3.2.2 — Contact import UI and matched user suggestion list
+      - **Spec Path**: <!-- Populated by /speckit.blueprint.link-spec -->
+      - **External**: —
+      - **Status**: ToDo
     - FT-3.2.3 — Favorite contacts and quick-access recents
+      - **Spec Path**: <!-- Populated by /speckit.blueprint.link-spec -->
+      - **External**: —
+      - **Status**: ToDo
 
 ---
 

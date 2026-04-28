@@ -1,0 +1,24 @@
+# Blueprint Extension Configuration
+# This file defines the docs directory structure for /speckit.blueprint.archive
+# Generated from spec-kit-blueprint extension template.
+# You can change this anytime by saying "restructure" during an archive.
+
+blueprint:
+  # Base directory for archived knowledge. All archive paths are relative to this.
+  docs_base_path: "docs"
+
+  # Docs Structure Options:
+  #   category_based          — domains/ (business) + systems/ (tech) + cross-cutting/ + decisions/
+  #   domain_driven           — identity/, communication/, commerce/ (DDD bounded contexts) + decisions/
+  #   feature_foundation_split — features/ (user-facing) + foundations/ (tech) + operations/ + decisions/
+  #   layer_based             — frontend/ + backend/ + infrastructure/ + decisions/
+  #   topic_centric_flat      — topics/ + decisions/ + runbooks/ (minimal depth)
+  #   custom                  — Define your own
+  docs_structure: ""           # Empty until the user picks a structure during the first archive
+
+  # Only used when docs_structure is "custom". Describe your layout, e.g.:
+  # "docs/modules/, docs/shared/, docs/adrs/"
+  custom_structure_description: ""
+
+  # Auto-updated on every structure change
+  last_updated: ""

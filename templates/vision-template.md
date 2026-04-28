@@ -1,7 +1,5 @@
 # Vision: [PROJECT NAME]
 
-_Last updated: [DATE]_
-
 ---
 
 ## Overview
@@ -67,11 +65,3 @@ _Last updated: [DATE]_
      Prefer measurable outcomes: "X% of users can do Y in under Z minutes".
      If the user provided none, propose 2–3 based on Core Features and confirm before saving. -->
 [How we know this project succeeded — measurable outcomes]
-
----
-
-## History
-
-| Timestamp | Subject | Note |
-| --- | --- | --- |
-| [YYYY-MM-DD HH:MM] | vision.md | Created |
