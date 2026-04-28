@@ -20,11 +20,11 @@ provides:
 
     - name: speckit.blueprint.design
       file: commands/design.md
-      description: "Generate the Epic→Story hierarchy from the confirmed vision."
+      description: "Generate the Epic→Story→Feature hierarchy from the confirmed vision."
 
     - name: speckit.blueprint.archive
       file: commands/archive.md
-      description: "Archive a completed FT into its parent Story's technical Source of Truth."
+      description: "Archive a completed FT into the project's Knowledge Base under docs/."  
 
   hooks:
     - event: before_blueprint_vision
@@ -40,10 +40,10 @@ provides:
       description: "Triggered after the Epic→Story hierarchy is confirmed and saved."
 
     - event: before_blueprint_archive
-      description: "Triggered before story.md archiving begins."
+      description: "Triggered before FT knowledge archiving begins."
 
     - event: after_blueprint_archive
-      description: "Triggered after story.md is archived."
+      description: "Triggered after FT knowledge is archived to docs/."
 
 tags:
   - planning

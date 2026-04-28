@@ -1,13 +1,12 @@
 # Blueprint: [PROJECT NAME]
 
+_Last updated: [YYYY-MM-DD]_
+
 <!-- Blueprint is the single master document for your project's delivery hierarchy.
-     It contains all Epics, their Stories, and each Story's Features in one place.
+      It contains all Epics, their Stories, and each Story's Features in one place.
       Use this as the draft for external tracking tool integration.
 
-     Story directories are organized under their parent Epic:
-       docs/blueprint/epics/<epic-slug>/<story-slug>/story.md
-
-     Number Epics sequentially: EP-1, EP-2, ...
+      Number Epics sequentially: EP-1, EP-2, ...
       Number Stories under each Epic: ST-1.1, ST-1.2, ST-2.1, ... (Epic number . Story sequence)
       Number Features under each Story: FT-1.1.1, FT-1.1.2, FT-1.2.1, ... (Epic . Story . Feature sequence) -->
 
@@ -64,3 +63,11 @@
     - FT-2.1.1 — [Summary]
 
 <!-- Add more Epics as needed. -->
+
+---
+
+## History
+
+| Timestamp | Subject | Note |
+| --- | --- | --- |
+| [YYYY-MM-DD HH:MM] | blueprint.md | Created from vision.md |

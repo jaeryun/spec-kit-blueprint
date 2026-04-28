@@ -1,10 +1,10 @@
 ---
-description: "Generate the Epic→Story→Feature hierarchy and story.md drafts from the confirmed vision."
+description: "Generate the Epic→Story→Feature hierarchy from the confirmed vision."
 ---
 
-# Blueprint
+# Blueprint Design
 
-Generate the Epic→Story→Feature hierarchy and story.md drafts from the confirmed vision.
+Generate the Epic→Story→Feature hierarchy from the confirmed vision.
 
 ## Purpose
 
@@ -147,11 +147,9 @@ Incorporate feedback and repeat until the user confirms.
 
 ### Step 4: Generate Output Files
 
-Load the templates to understand required sections:
-- `templates/blueprint-template.md` for `docs/blueprint/blueprint.md`
-- `templates/story-template.md` for the structure of each Story's `story.md`
+Load `templates/blueprint-template.md` to understand the required sections for `docs/blueprint/blueprint.md`.
 
-Fill each file with the confirmed output from Steps 2 and 3, following the **For AI Generation** guidelines below.
+Fill the file with the confirmed output from Steps 2 and 3, following the **For AI Generation** guidelines below.
 
 #### 4a: blueprint.md
 
@@ -165,49 +163,15 @@ If the file did not yet exist, include the initial history entry from the templa
 
 Keep summaries concise (one line) and descriptive of the specific action taken (e.g., "Full regeneration from vision.md", "EP-2 updated to include API requirements").
 
-#### 4b: story.md lightweight drafts
-
-For each Story, create a directory at `docs/blueprint/epics/[epic-slug]/[story-slug]/` and place a lightweight `story.md` inside it.
-
-This is **not** the full technical SoT — that is built incrementally via `/speckit.blueprint.archive` after each FT is merged. Additional artifacts (data-model.md, contracts/, etc.) can be added to the same directory as the Story evolves.
-
-Use this format (matches `templates/story-template.md`):
-
-```markdown
-# ST-X.X — [Story Title]
-
-> Source of Truth.
-> External: —
-
-## Overview
-[2-3 sentences from interview]
-
-## Current State
-(TBD — filled incrementally after each FT is specified and merged)
-
-## Tech Context
-(TBD)
-
-## Non-Goals
-(TBD)
-
-## NFR
-(TBD)
-
-## ADR
-(TBD)
-```
-
-Save all files.
+Save the file.
 
 ---
 
 ### Step 5: Completion
 
-Confirm all files are saved:
+Confirm the file is saved:
 
 - `docs/blueprint/blueprint.md` ✓
-- `docs/blueprint/epics/[epic-slug]/[story-slug]/story.md` ([N] files) ✓
 
 Output:
 
@@ -230,10 +194,9 @@ Next: /speckit.specify [first Feature not yet specified]
 
 ## Output Files
 
-| File / Directory | Purpose |
+| File | Purpose |
 | --- | --- |
 | `docs/blueprint/blueprint.md` | **Master blueprint** — full Epic → Story → Feature hierarchy in one document. |
-| `docs/blueprint/epics/[epic-slug]/[story-slug]/` | One Story directory per Epic — contains `story.md` (lightweight draft → evolves into technical SoT via `archive`) and any related artifacts. |
 
 ---
 

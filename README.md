@@ -101,14 +101,14 @@ flowchart TD
 ## Goals
 
 - **Vision-First**: Walks you through defining the problem, target users, and core value — ensuring you know *why* you're building before you decide *what*.
-- **Strategic Decomposition**: Breaks the vision down into Epics, Stories, and Features — so every spec maps to exactly one Story.
-- **Contextual Integrity**: Automatically checks every spec you write against the hierarchy, ensuring your implementation never loses sight of the original vision.
+- **Strategic Decomposition**: Breaks the vision down into Epics, Stories, and Features — so every spec maps to exactly one Feature.
+- **Contextual Integrity**: Ensures every spec you write maps to a defined Feature in the hierarchy, keeping implementation aligned with the original vision.
 
 ## Quick Start
 
 > Blueprint runs **before** SpecKit's core `specify → plan → tasks → implement` workflow. See [Installation](#installation) to add it first.
 
-**The workflow consists of 3 manual steps.** Run them in order, and re-run any step whenever your plan changes.
+**The workflow consists of 4 manual steps.** Run them in order, and re-run any step whenever your plan changes.
 
 ```text
 # 0. Install the extension
@@ -124,7 +124,7 @@ specify extension add blueprint --from https://github.com/jaeryun/spec-kit-bluep
 /speckit.specify FT-1.1.1
 #    → /speckit.plan → /speckit.tasks → /speckit.implement
 
-# 4. Archive the completed Feature into the Story's SoT
+# 4. Archive the completed Feature into the project's Knowledge Base
 /speckit.blueprint.archive FT-1.1.1
 
 # Repeat 3-4 for each Feature
@@ -133,26 +133,19 @@ specify extension add blueprint --from https://github.com/jaeryun/spec-kit-bluep
 **Re-running commands:**
 - Run `vision` again whenever your project goals or scope changes. It will prompt you to update the blueprint accordingly.
 - Run `design` again whenever you need to add, remove, or reorder Epics, Stories, or Features.
-- Run `archive` after each completed FT to keep the Story's technical Source of Truth up to date.
+- Run `archive` after each completed FT to preserve its durable technical knowledge under `docs/`.
 
 ## Output Examples
 
 ```text
-docs/blueprint/
-├── vision.md              # Project vision
-├── blueprint.md           # Master roadmap: Epic → Story → Feature hierarchy
-└── epics/
-    ├── 01-auth/
-    │   ├── 01-user-login/
-    │   │   ├── story.md       # Story technical SoT (evolves via archive)
-    │   │   ├── data-model.md  # (optional) Related artifacts
-    │   │   └── contracts/
-    │   │       └── auth-api.md
-    │   └── 02-profile/
-    │       └── story.md
-    └── 02-admin/
-        └── 01-analytics/
-            └── story.md
+docs/
+├── blueprint/
+│   ├── vision.md          # Project vision
+│   └── blueprint.md       # Master roadmap: Epic → Story → Feature hierarchy
+├── auth.md                # Knowledge Base: authentication decisions (evolves via archive)
+├── messaging.md           # Knowledge Base: messaging architecture
+├── database.md            # Knowledge Base: data model & schema decisions
+└── ...
 ```
 
 ## Why Archive?
@@ -161,15 +154,15 @@ SpecKit's `/speckit.specify` produces a detailed feature spec for each FT — da
 
 Over time, three problems emerge:
 
-1. **Specs go stale** — As the codebase evolves, the details in an old `spec.md` drift from reality. A developer reading `specs/FT-1.1.1/spec.md` three months later cannot trust it as the current source of truth.
+1. **Specs go stale** — As the codebase evolves, the details in an old `spec.md` drift from reality. A developer reading a three-month-old spec cannot trust it as the current source of truth.
 
-2. **Knowledge is scattered** — Each Story spans 3–8 Features. The full technical picture of "how authentication works" is split across `specs/FT-1.1.1/`, `specs/FT-1.1.2/`, `specs/FT-1.1.3/`, etc. No single document tells the whole Story.
+2. **Knowledge is scattered** — The full technical picture of "how authentication works" is split across multiple spec directories. No single document tells the whole story.
 
-3. **Too much noise** — A `spec.md` includes planning artifacts (sprint estimates, task breakdowns, temporary decisions) that are irrelevant once the Feature is shipped.
+3. **Knowledge is trapped in delivery units** — When a Story is closed, the technical decisions buried inside its FT specs become hard to discover and easily outdated.
 
-**Archive solves this** by merging only the durable technical decisions from each completed FT into its parent Story's `story.md`. The result is a **living, Story-level Source of Truth** — concise enough to read in one sitting, accurate because it is updated after every FT, and organized by capability rather than by delivery batch.
+**Archive solves this** by extracting durable technical decisions from each completed FT and storing them as **topic-based knowledge under `docs/`**. Unlike Story-bound documents, these files survive delivery closure and remain discoverable by topic.
 
-Run `/speckit.blueprint.archive FT-1.1.1` after a Feature is merged. The Story's `story.md` grows incrementally into the definitive technical reference for that capability.
+Run `/speckit.blueprint.archive FT-1.1.1` after a Feature is merged. The AI proposes a topic-based file under `docs/` (e.g., `docs/auth.md`), merges the FT's technical content and ADRs, and marks the FT as completed in `blueprint.md`.
 
 **vision.md** — structured sections for the problem, users, goals, constraints, and out-of-scope items:
 
@@ -229,9 +222,10 @@ _Last updated: 2026-04-25_
   - **Key AC**: Given an open conversation, a sent message appears in the recipient's client within 1 second. Given a sent message, sender sees "delivered" when the server acknowledges, and "read" when recipient opens the conversation.
   - **External**: —
   - **Features**:
-    - FT-1.1.1 — WebSocket connection management and message routing
+    - FT-1.1.1 — WebSocket connection management and message routing (specs/ft-1.1.1-websocket) ✅
     - FT-1.1.2 — Message persistence and conversation history API
     - FT-1.1.3 — Delivery and read receipt state machine
+  - **Related KB**: [docs/messaging.md](docs/messaging.md#from-ft-1-1-1)
 
 - **ST-1.2** — Users can share rich media and voice messages in 1:1 chats.
   - **Scope**: Image/video upload with compression, file attachments, voice message recording and playback.
@@ -308,8 +302,8 @@ specify extension list
 | Command | Description | Requires |
 |---------|-------------|---------|
 | `/speckit.blueprint.vision` | Walks you through defining the problem, users, and core value — outputs `vision.md` | — |
-| `/speckit.blueprint.design` | Breaks the vision down into an Epic → Story → Feature hierarchy — outputs `blueprint.md` and lightweight `story.md` drafts | `vision.md` |
-| `/speckit.blueprint.archive` | Archives a completed FT into its parent Story's technical Source of Truth | `blueprint.md` + spec |
+| `/speckit.blueprint.design` | Breaks the vision down into an Epic → Story → Feature hierarchy — outputs `blueprint.md` | `vision.md` |
+| `/speckit.blueprint.archive` | Archives a completed FT into the project's Knowledge Base under `docs/` | `blueprint.md` + spec |
 
 Each command accepts an optional free-text argument that pre-populates the interview or narrows its focus.
 
@@ -336,7 +330,7 @@ Each command accepts an optional free-text argument that pre-populates the inter
 **`/speckit.blueprint.archive`**
 
 ```text
-# Archive a completed FT into its parent Story's SoT
+# Archive a completed FT into the project's Knowledge Base
 /speckit.blueprint.archive FT-1.1.1
 ```
 
@@ -352,8 +346,8 @@ Events emitted for other extensions to subscribe to:
 | `after_blueprint_vision` | After `vision.md` is confirmed and saved |
 | `before_blueprint_design` | Before Epic → Story hierarchy generation begins |
 | `after_blueprint_design` | After the hierarchy is saved |
-| `before_blueprint_archive` | Before `story.md` archiving begins |
-| `after_blueprint_archive` | After `story.md` is archived |
+| `before_blueprint_archive` | Before FT knowledge archiving begins |
+| `after_blueprint_archive` | After FT knowledge is archived to `docs/` |
 
 ## Non-Goals
 

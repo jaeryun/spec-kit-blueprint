@@ -28,7 +28,7 @@ This repo is a [SpecKit](https://github.com/github/spec-kit) extension. See [REA
 |------|---------|
 | `extension.yml` | **Source of truth** for extension metadata, commands, hooks, and version. |
 | `commands/{vision,design,archive}.md` | Command definitions consumed by SpecKit. Changing these changes runtime behavior. |
-| `templates/*.md` | Draft templates for `vision.md`, `blueprint.md`, and `story.md`. |
+| `templates/*.md` | Draft templates for `vision.md` and `blueprint.md`. |
 | `examples/` | Worked examples referenced by README. |
 | `docs/blueprint/` | **Generated output directory** (gitignored). Never commit this. |
 
