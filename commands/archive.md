@@ -69,99 +69,104 @@ After completing all steps, check `.specify/extensions.yml` for any handlers reg
 2. Scan `docs/` for any existing `.md` files and subdirectories that might serve as a topic-based knowledge base.
 3. **Topic Convention**: Use short lowercase English words with hyphens (e.g., `auth`, `api-contracts`, `user-profile`). Prefer concise, recognizable names.
 
-#### Directory Structure Options
+#### Directory Structure Options for SDD
 
-If this is the **first archive** for the project, or if the user asks to reconsider the structure, present these **5 proven directory structure patterns**. Each supports subdirectories and scales beyond 50+ topics:
+If this is the **first archive** for the project, or if the user asks to reconsider the structure, present these **5 proven directory structure patterns** optimized for Software Design Documentation. Each supports subdirectories and scales beyond 50+ topics:
 
-**Option A: Categorized Subdirectories** ⭐⭐⭐⭐⭐
+**Option A: Category-Based** (Inspired by Kubernetes KEP structure)
 ```
 docs/
-├── domains/           # Business capabilities
-│   ├── auth.md
-│   ├── messaging.md
-│   └── payments.md
+├── domains/           # Business capabilities / Bounded Contexts
+│   ├── auth.md        # ← FT-1.1.1, FT-1.1.2, FT-2.1.1 ...
+│   ├── messaging.md   # ← FT-1.1.1, FT-1.2.1, FT-2.2.1 ...
+│   └── payments.md    # ← FT-2.1.0, FT-3.1.0 ...
 ├── systems/           # Technical infrastructure
-│   ├── database.md
-│   ├── websocket.md
+│   ├── database.md    # ← FT-1.1.2, FT-1.3.1 ...
+│   ├── websocket.md   # ← FT-1.1.1 ...
 │   └── caching.md
-├── cross-cutting/     # Shared concerns
+├── cross-cutting/     # Shared concerns (observability, security)
 │   ├── observability.md
 │   └── security.md
-└── adrs/              # Architecture Decision Records
+└── decisions/         # Architecture Decision Records
     ├── 001-websocket-protocol.md
     └── 002-database-selection.md
 ```
-- **Best for**: Most teams (5~50 people). Separates business domain, tech stack, and cross-cutting concerns.
+- **Best for**: Most teams (5~50 people). Separates business domain, tech stack, and cross-cutting concerns. Similar to how Kubernetes organizes KEPs by SIG.
+- **Trade-off**: Requires initial categorization agreement.
 
-**Option B: Domain-Oriented (DDD)** ⭐⭐⭐⭐
+**Option B: Domain-Driven** (Inspired by DDD Aggregate boundaries)
 ```
 docs/
-├── identity/
-│   ├── auth.md
-│   └── user-profile.md
-├── communication/
-│   ├── messaging.md
-│   └── notifications.md
-├── commerce/
-│   ├── payments.md
-│   └── catalog.md
-└── adrs/
+├── identity/          # Bounded Context: Identity & Access
+│   ├── auth.md        # ← FT-1.1.1, FT-1.1.2 ...
+│   └── user-profile.md # ← FT-1.2.5 ...
+├── communication/     # Bounded Context: Communication
+│   ├── messaging.md   # ← FT-1.1.1, FT-1.2.1 ...
+│   └── notifications.md # ← FT-2.0.1 ...
+├── commerce/          # Bounded Context: Commerce
+│   ├── payments.md    # ← FT-2.1.0 ...
+│   └── catalog.md     # ← FT-3.1.0 ...
+└── decisions/
     └── ...
 ```
-- **Best for**: DDD-practicing teams, MSA/modular monoliths, domain experts actively involved.
+- **Best for**: DDD-practicing teams, MSA/modular monoliths, domain experts actively involved. Mirrors bounded context boundaries.
+- **Trade-off**: Cross-domain decisions may be hard to place.
 
-**Option C: Concern-Based (Functional vs Technical)** ⭐⭐⭐⭐
+**Option C: Feature-Foundation Split** (Inspired by React RFC separation)
 ```
 docs/
 ├── features/          # User-facing capabilities
-│   ├── messaging.md
-│   ├── media-sharing.md
-│   └── group-management.md
-├── foundations/       # Underlying tech
-│   ├── auth.md
-│   ├── database.md
-│   └── websocket.md
-├── operations/        # DevOps/observability
-│   ├── monitoring.md
-│   └── deployment.md
-└── adrs/
+│   ├── messaging.md   # ← FT-1.1.1, FT-1.2.1 ...
+│   ├── media-sharing.md # ← FT-1.2.1 ...
+│   └── group-management.md # ← FT-2.1.1 ...
+├── foundations/       # Underlying technical infrastructure
+│   ├── auth.md        # ← FT-1.1.1, FT-1.1.2 ...
+│   ├── database.md    # ← FT-1.1.2, FT-1.3.1 ...
+│   └── websocket.md   # ← FT-1.1.1 ...
+├── operations/        # DevOps / Observability
+│   ├── monitoring.md  # ← FT-4.0.0 ...
+│   └── deployment.md  # ← FT-5.0.0 ...
+└── decisions/
     └── ...
 ```
-- **Best for**: Product-centric teams. Intuitive separation between "what users see" and "what powers it".
+- **Best for**: Product-centric teams. Intuitive separation between "what users see" and "what powers it". Similar to React's separation of user API vs internals.
+- **Trade-off**: Some topics span both (e.g., real-time messaging = feature + websocket foundation).
 
-**Option D: Layer-Based** ⭐⭐⭐
+**Option D: Layer-Based** (Inspired by Clean Architecture / Envoy API layers)
 ```
 docs/
-├── frontend/
+├── frontend/          # Presentation layer
 │   ├── ui-components.md
 │   └── state-management.md
-├── backend/
-│   ├── api-contracts.md
-│   ├── auth-logic.md
-│   └── database-schema.md
-├── infrastructure/
-│   ├── messaging-pipeline.md
-│   └── observability.md
-└── adrs/
+├── backend/           # Application/Business logic layer
+│   ├── api-contracts.md # ← FT-2.1.0 ...
+│   ├── auth-logic.md    # ← FT-1.1.1 ...
+│   └── database-schema.md # ← FT-1.1.2 ...
+├── infrastructure/    # Infrastructure layer
+│   ├── messaging-pipeline.md # ← FT-1.2.4 ...
+│   └── observability.md      # ← FT-4.0.0 ...
+└── decisions/
     └── ...
 ```
-- **Best for**: Teams with clear role separation (frontend/backend/infra), multi-platform projects (web + mobile + infra).
+- **Best for**: Teams with clear role separation (frontend/backend/infra), multi-platform projects, Clean Architecture practitioners.
+- **Trade-off**: Cross-layer features (e.g., authentication) appear in multiple layers.
 
-**Option E: Hybrid Shallow Tree** ⭐⭐⭐⭐⭐
+**Option E: Topic-Centric Flat** (Inspired by Django Topic Guides)
 ```
 docs/
-├── topics/            # All topic knowledge
-│   ├── auth.md
-│   ├── messaging.md
-│   ├── database.md
-│   └── payments.md
-├── adrs/              # Architecture decisions
+├── topics/            # All design knowledge by topic
+│   ├── auth.md        # ← FT-1.1.1, FT-1.1.2, FT-2.1.1 ...
+│   ├── messaging.md   # ← FT-1.1.1, FT-1.2.1, FT-2.2.1 ...
+│   ├── database.md    # ← FT-1.1.2, FT-1.3.1 ...
+│   └── payments.md    # ← FT-2.1.0, FT-3.1.0 ...
+├── decisions/         # Architecture Decision Records
 │   ├── 001-websocket-protocol.md
 │   └── 002-database-selection.md
 └── runbooks/          # Operational guides (optional)
     └── incident-response.md
 ```
-- **Best for**: Teams wanting minimal depth (max 2 levels) with clear separation between topics, ADRs, and runbooks.
+- **Best for**: Teams wanting minimal depth (max 2 levels) with clear separation between topics, ADRs, and runbooks. Similar to Django's `topics/` and `ref/` separation.
+- **Trade-off**: `topics/` directory can become large; relies on good naming conventions.
 
 #### Proposing to the User
 
