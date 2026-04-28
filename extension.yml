@@ -26,6 +26,10 @@ provides:
       file: commands/archive.md
       description: "Archive a completed FT into the project's Knowledge Base under docs/."  
 
+    - name: speckit.blueprint.link-spec
+      file: commands/link-spec.md
+      description: "Link a Feature to its spec directory in blueprint.md after /speckit.specify."
+
   hooks:
     - event: before_blueprint_vision
       description: "Triggered before the vision interview begins."
@@ -43,7 +47,19 @@ provides:
       description: "Triggered before FT knowledge archiving begins."
 
     - event: after_blueprint_archive
-      description: "Triggered after FT knowledge is archived to docs/."
+      description: "Triggered after FT knowledge is archived to the configured docs base path."
+
+    - event: before_blueprint_link_spec
+      description: "Triggered before linking a FT to its spec directory in blueprint.md."
+
+    - event: after_blueprint_link_spec
+      description: "Triggered after a FT is linked to its spec directory in blueprint.md."
+
+  config:
+    - name: ".specify/config-bp.yml"
+      template: "templates/config-bp.template.yml"
+      required: false
+      description: "Blueprint extension configuration."
 
 tags:
   - planning

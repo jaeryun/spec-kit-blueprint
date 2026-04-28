@@ -37,7 +37,13 @@ _Last updated: [YYYY-MM-DD]_
   - **External**: — <!-- Reserved for future tracker integration (Jira, Linear, etc.). Leave as — unless manually linking to an external ticket. -->
   - **Features**:
     - FT-1.1.1 — <!-- ACTION REQUIRED: Summary of the spec-sized unit. Each FT = one /speckit.specify run. -->
+      - **Spec Path**: <!-- Populated by /speckit.blueprint.link-spec after /speckit.specify. Leave blank until then. -->
+      - **External**: — <!-- Reserved for future tracker integration (Jira, Linear, etc.). Leave as — unless manually linking to an external ticket. -->
+      - **Status**: ToDo <!-- ToDo → InProgress → Done. Updated by /speckit.blueprint.link-spec and /speckit.blueprint.archive. -->
     - FT-1.1.2 — [Summary]
+      - **Spec Path**: <!-- Populated by /speckit.blueprint.link-spec after /speckit.specify. Leave blank until then. -->
+      - **External**: —
+      - **Status**: ToDo
 
 - **ST-1.2** — [User-facing outcome]
   - **Scope**: [What this Story encompasses]
@@ -45,6 +51,8 @@ _Last updated: [YYYY-MM-DD]_
   - **External**: — <!-- Reserved for future tracker integration (Jira, Linear, etc.). Leave as — unless manually linking to an external ticket. -->
   - **Features**:
     - FT-1.2.1 — [Summary]
+      - **Spec Path**: <!-- Populated by /speckit.blueprint.link-spec after /speckit.specify. Leave blank until then. -->
+      - **External**: —
 
 ### EP-2 — [User-facing outcome]
 
@@ -61,6 +69,8 @@ _Last updated: [YYYY-MM-DD]_
   - **External**: — <!-- Reserved for future tracker integration (Jira, Linear, etc.). Leave as — unless manually linking to an external ticket. -->
   - **Features**:
     - FT-2.1.1 — [Summary]
+      - **Spec Path**: <!-- Populated by /speckit.blueprint.link-spec after /speckit.specify. Leave blank until then. -->
+      - **External**: —
 
 <!-- Add more Epics as needed. -->
 

@@ -1,256 +1,162 @@
 ---
-description: "Archive a completed FT into the project's Knowledge Base under docs/."
+description: "Archive a completed FT into the project's archive location under the configured base path."
 ---
 
 # Blueprint Archive
 
-Archive a completed Feature (FT) into the project's Knowledge Base under `docs/`.
+Archive a completed Feature (FT) into `{docs_base_path}/` as durable project knowledge.
 
-## Purpose
-
-When a Feature is fully specified and implemented, its technical decisions, ADRs, and context should be preserved as durable project knowledge — independent of delivery units (Stories). This command extracts durable technical content from an FT's spec directory and stores it under `docs/` as topic-based knowledge that survives Story closure.
+All archive paths use `docs_base_path` from `.specify/config-bp.yml` (default: `docs`). Read this value at the start of Step 4 and use it in place of `{docs_base_path}/` throughout this command.
 
 ## User Input
 
 `$ARGUMENTS`
 
-Feature ID, e.g., `"FT-1.1.1"`.
+Accepted forms:
+- **Feature ID**: `FT-1.1.1`
+- **Spec directory path**: `specs/001-auth`
+- **Spec directory ID**: `001-auth`
 
-If `$ARGUMENTS` is not provided, ask: "Which Feature should I archive? (e.g., FT-1.1.1)"
+If `$ARGUMENTS` is not provided, ask: "Which Feature should I archive? (FT ID, spec path, or spec ID)"
 
 ## Hooks
 
-Before starting, check `.specify/extensions.yml` for any handlers registered under `before_blueprint_archive` and execute them in order.
-
-After completing all steps, check `.specify/extensions.yml` for any handlers registered under `after_blueprint_archive` and execute them in order.
+Run `before_blueprint_archive` hooks before starting, and `after_blueprint_archive` hooks after completion.
 
 ## Instructions
 
 ### Step 1: Parse Input
 
-1. Extract the Feature ID from `$ARGUMENTS` (e.g., `FT-1.1.1`).
-2. Validate the Feature ID format: expected pattern is `FT-[N].[N].[N]`.
-3. If invalid or missing, warn: "Invalid Feature ID format. Expected FT-[N].[N].[N]."
-   Stop.
+1. Examine `$ARGUMENTS`.
+   - If it matches `FT-[N].[N].[N]`, treat it as a **Feature ID**.
+   - Otherwise, treat it as a **spec directory path or ID** (e.g., `specs/001-auth` or `001-auth`).
+2. If `$ARGUMENTS` is empty, ask for input. Stop if still empty.
 
 ---
 
-### Step 2: Locate FT Spec
+### Step 2: Locate FT via blueprint.md
 
-1. Find the spec directory for this FT. Search under the project's spec directory for a directory whose name contains the FT ID (e.g., `specs/ft-1.1.1-*/` or `specs/FT-1.1.1-*/` or similar naming conventions used by the project).
-2. Verify `spec.md` exists in that directory. If not found, warn:
-   > "No spec found for [FT-ID]. Run `/speckit.specify [FT-ID]` first."
-   > Stop.
-3. Read **all files** in that directory, not just `spec.md`. This includes:
-   - `spec.md` (core)
-   - `data-model.md`, `adr.md`, or any other markdown files
-   - Files under subdirectories such as `contracts/`, `schemas/`, `diagrams/`, etc.
-4. Extract durable technical content (exclude temporary workarounds, sprint assignments, unvalidated UI mockups, and implementation todo lists):
-   - **Tech Context** section from `spec.md`
-   - **ADR** section(s) from any files
-   - Key architecture decisions, data models, API contracts, and other artifacts
-   - List all artifact paths for reference
+1. Read `{docs_base_path}/blueprint/blueprint.md`.
+2. **If input is a Feature ID:**
+   - Locate the FT line in the hierarchy.
+   - If not found, warn: "FT-[ID] not found in `blueprint.md`. Run `/speckit.blueprint.design` first." Stop.
+   - Read the FT's `**Spec Path**` value.
+3. **If input is a spec path or ID:**
+   - Scan all FT entries in blueprint.md for a matching `**Spec Path**`.
+   - If the input lacks a directory prefix (e.g., `001-auth`), also try matching against `specs/[input]`.
+   - If no match is found, warn: "No FT linked to `[input]` in `blueprint.md`. Run `/speckit.blueprint.link-spec` first." Stop.
+   - If multiple matches are found, list them and ask the user to pick one.
+   - Extract the FT ID from the matched entry.
+4. Verify the spec directory exists and contains `spec.md`. If not, warn: "Spec directory `[path]` not found or missing `spec.md`." Stop.
+5. Read all `.md` files in that directory and subdirectories. List non-markdown artifact paths for reference, but do not read them.
+6. Extract durable technical content (exclude temporary workarounds, sprint assignments, unvalidated mockups, and todo lists): Tech Context, ADRs, architecture decisions, data models, API contracts, and artifact paths.
 
 ---
 
 ### Step 3: Identify Parent Story
 
-1. Read `docs/blueprint/blueprint.md` and locate the FT in the Epic → Story → Feature hierarchy.
-2. If the FT is not found in `blueprint.md`, warn: "FT-[ID] not found in `blueprint.md`. Run `/speckit.blueprint.design` first to define the hierarchy."
-   Stop.
-3. Extract the parent Story ID (e.g., `ST-1.1`) and Story title.
-4. Note the spec directory name (e.g., `specs/ft-1.1.1-user-auth`) for use in Step 5b.
+1. From the blueprint.md already read in Step 2, locate the FT in the Epic → Story → Feature hierarchy.
+2. Extract the parent Story ID (e.g., `ST-1.1`) and Story title.
+3. Note the spec directory name for use in Step 5.
 
 ---
 
-### Step 4: Propose Knowledge Base Location
+### Step 4: Propose Archive Location
 
-1. Analyze the extracted content to identify the **topics** covered by this FT (e.g., `auth`, `database`, `messaging`, `api-contract`).
-2. Scan `docs/` for any existing `.md` files and subdirectories that might serve as a topic-based knowledge base.
-3. **Topic Convention**: Use short lowercase English words with hyphens (e.g., `auth`, `api-contracts`, `user-profile`). Prefer concise, recognizable names.
+1. Analyze the extracted content to identify the **topics** covered by this FT (e.g., `auth`, `database`, `messaging`).
+2. Scan `{docs_base_path}/` for existing `.md` files and subdirectories.
+3. **Topic Convention**: Use short lowercase English words with hyphens (e.g., `auth`, `api-contracts`).
 
-#### Directory Structure Configuration
+#### Directory Structure
 
-The KB directory structure is managed in **the user's project** at `.specify/config-bp.yml`. This file is created on first archive and updated when the user changes the structure.
+The archive structure is configured in `.specify/config-bp.yml`:
 
-The **detailed descriptions** of the 5 structure options (A~E) plus Custom are maintained in **this extension's** `docs/archive-directory-guide.md`. Read that file when you need to present options to the user.
-
-**Config file format (user's `.specify/config-bp.yml`):**
 ```yaml
 blueprint:
-  kb_structure: "A"        # A, B, C, D, E, or custom
-  custom_description: ""   # Only used when kb_structure is "custom"
+  docs_structure: ""           # category_based, domain_driven, etc., or custom
+  custom_structure_description: ""
   last_updated: "YYYY-MM-DD"
 ```
 
-**First-time setup (if user's `.specify/config-bp.yml` does not exist):**
-1. Inform the user: "This appears to be the first archive for this project. Let's set up your Knowledge Base directory structure."
-2. Read `docs/archive-directory-guide.md` from this extension to get the full option descriptions.
-3. Present a concise summary:
-   > **Choose a directory structure for your Knowledge Base:**
-   >
-   > **A. Category-Based** — domains/ (business) + systems/ (tech) + cross-cutting/ + decisions/
-   > **B. Domain-Driven** — identity/, communication/, commerce/ (DDD bounded contexts) + decisions/
-   > **C. Feature-Foundation Split** — features/ (user-facing) + foundations/ (tech) + operations/ + decisions/
-   > **D. Layer-Based** — frontend/ + backend/ + infrastructure/ + decisions/
-   > **E. Topic-Centric Flat** — topics/ + decisions/ + runbooks/ (minimal depth)
-   > **Custom** — Define your own structure
-   >
-   > _Say "details" to see full descriptions with examples, or pick A~E/Custom._
-   > _You can always change this later by saying "restructure" during any archive._
-4. If the user says "details", read `docs/archive-directory-guide.md` and present the full option descriptions.
-5. If the user chooses **A~E**: write `.specify/config-bp.yml` with `kb_structure: "X"`.
-6. If the user chooses **Custom**:
-   - Ask: "Describe your custom directory structure (e.g., 'docs/modules/, docs/shared/, docs/adrs/')"
-   - Store in `.specify/config-bp.yml`:
-     ```yaml
-     blueprint:
-       kb_structure: "custom"
-       custom_description: "docs/modules/, docs/shared/, docs/adrs/"
-       last_updated: "YYYY-MM-DD"
-     ```
+On first archive or when `docs_structure` is empty, read `docs/archive-directory-guide.md` and present a concise summary with an AI recommendation:
 
-**Normal operation (user's config exists):**
-1. Read `.specify/config-bp.yml` from the user's project.
-2. Propose the KB location **within the configured structure**.
-3. Always present the proposal with a visible "restructure" hint:
-   > This FT covers topics: **[topic1, topic2, ...]**.
-   >
-   > **Proposed KB location(s):**
-   > 1. `docs/[category]/[proposed-file].md` (recommended — fits your current structure)
-   > 2. `docs/[alternative-category]/[alternative].md`
-   > 3. Enter a custom path
-   >
-   > _Not happy with the structure? Say **"restructure"** to change your KB layout, **"details"** to see full option descriptions, or **"custom"** to use a one-off path._
-   >
-   > Confirm or specify your preferred path.
+> **Choose a directory structure:**
+>
+> **category_based** — business domains + tech systems + cross-cutting + decisions
+> **domain_driven** — DDD bounded contexts + decisions
+> **feature_foundation_split** — user-facing features + tech foundations + operations + decisions
+> **layer_based** — frontend + backend + infrastructure + decisions
+> **topic_centric_flat** — flat topics + decisions + runbooks
+> **custom** — define your own layout
+>
+> Based on this FT's content, I recommend: **[type]** — [1-sentence reason].
 
-**Structure change request:**
-If the user says "restructure", "change structure", "reorganize", "different pattern", or similar:
-1. Read `docs/archive-directory-guide.md` to get the full option descriptions.
-2. Present the 5 options (A~E) + Custom to the user.
-3. If the user wants details, show the full descriptions from the guide file.
-4. After selection, update `.specify/config-bp.yml`:
-   - Update `blueprint.kb_structure`
-   - Update `blueprint.last_updated`
-   - If custom, update `blueprint.custom_description`
-5. Inform the user: "Structure updated. Future archives will use this new layout."
-6. Continue archiving with the new structure.
+After the user picks a type, write `.specify/config-bp.yml` and continue.
 
-**One-off custom path:**
-If the user says "custom" or provides a path outside the configured structure:
-- Accept the path as a one-off exception.
-- Do NOT update `.specify/config-bp.yml`.
-- Archive the FT to the specified path.
-- Note: "This is a one-off path. Your default structure remains unchanged."
+**Normal operation:**
 
-**Ambiguous response:**
-If the user replies with phrases like "you decide", "anywhere is fine", or gives an unclear answer, ask explicitly: "Where should I archive this FT's knowledge? (path under docs/, or say 'restructure' to change layout, or 'details' to see options)"
+Propose the archive location within the configured structure:
+
+> This FT covers topics: **[topic1, topic2, ...]**.
+>
+> **Proposed location:** `{docs_base_path}/[category]/[proposed-file].md`
+>
+> Confirm, specify a different path, or say **restructure** to change your layout, **custom** for a one-off path.
+
+If the user says "restructure", present the 5 structure types + custom again, update `.specify/config-bp.yml`, and continue.
+
+If the user says "custom" or provides a path outside the configured structure, accept it as a one-off exception. Do NOT update `.specify/config-bp.yml`.
 
 ---
 
-### Step 5: Create/Update Knowledge Base & blueprint.md
-
-#### 5a: Prepare Knowledge Base changes
+### Step 5: Apply Changes
 
 1. Read the target file if it already exists.
-2. If the target file already contains a section for this FT (e.g., `## From FT-[ID]`), warn the user:
-
-   > ⚠️ FT-[ID] is already archived in `docs/[file].md` (last updated: [date]).
-   >
-   > What would you like to do?
-   > (1) Update existing section with new content
-   > (2) Skip (no changes)
-   > (3) Archive to a different file instead
-
-   - If **(1)**: proceed to update the existing section.
-   - If **(2)**: stop and report that no changes were made.
-   - If **(3)**: return to Step 4 to reselect the KB file.
-
-3. Merge the FT's technical content into the target file using this format:
-
-   File header (new or updated):
+2. If the target file already contains a section for this FT (e.g., `## From FT-[ID]`):
+   > "FT-[ID] is already archived in `{docs_base_path}/[file].md`. I'll update it with the latest content. (Say 'skip' to do nothing, or 'new file' to archive elsewhere.)"
+   - If **skip**: stop and report no changes.
+   - If **new file**: return to Step 4 to reselect.
+   - Otherwise (default): update the existing `## From FT-[ID]` section. All other sections are preserved.
+3. Merge the FT's technical content using this format:
    ```markdown
    <!--
    Topics: [comma-separated topics]
-   Contributors: [list of FT-IDs already in this file, plus this one]
+   Contributors: [list of FT-IDs in this file]
    Last updated: [YYYY-MM-DD]
    -->
-   ```
 
-   Content sections (appended or merged):
-   ```markdown
    ## From FT-X.X.X — [FT Title]
-   
+
    [Tech Context content from spec.md]
-   
+
    ### ADRs
    [ADR content]
-   
+
    ### Artifacts
    - [artifact description]: [relative path]
    ```
+4. Read `{docs_base_path}/blueprint/blueprint.md`.
+5. Update the FT's `**Status**` to `Done`.
+   - If no `**Status**` field exists, add it under the FT line.
+6. In the parent Story section, append a **Related KB** line if the same link doesn't already exist:
+   - `  - **Related KB**: [{docs_base_path}/file.md](../file.md#from-ft-1-1-1)`
+7. Update the `_Last updated: [date]_` line.
+8. Append a History entry: `[YYYY-MM-DD HH:MM] | blueprint.md | Archived FT-[ID] to {docs_base_path}/[file].md`.
 
-3. Preserve existing structure and ordering in the target file.
-4. Avoid duplicate entries: if this FT was previously archived to this file, update the existing section rather than appending a new one.
+#### Confirm
 
-#### 5b: Prepare blueprint.md changes
+> Apply these changes? (yes / review / no)
 
-5. Read `docs/blueprint/blueprint.md`.
-6. Locate the line for this FT in the hierarchy.
-7. Append the spec directory name and a completion marker:
-   - Before: `- FT-1.1.1 — Email/password sign-up`
-   - After: `- FT-1.1.1 — Email/password sign-up (specs/ft-1.1.1-user-auth) ✅`
-8. In the parent Story section, append a **Related KB** line if not already present:
-   - Add under the Story's bullet: `  - **Related KB**: [docs/file.md](docs/file.md#from-ft-1-1-1)`
-   - If a Related KB line already exists, append the new link.
-9. Update the `_Last updated: [date]_` line.
-10. Append a History entry: `[YYYY-MM-DD HH:MM] | blueprint.md | Archived FT-[ID] to docs/[file].md`.
-
-#### 5c: Confirm and apply
-
-11. Show a summary of changes:
-    - Knowledge Base: new or updated sections in `docs/[file].md`
-    - blueprint.md: FT completion marker + Related KB link
-12. Ask the user:
-
-    > "Apply these changes (Knowledge Base + `blueprint.md`)? (yes / no / KB-only)"
-    >
-    > Accepted responses (case-insensitive):
-    > - Proceed: "yes", "y", "sure", "apply"
-    > - Partial: "KB-only", "just KB", "knowledge base only"
-    > - Cancel: "no", "n", "cancel", "abort"
-    > - Review: "review", "show details", "preview"
-    > - Change target: "change target", "different file"
-
-    - If **yes** (or synonyms): write both the updated KB file and `blueprint.md`.
-    - If **KB-only** (or synonyms): write only the KB file. Warn: "`blueprint.md` was not updated. FT-[ID] will appear as incomplete. Run `/speckit.blueprint.archive FT-[ID]` again to fix."
-    - If **no** (or synonyms): stop here and report that no changes were made.
-    - If **review** (or synonyms): show the exact diff/preview, then repeat the question.
-    - If **change target** (or synonyms): return to Step 4 to reselect the KB file.
-    - If the user replies with anything else or an ambiguous answer, ask for clarification: "Did you mean to apply all changes? (yes / no / KB-only / review / change target)" or repeat the prompt.
+- **yes**: write both files.
+- **review**: show a diff/preview, then repeat the question.
+- **no** (or anything else): stop and report no changes.
 
 ---
 
 ### Step 6: Completion
 
-Confirm completion status:
+- FT spec read: yes
+- Knowledge Base: `{docs_base_path}/[file].md` [new / updated / skipped]
+- blueprint.md: [updated / skipped]
 
-| Step | Status |
-| --- | --- |
-| FT spec read | yes |
-| Knowledge Base updated | [file path or skipped] |
-| blueprint.md updated | [yes / no / skipped] |
-
-Provide next steps:
-
-> FT-[ID] archived into `docs/[file].md`. Next: pick another FT to specify, or archive the next completed FT.
->
-> Suggest the next unarchived FT from the same Story (read `blueprint.md` to find the next sibling FT without a ✅ marker). If none remain in this Story, suggest the first unarchived FT from the next Story in dependency order.
-
-## Output Files
-
-| File | Purpose |
-| --- | --- |
-| `docs/[topic].md` | Topic-based Knowledge Base with merged FT technical content, ADRs, and artifact references. Survives Story closure. |
-| `docs/blueprint/blueprint.md` | Master blueprint with FT completion markers and spec directory references. |
+> ✅ FT-[ID] archived to `{docs_base_path}/[file].md`. Next: `/speckit.blueprint.archive [next-FT]`
