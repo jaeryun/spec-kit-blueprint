@@ -71,25 +71,22 @@ After completing all steps, check `.specify/extensions.yml` for any handlers reg
 
 #### Directory Structure Configuration
 
-The KB directory structure is managed in **`.specify/config-bp.yml`**. This file is created automatically on first archive and updated when the user changes the structure.
+The KB directory structure is managed in **the user's project** at `.specify/config-bp.yml`. This file is created on first archive and updated when the user changes the structure.
 
-**Config file format (`.specify/config-bp.yml`):**
+The **detailed descriptions** of the 5 structure options (A~E) plus Custom are maintained in **this extension's** `templates/archive-directory-guide.md`. Read that file when you need to present options to the user.
+
+**Config file format (user's `.specify/config-bp.yml`):**
 ```yaml
-# SpecKit Blueprint Extension Configuration
-kb_structure: "A"  # A, B, C, D, E, or custom
-# A = Category-Based (domains/, systems/, cross-cutting/, decisions/)
-# B = Domain-Driven (identity/, communication/, commerce/, decisions/)
-# C = Feature-Foundation Split (features/, foundations/, operations/, decisions/)
-# D = Layer-Based (frontend/, backend/, infrastructure/, decisions/)
-# E = Topic-Centric Flat (topics/, decisions/, runbooks/)
-# custom = User-defined structure
-custom_paths: {}   # Only used when kb_structure is "custom"
-last_updated: "YYYY-MM-DD"
+blueprint:
+  kb_structure: "A"        # A, B, C, D, E, or custom
+  custom_description: ""   # Only used when kb_structure is "custom"
+  last_updated: "YYYY-MM-DD"
 ```
 
-**First-time setup (if `.specify/config-bp.yml` does not exist):**
+**First-time setup (if user's `.specify/config-bp.yml` does not exist):**
 1. Inform the user: "This appears to be the first archive for this project. Let's set up your Knowledge Base directory structure."
-2. Present the options:
+2. Read `templates/archive-directory-guide.md` from this extension to get the full option descriptions.
+3. Present a concise summary:
    > **Choose a directory structure for your Knowledge Base:**
    >
    > **A. Category-Based** — domains/ (business) + systems/ (tech) + cross-cutting/ + decisions/
@@ -99,18 +96,22 @@ last_updated: "YYYY-MM-DD"
    > **E. Topic-Centric Flat** — topics/ + decisions/ + runbooks/ (minimal depth)
    > **Custom** — Define your own structure
    >
-   > You can always change this later by saying "restructure" during any archive.
-3. If the user chooses **A~E**: write `.specify/config-bp.yml` with `kb_structure: "X"`.
-4. If the user chooses **Custom**:
+   > _Say "details" to see full descriptions with examples, or pick A~E/Custom._
+   > _You can always change this later by saying "restructure" during any archive._
+4. If the user says "details", read `templates/archive-directory-guide.md` and present the full option descriptions.
+5. If the user chooses **A~E**: write `.specify/config-bp.yml` with `kb_structure: "X"`.
+6. If the user chooses **Custom**:
    - Ask: "Describe your custom directory structure (e.g., 'docs/modules/, docs/shared/, docs/adrs/')"
-   - Store the user's description in `.specify/config-bp.yml`:
+   - Store in `.specify/config-bp.yml`:
      ```yaml
-     kb_structure: "custom"
-     custom_description: "docs/modules/, docs/shared/, docs/adrs/"
+     blueprint:
+       kb_structure: "custom"
+       custom_description: "docs/modules/, docs/shared/, docs/adrs/"
+       last_updated: "YYYY-MM-DD"
      ```
 
-**Normal operation (config exists):**
-1. Read `.specify/config-bp.yml`.
+**Normal operation (user's config exists):**
+1. Read `.specify/config-bp.yml` from the user's project.
 2. Propose the KB location **within the configured structure**.
 3. Always present the proposal with a visible "restructure" hint:
    > This FT covers topics: **[topic1, topic2, ...]**.
@@ -120,20 +121,21 @@ last_updated: "YYYY-MM-DD"
    > 2. `docs/[alternative-category]/[alternative].md`
    > 3. Enter a custom path
    >
-   > _Not happy with the structure? Say **"restructure"** to change your KB layout, or **"custom"** to use a one-off path._
+   > _Not happy with the structure? Say **"restructure"** to change your KB layout, **"details"** to see full option descriptions, or **"custom"** to use a one-off path._
    >
    > Confirm or specify your preferred path.
 
 **Structure change request:**
 If the user says "restructure", "change structure", "reorganize", "different pattern", or similar:
-1. Read the current structure from `.specify/config-bp.yml`.
-2. Present the 5 options (A~E) + Custom again.
-3. After selection, update `.specify/config-bp.yml`:
-   - Update `kb_structure`
-   - Update `last_updated`
-   - If custom, update `custom_description`
-4. Inform the user: "Structure updated. Future archives will use this new layout."
-5. Continue archiving with the new structure.
+1. Read `templates/archive-directory-guide.md` to get the full option descriptions.
+2. Present the 5 options (A~E) + Custom to the user.
+3. If the user wants details, show the full descriptions from the guide file.
+4. After selection, update `.specify/config-bp.yml`:
+   - Update `blueprint.kb_structure`
+   - Update `blueprint.last_updated`
+   - If custom, update `blueprint.custom_description`
+5. Inform the user: "Structure updated. Future archives will use this new layout."
+6. Continue archiving with the new structure.
 
 **One-off custom path:**
 If the user says "custom" or provides a path outside the configured structure:
@@ -143,7 +145,7 @@ If the user says "custom" or provides a path outside the configured structure:
 - Note: "This is a one-off path. Your default structure remains unchanged."
 
 **Ambiguous response:**
-If the user replies with phrases like "you decide", "anywhere is fine", or gives an unclear answer, ask explicitly: "Where should I archive this FT's knowledge? (path under docs/, or say 'restructure' to change layout)"
+If the user replies with phrases like "you decide", "anywhere is fine", or gives an unclear answer, ask explicitly: "Where should I archive this FT's knowledge? (path under docs/, or say 'restructure' to change layout, or 'details' to see options)"
 
 ---
 
