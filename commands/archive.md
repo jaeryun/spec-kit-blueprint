@@ -73,7 +73,7 @@ After completing all steps, check `.specify/extensions.yml` for any handlers reg
 
 The KB directory structure is managed in **the user's project** at `.specify/config-bp.yml`. This file is created on first archive and updated when the user changes the structure.
 
-The **detailed descriptions** of the 5 structure options (A~E) plus Custom are maintained in **this extension's** `templates/archive-directory-guide.md`. Read that file when you need to present options to the user.
+The **detailed descriptions** of the 5 structure options (A~E) plus Custom are maintained in **this extension's** `docs/archive-directory-guide.md`. Read that file when you need to present options to the user.
 
 **Config file format (user's `.specify/config-bp.yml`):**
 ```yaml
@@ -85,7 +85,7 @@ blueprint:
 
 **First-time setup (if user's `.specify/config-bp.yml` does not exist):**
 1. Inform the user: "This appears to be the first archive for this project. Let's set up your Knowledge Base directory structure."
-2. Read `templates/archive-directory-guide.md` from this extension to get the full option descriptions.
+2. Read `docs/archive-directory-guide.md` from this extension to get the full option descriptions.
 3. Present a concise summary:
    > **Choose a directory structure for your Knowledge Base:**
    >
@@ -98,7 +98,7 @@ blueprint:
    >
    > _Say "details" to see full descriptions with examples, or pick A~E/Custom._
    > _You can always change this later by saying "restructure" during any archive._
-4. If the user says "details", read `templates/archive-directory-guide.md` and present the full option descriptions.
+4. If the user says "details", read `docs/archive-directory-guide.md` and present the full option descriptions.
 5. If the user chooses **A~E**: write `.specify/config-bp.yml` with `kb_structure: "X"`.
 6. If the user chooses **Custom**:
    - Ask: "Describe your custom directory structure (e.g., 'docs/modules/, docs/shared/, docs/adrs/')"
@@ -127,7 +127,7 @@ blueprint:
 
 **Structure change request:**
 If the user says "restructure", "change structure", "reorganize", "different pattern", or similar:
-1. Read `templates/archive-directory-guide.md` to get the full option descriptions.
+1. Read `docs/archive-directory-guide.md` to get the full option descriptions.
 2. Present the 5 options (A~E) + Custom to the user.
 3. If the user wants details, show the full descriptions from the guide file.
 4. After selection, update `.specify/config-bp.yml`:
