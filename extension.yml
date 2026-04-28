@@ -3,7 +3,7 @@ schema_version: "1.0"
 extension:
   id: blueprint
   name: "Blueprint"
-  version: "1.1.0"
+  version: "1.2.0"
   description: "Vision-first project planning for SpecKit. Decomposes project vision into a 3-level hierarchy: Epic → Story → Feature — each Feature mapping to one /speckit.specify run."
   author: "jaeryun"
   repository: "https://github.com/jaeryun/spec-kit-blueprint"
